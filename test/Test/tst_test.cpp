@@ -15,6 +15,7 @@ private slots:
     void initTestCase();
     void cleanupTestCase();
     void test_party();
+    void test_person();
 };
 
 Test::Test()
@@ -41,48 +42,28 @@ void Test::cleanupTestCase()
 
 void Test::test_party()
 {
-    PartyModule partyModule;
-    partyModule.install();
+    PartyFacade facade;
 
     Organization org;
     org.generateId();
     org.setCompany_name("Aspects Pro");
     org.setAddress("#38 Iere Village, Naparima Mayaro Road, Princes Town");
     org.setEmail_address("greg@aspectspro.com");
-    org.setTelephone_number("868-269-6529");
+    org.setTelephone_number("868-269-6529");    
 
     OrganizationMapper mapper;
     try {
-        mapper.insert(org);
-        org.setCompany_name("AspectsPro Software");
-        org.setAddress("#1 Naparima Mayaro Road, Princes Town");
-
+        qDebug() << mapper.loadAll().first().toJsonObject();
     } catch (std::exception &e) {
         qInfo() << e.what();
     }
+}
 
-    QList<Organization> all;
-
-    try {
-        all = mapper.loadAll();
-    } catch (std::exception &e) {
-        qInfo() << e.what();
-    }
-
-    //Step 1 : Call ModelFactory::createModule<Type>() to initialize model;
-    auto model = ModelFactory::createModel<Organization>();
-
-    //Step 2 : Initialize DomainObjectPtr list - TODO : automate this.
-    DomainObjectListPtr orgList = std::make_shared<QList<DomainObjectPtr>>();
-    model->changeDomainList(orgList);
-
-    //Step 3 : Insert Data. TODO : automate this.
-    orgList->clear();
-    foreach (auto i, all) {
-        orgList->append(i.clone());
-    }
-
-    partyModule.uninstall();
+void Test::test_person()
+{
+    Person person;
+    person.generateId();
+    qDebug() << person.toJsonObject();
 }
 
 QTEST_MAIN(Test)

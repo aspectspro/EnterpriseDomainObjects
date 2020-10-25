@@ -28,6 +28,8 @@ if(EXISTS ${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
         Party/Organization.h
         Party/Organization.cpp
         Party/Party.h
+        Party/PartyFacade.h
+        Party/PartyFacade.cpp
         ${PROJECT_NAME}.h
     #        ${RESOURCES}
     )

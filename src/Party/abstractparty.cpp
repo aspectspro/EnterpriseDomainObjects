@@ -59,8 +59,7 @@ SetupModule &PartyModule::installSchema()
 
     auto organizationTable = initializeModuleTable("organization");
     organizationTable.appendTableColumn({"id",TableColumn::TypeString,true});
-//    organizationTable.appendTableColumn({"party_id",TableColumn::TypeString});
-    organizationTable.appendTableColumn({"company_name",TableColumn::TypeString});
+    organizationTable.appendTableColumn({"company_name",TableColumn::TypeString,true});
     insertTable(organizationTable);
 
     return *this;

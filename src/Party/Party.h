@@ -3,5 +3,6 @@
 
 #include "abstractparty.h"
 #include "organization.h"
+#include "partyfacade.h"
 
 #endif // PARTY_H
