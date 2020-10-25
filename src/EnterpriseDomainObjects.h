@@ -1,6 +1,6 @@
 #ifndef ENTERPRISEDOMAINOBJECTS_H
 #define ENTERPRISEDOMAINOBJECTS_H
 
-#include "Party/abstractparty.h"
+#include "Party/Party.h"
 
 #endif // ENTERPRISEDOMAINOBJECTS_H

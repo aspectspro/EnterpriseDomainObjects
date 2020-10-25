@@ -25,6 +25,9 @@ if(EXISTS ${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
         EnterpriseDomainObjects.h
         Party/AbstractParty.h
         Party/AbstractParty.cpp
+        Party/Organization.h
+        Party/Organization.cpp
+        Party/Party.h
         ${PROJECT_NAME}.h
     #        ${RESOURCES}
     )

@@ -54,50 +54,6 @@ public:
     }
 };
 
-class Organization : public AbstractParty, public DomainCloneTemplate<Organization>{
-
-    Q_GADGET
-    Q_PROPERTY(QString company_name READ getCompany_name WRITE setCompany_name)
-//    Q_PROPERTY(QString party_id READ getParty_id WRITE setParty_id)
-
-public:
-    QString getCompany_name() const;
-    void setCompany_name(const QString &value);
-
-//    QString getParty_id() const;
-//    void setParty_id(const QString &value);
-
-private:
-    QString company_name;
-//    QString party_id;
-
-    // AbstractDomainObject interface
-public:
-    virtual const QMetaObject &metaObject() const override
-    {
-        return staticMetaObject;
-    }
-};
-
-Q_DECLARE_METATYPE(Organization)
-
-class OrganizationMapper : public TemplateMapper<Organization>{
-
-
-    // AbstractMapper interface
-public:
-    virtual QString tableName() const override
-    {
-        return "party_organization";
-    }
-
-protected:
-    virtual void injectInsert(AbstractDomainObject &domainObject) const override;
-    virtual void injectUpdate(AbstractDomainObject &domainObject) const override;
-    virtual void injectRemove(AbstractDomainObject &domainObject) const override;
-    virtual void injectLoad(AbstractDomainObject &domainObject) const override;
-};
-
 class PartyModule : public SetupModule{
 
 protected:
