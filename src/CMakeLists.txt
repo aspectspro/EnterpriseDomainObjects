@@ -1,0 +1,42 @@
+cmake_minimum_required(VERSION 3.5)
+
+set(NAME "EnterpriseDomainObjects")
+
+project(${NAME} LANGUAGES CXX)
+
+set(Qt5_DIR "C:\\Felgo\\5.13.2\\msvc2017_64\\lib\\cmake\\Qt5")
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+find_package(Qt5 COMPONENTS Core REQUIRED Sql Concurrent)
+
+#qt5_add_resources(RESOURCES resources.qrc)
+
+if(EXISTS ${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+
+    include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+    conan_basic_setup()
+
+    add_library(${PROJECT_NAME} STATIC
+        EnterpriseDomainObjects.h
+        Party/AbstractParty.h
+        Party/AbstractParty.cpp
+        ${PROJECT_NAME}.h
+    #        ${RESOURCES}
+    )
+
+else()
+    message(WARNING "The file conanbuildinfo.cmake doesn't exist, you have to run conan install first")
+    add_library(${PROJECT_NAME} STATIC ${PROJECT_NAME}.h)
+endif()
+
+target_link_libraries(${PROJECT_NAME} PUBLIC ${CONAN_LIBS} PRIVATE Qt5::Core Qt5::Sql Qt5::Concurrent)
+
+#target_link_libraries( ${CONAN_LIBS})
+#set_target_properties(${PROJECT_NAME} PROPERTIES DEBUG_POSTFIX _d)
+#Replace TEMPLATE_LIBRARY with PROJECTNAME_LIBRARY
+target_compile_definitions(${PROJECT_NAME} PRIVATE ENTERPRISEDOMAINOBJECTS_LIBRARY)

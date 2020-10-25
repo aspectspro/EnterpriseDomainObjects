@@ -1,0 +1,6 @@
+#ifndef ENTERPRISEDOMAINOBJECTS_H
+#define ENTERPRISEDOMAINOBJECTS_H
+
+#include "Party/abstractparty.h"
+
+#endif // ENTERPRISEDOMAINOBJECTS_H
