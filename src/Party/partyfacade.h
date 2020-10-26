@@ -1,5 +1,6 @@
 #ifndef PARTYFACADE_H
 #define PARTYFACADE_H
+#include "partymodule.h"
 #include "organization.h"
 
 class PartyFacade : public QObject

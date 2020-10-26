@@ -54,14 +54,6 @@ public:
     }
 };
 
-class PartyModule : public SetupModule{
 
-protected:
-    SetupModule &createModule() override;
-    SetupModule &installSchema() override;
-    SetupModule &installData() override;
-    SetupModule &upgradeSchema() override;
-    SetupModule &upgradeData() override;
-};
 
 #endif // ABSTRACTPARTY_H

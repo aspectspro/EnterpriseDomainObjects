@@ -63,4 +63,38 @@ private:
 
 Q_DECLARE_METATYPE(Person)
 
+class Employee : public Person{
+
+    Q_GADGET
+    Q_PROPERTY(QString bir_number READ getBir_number WRITE setBir_number)
+    Q_PROPERTY(QString nis_number READ getNis_number WRITE setNis_number)
+    Q_PROPERTY(DateTime date_of_employment READ getDate_of_employment WRITE setDate_of_employment)
+    Q_PROPERTY(DateTime date_of_discharge READ getDate_of_discharge WRITE setDate_of_discharge)
+
+    // AbstractDomainObject interface
+public:
+    virtual const QMetaObject &metaObject() const override;
+    virtual void registerConverter() override;
+
+    QString getBir_number() const;
+    void setBir_number(const QString value);
+
+    QString getNis_number() const;
+    void setNis_number(const QString value);
+
+    DateTime getDate_of_employment() const;
+    void setDate_of_employment(const DateTime value);
+
+    DateTime getDate_of_discharge() const;
+    void setDate_of_discharge(const DateTime value);
+
+private:
+    QString bir_number;
+    QString nis_number;
+    DateTime date_of_employment;
+    DateTime date_of_discharge;
+};
+
+Q_DECLARE_METATYPE(Employee)
+
 #endif // PERSON_H

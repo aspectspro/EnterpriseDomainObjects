@@ -125,3 +125,53 @@ void DateTime::registerMetaType()
         return dt;
     });
 }
+
+
+const QMetaObject &Employee::metaObject() const
+{
+    return staticMetaObject;
+}
+
+void Employee::registerConverter()
+{
+}
+
+QString Employee::getBir_number() const
+{
+    return bir_number;
+}
+
+void Employee::setBir_number(const QString value)
+{
+    bir_number = value;
+}
+
+QString Employee::getNis_number() const
+{
+    return nis_number;
+}
+
+void Employee::setNis_number(const QString value)
+{
+    nis_number = value;
+}
+
+DateTime Employee::getDate_of_employment() const
+{
+    return date_of_employment;
+}
+
+void Employee::setDate_of_employment(const DateTime value)
+{
+    date_of_employment = value;
+}
+
+DateTime Employee::getDate_of_discharge() const
+{
+    return date_of_discharge;
+}
+
+void Employee::setDate_of_discharge(const DateTime value)
+{
+    date_of_discharge = value;
+}

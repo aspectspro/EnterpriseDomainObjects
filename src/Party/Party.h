@@ -5,5 +5,6 @@
 #include "organization.h"
 #include "partyfacade.h"
 #include "person.h"
+#include "partymodule.h"
 
 #endif // PARTY_H
