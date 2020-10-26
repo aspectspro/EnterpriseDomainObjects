@@ -63,8 +63,7 @@ void Test::test_person()
 {
     Person person;
     person.generateId();
-    qDebug() << person.toJsonObject();
-    qDebug() << DateTime::getNow().getDateTimeAsString();
+    person.setDate_of_birth(DateTime::getNow());
 }
 
 QTEST_MAIN(Test)

@@ -105,11 +105,21 @@ void DateTime::registerMetaType()
 
     qRegisterMetaType<DateTime>();
 
-    QMetaType::registerConverter<DateTime,QString>([=](DateTime dateTime) ->QString{
-        return QString::number(dateTime.timestamp);
+    QMetaType::registerConverter<DateTime,QString>([=](DateTime dateTime) -> QString{
+        return QString::number(dateTime.getTimestamp());
     });
 
-    QMetaType::registerConverter<QString,DateTime>([=](QString dateTime) ->DateTime{
+    QMetaType::registerConverter<QString,DateTime>([=](QString dateTime) -> DateTime{
+        DateTime dt;
+        dt.setTimestamp(dateTime.toInt());
+        return dt;
+    });
+
+    QMetaType::registerConverter<DateTime,QJsonValue>([=](DateTime dateTime) -> QJsonValue{
+        return QString::number(dateTime.getTimestamp());
+    });
+
+    QMetaType::registerConverter<QJsonValue,DateTime>([=](QJsonValue dateTime) -> DateTime{
         DateTime dt;
         dt.setTimestamp(dateTime.toInt());
         return dt;
