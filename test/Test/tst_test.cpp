@@ -37,7 +37,7 @@ void Test::initTestCase()
 
 void Test::cleanupTestCase()
 {
-    DatabaseSingleton::getInstance()->removeDatabaseFolder();
+//    DatabaseSingleton::getInstance()->removeDatabaseFolder();
 }
 
 void Test::test_party()
@@ -64,6 +64,7 @@ void Test::test_person()
     Person person;
     person.generateId();
     qDebug() << person.toJsonObject();
+    qDebug() << DateTime::getNow().getDateTimeAsString();
 }
 
 QTEST_MAIN(Test)

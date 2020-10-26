@@ -62,6 +62,24 @@ SetupModule &PartyModule::installSchema()
     organizationTable.appendTableColumn({"company_name",TableColumn::TypeString,true});
     insertTable(organizationTable);
 
+
+//    QString first_name;
+//    QString last_name;
+//    QString identification_number;
+//    QString driver_permit_number;
+//    QString passport_number;
+//    QDateTime date_of_birth;
+
+    auto personTable = initializeModuleTable("person");
+    personTable.appendTableColumn({"id",TableColumn::TypeString,true});
+    personTable.appendTableColumn({"first_name",TableColumn::TypeString});
+    personTable.appendTableColumn({"last_name",TableColumn::TypeString});
+    personTable.appendTableColumn({"identification_number",TableColumn::TypeString,true});
+    personTable.appendTableColumn({"driver_permit_number",TableColumn::TypeString,true});
+    personTable.appendTableColumn({"passport_number",TableColumn::TypeString,true});
+    personTable.appendTableColumn({"date_of_birth",TableColumn::TypeString,true});
+    insertTable(personTable);
+
     return *this;
 }
 

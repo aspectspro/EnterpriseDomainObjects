@@ -30,6 +30,8 @@ if(EXISTS ${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
         Party/Party.h
         Party/PartyFacade.h
         Party/PartyFacade.cpp
+        Party/Person.h
+        Party/Person.cpp
         ${PROJECT_NAME}.h
     #        ${RESOURCES}
     )
