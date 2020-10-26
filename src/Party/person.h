@@ -63,7 +63,7 @@ private:
 
 Q_DECLARE_METATYPE(Person)
 
-class Employee : public Person{
+class Employee : public Person, public DomainCloneTemplate<Employee>{
 
     Q_GADGET
     Q_PROPERTY(QString bir_number READ getBir_number WRITE setBir_number)
@@ -73,6 +73,8 @@ class Employee : public Person{
 
     // AbstractDomainObject interface
 public:
+    using DomainCloneTemplate<Employee>::clone;
+
     virtual const QMetaObject &metaObject() const override;
     virtual void registerConverter() override;
 

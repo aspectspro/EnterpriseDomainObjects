@@ -16,7 +16,7 @@ private slots:
     void cleanupTestCase();
     void test_party();
     void test_person();
-    void tes_employee();
+    void test_employee();
 };
 
 Test::Test()
@@ -67,10 +67,9 @@ void Test::test_person()
     person.setDate_of_birth(DateTime::getNow());
 }
 
-void Test::tes_employee()
+void Test::test_employee()
 {
-    Employee emp;
-    qDebug() << emp.toJsonObject();
+
 }
 
 QTEST_MAIN(Test)
