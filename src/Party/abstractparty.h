@@ -27,24 +27,6 @@ public:
     QString getId() const;
     void setId(const QString value);
 
-    void copyBaseParty(AbstractParty &party){        
-        this->fromJson(party.toJsonObject());
-    }
-
-    /** copyFrom - //To move to AbstractDomainObjects. Used for copying from other classes. Use this
-     * when loading sql and base class needs to be loaded.
-     *
-     */
-    template<typename T>
-    void copyFrom(AbstractDomainObject &domainObject){
-        try {
-            auto _party = dynamic_cast<T*>(&domainObject);
-            this->fromJson(_party->toJsonObject());
-        } catch (std::exception &e) {
-            qInfo() << e.what();
-        }
-    }
-
 private:
     QString telephone_number;
     QString address;

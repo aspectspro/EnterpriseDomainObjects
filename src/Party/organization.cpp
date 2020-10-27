@@ -27,29 +27,20 @@ void Organization::registerConverter()
 
 void OrganizationMapper::injectInsert(AbstractDomainObject &domainObject) const
 {
-    auto org = dynamic_cast<Organization*>(&domainObject);
-    AbstractParty party(*org);
-    party.generateId();
-
     AbstractPartyMapper mapper;
-    mapper.insert(party);
-
-    org->setId(party.getId());
+    mapper.insert(domainObject);
 }
 
 void OrganizationMapper::injectUpdate(AbstractDomainObject &domainObject) const
 {
-    auto org = dynamic_cast<Organization*>(&domainObject);
-    AbstractParty party(*org);
     AbstractPartyMapper mapper;
-    mapper.update(party);
+    mapper.update(domainObject);
 }
 
 void OrganizationMapper::injectRemove(AbstractDomainObject &domainObject) const
 {
-    auto org = dynamic_cast<Organization*>(&domainObject);
     AbstractPartyMapper mapper;
-    mapper.remove(*org);
+    mapper.remove(domainObject);
 }
 
 void OrganizationMapper::injectLoad(AbstractDomainObject &domainObject) const
@@ -57,5 +48,5 @@ void OrganizationMapper::injectLoad(AbstractDomainObject &domainObject) const
     auto org = dynamic_cast<Organization*>(&domainObject);
     AbstractPartyMapper partyMapper;
     auto loadedParty = partyMapper.find(org->getId());
-    org->copyBaseParty(loadedParty);
+    org->copyFrom<AbstractParty>(domainObject);
 }
