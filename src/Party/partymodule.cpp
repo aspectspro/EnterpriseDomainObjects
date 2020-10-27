@@ -44,6 +44,7 @@ SetupModule &PartyModule::installSchema()
     auto organizationTable = initializeModuleTable("organization");
     organizationTable.appendTableColumn({"id",TableColumn::TypeString,true});
     organizationTable.appendTableColumn({"company_name",TableColumn::TypeString,true});
+    organizationTable.setPrimaryKey("id");
     insertTable(organizationTable);
 
 //    Properties for Person
@@ -62,6 +63,7 @@ SetupModule &PartyModule::installSchema()
     personTable.appendTableColumn({"driver_permit_number",TableColumn::TypeString,true});
     personTable.appendTableColumn({"passport_number",TableColumn::TypeString,true});
     personTable.appendTableColumn({"date_of_birth",TableColumn::TypeInt});
+    personTable.setPrimaryKey("id");
     insertTable(personTable);
 
 //    Properties for Employee
@@ -76,6 +78,7 @@ SetupModule &PartyModule::installSchema()
     employeeTable.appendTableColumn({"nis_number",TableColumn::TypeString,true});
     employeeTable.appendTableColumn({"date_of_employment",TableColumn::TypeInt});
     employeeTable.appendTableColumn({"date_of_discharge",TableColumn::TypeInt});
+    employeeTable.setPrimaryKey("id");
     insertTable(employeeTable);
 
     return *this;

@@ -205,9 +205,37 @@ void PersonMapper::injectLoad(AbstractDomainObject &domainObject) const
     AbstractPartyMapper apMapper;
     auto person = dynamic_cast<Person*>(&domainObject);
     auto party = apMapper.find(person->getId());
+    person->copyFrom<AbstractParty>(party);
+}
 
 
-    person->setAddress(party.getAddress());
-    person->setEmail_address(party.getEmail_address());
-    person->setTelephone_number(party.getTelephone_number());
+QString EmployeeMapper::tableName() const
+{
+    return "party_employee";
+}
+
+void EmployeeMapper::injectInsert(AbstractDomainObject &domainObject) const
+{
+    PersonMapper mapper;
+    mapper.insert(domainObject);
+}
+
+void EmployeeMapper::injectUpdate(AbstractDomainObject &domainObject) const
+{
+    PersonMapper mapper;
+    mapper.update(domainObject);
+}
+
+void EmployeeMapper::injectRemove(AbstractDomainObject &domainObject) const
+{
+    PersonMapper mapper;
+    mapper.remove(domainObject);
+}
+
+void EmployeeMapper::injectLoad(AbstractDomainObject &domainObject) const
+{
+    PersonMapper mapper;
+    auto employee = dynamic_cast<Employee*>(&domainObject);
+    auto person = mapper.find(employee->getId());
+    employee->copyFrom<Person>(person);
 }

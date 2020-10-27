@@ -87,16 +87,51 @@ void Test::test_person()
     auto all = mapper.loadAll();
 
     foreach (auto i, all) {
-        qDebug() << i.toJsonObject();
-//        mapper.remove(i);
+        mapper.remove(i);
+        qDebug() << i.toJsonObject() << endl;
     }
 
 }
 
 void Test::test_employee()
 {
-    Employee emp;
+    Employee person;
+    person.generateId();
+    person.setDate_of_birth(DateTime::getNow());
 
+    EmployeeMapper mapper;
+    try {
+        mapper.insert(person);
+    } catch (std::exception &e) {
+        qInfo() << e.what();
+    }
+
+    person.setFirst_name("Greg");
+    person.setLast_name("Dillon");
+    person.setPassport_number("5533234");
+    person.setDriver_permit_number("55221122");
+    person.setIdentification_number("899747397234");
+    person.setAddress("#38 Iere Village Princes Town");
+    person.setEmail_address("greg@aspectspro.com");
+    person.setTelephone_number("868-269-6529");
+
+    person.setBir_number("12412039");
+    person.setNis_number("0399903");
+    person.setDate_of_employment(DateTime::getNow());
+
+
+    try {
+        mapper.update(person);
+    } catch (std::exception &e) {
+        qInfo() << e.what();
+    }
+
+    auto all = mapper.loadAll();
+
+    foreach (auto i, all) {
+        mapper.remove(i);
+        qDebug() << i.toJsonObject() << endl;
+    }
 }
 
 QTEST_MAIN(Test)

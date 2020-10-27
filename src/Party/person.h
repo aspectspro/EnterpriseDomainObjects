@@ -113,4 +113,18 @@ private:
 
 Q_DECLARE_METATYPE(Employee)
 
+class EmployeeMapper : public TemplateMapper<Employee>{
+
+
+    // AbstractMapper interface
+public:
+    virtual QString tableName() const override;
+
+protected:
+    virtual void injectInsert(AbstractDomainObject &domainObject) const override;
+    virtual void injectUpdate(AbstractDomainObject &domainObject) const override;
+    virtual void injectRemove(AbstractDomainObject &domainObject) const override;
+    virtual void injectLoad(AbstractDomainObject &domainObject) const override;
+};
+
 #endif // PERSON_H
