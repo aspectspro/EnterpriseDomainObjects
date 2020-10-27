@@ -5,12 +5,13 @@
 class DateTime{
 
     Q_GADGET
+    Q_PROPERTY(int timestamp READ getTimestamp WRITE setTimestamp)
 public:
     DateTime();
-    int getTimestamp() const;
-    void setTimestamp(int value);
-    QString getDateTimeAsString();
-    static DateTime getNow();
+    Q_INVOKABLE int getTimestamp() const;
+    Q_INVOKABLE void setTimestamp(int value);
+    Q_INVOKABLE QString getDateTimeAsString();
+    Q_INVOKABLE static DateTime getNow();
 
 private:
     int timestamp = 0;
@@ -31,6 +32,7 @@ class Person : public AbstractParty, public DomainCloneTemplate<Person>{
 
     // AbstractDomainObject interface
 public:
+    Person();
     virtual const QMetaObject &metaObject() const override;
     virtual void registerConverter() override;
 
@@ -87,6 +89,7 @@ class Employee : public Person, public DomainCloneTemplate<Employee>{
 
     // AbstractDomainObject interface
 public:
+    Employee();
     using DomainCloneTemplate<Employee>::clone;
 
     virtual const QMetaObject &metaObject() const override;

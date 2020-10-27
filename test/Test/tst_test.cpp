@@ -34,6 +34,10 @@ void Test::initTestCase()
     DatabaseSingleton::getInstance()->initializeDatabase();
     Core core;
     core.initializeCoreTables();
+
+    PartyModule module;
+    module.uninstall();
+    module.install();
 }
 
 void Test::cleanupTestCase()
@@ -84,13 +88,7 @@ void Test::test_person()
         qInfo() << e.what();
     }
 
-    auto all = mapper.loadAll();
-
-    foreach (auto i, all) {
-        mapper.remove(i);
-        qDebug() << i.toJsonObject() << endl;
-    }
-
+    mapper.remove(person);
 }
 
 void Test::test_employee()
@@ -110,6 +108,8 @@ void Test::test_employee()
     emp.setPassport_number(QString::number(qrand()));
 
     emp.setDate_of_employment(DateTime::getNow());
+
+    facade.saveEmployee(emp);
 
     qDebug() << emp.toJsonObject();
 

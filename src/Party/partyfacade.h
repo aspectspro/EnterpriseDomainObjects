@@ -4,6 +4,24 @@
 #include "organization.h"
 #include "person.h"
 
+/**
+ * @brief The EnterpriseDateUtils class - Utilities for Date Formatting.
+ */
+class EnterpriseDateUtils : public QObject{
+    Q_OBJECT
+
+public slots:
+    static DateTime now();
+
+    static DateTime dateTimeFromTimestamp(int timestamp);
+
+    static DateTime dateTimeFromUtc(QString utcTime);
+
+    static QString appDatesView(int timestamp);
+
+    static QString appDatesView(QDateTime dateTime);
+};
+
 class PartyFacade : public QObject
 {
     Q_OBJECT

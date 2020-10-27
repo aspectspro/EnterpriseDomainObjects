@@ -1,5 +1,10 @@
 #include "person.h"
 
+Person::Person()
+{
+    registerConverter();
+}
+
 const QMetaObject &Person::metaObject() const
 {
     return staticMetaObject;
@@ -126,6 +131,11 @@ void DateTime::registerMetaType()
     });
 }
 
+
+Employee::Employee()
+{
+    registerConverter();
+}
 
 const QMetaObject &Employee::metaObject() const
 {
