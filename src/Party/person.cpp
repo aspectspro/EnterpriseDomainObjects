@@ -175,3 +175,39 @@ void Employee::setDate_of_discharge(const DateTime value)
 {
     date_of_discharge = value;
 }
+
+
+QString PersonMapper::tableName() const
+{
+    return "party_person";
+}
+
+void PersonMapper::injectInsert(AbstractDomainObject &domainObject) const
+{
+    AbstractPartyMapper apMapper;
+    apMapper.insert(domainObject);
+}
+
+void PersonMapper::injectUpdate(AbstractDomainObject &domainObject) const
+{
+    AbstractPartyMapper apMapper;
+    apMapper.update(domainObject);
+}
+
+void PersonMapper::injectRemove(AbstractDomainObject &domainObject) const
+{
+    AbstractPartyMapper apMapper;
+    apMapper.remove(domainObject);
+}
+
+void PersonMapper::injectLoad(AbstractDomainObject &domainObject) const
+{
+    AbstractPartyMapper apMapper;
+    auto person = dynamic_cast<Person*>(&domainObject);
+    auto party = apMapper.find(person->getId());
+
+
+    person->setAddress(party.getAddress());
+    person->setEmail_address(party.getEmail_address());
+    person->setTelephone_number(party.getTelephone_number());
+}
