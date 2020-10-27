@@ -2,6 +2,7 @@
 #define PARTYFACADE_H
 #include "partymodule.h"
 #include "organization.h"
+#include "person.h"
 
 class PartyFacade : public QObject
 {
@@ -25,6 +26,20 @@ protected:
 private:
     DomainModelPtr _organizationModel;
 
+};
+
+class EmployeeFacade : public QObject{
+
+    Q_OBJECT
+
+public slots:
+    static Employee employeeFactory();
+    void saveEmployee(Employee employee);
+    void removeEmployee(Employee employee);
+    void updateEmployee(Employee employee);
+
+private:
+    EmployeeMapper mapper;
 };
 
 #endif // PARTYFACADE_H

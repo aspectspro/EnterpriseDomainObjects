@@ -61,3 +61,37 @@ void PartyFacade::load()
     _organizationModel->changeDomainList(data);
 
 }
+
+Employee EmployeeFacade::employeeFactory()
+{
+    Employee employee;
+    employee.generateId();
+    return employee;
+}
+
+void EmployeeFacade::saveEmployee(Employee employee)
+{
+    try {
+        mapper.insert(employee);
+    } catch (std::exception &e) {
+        qInfo() << e.what();
+    }
+}
+
+void EmployeeFacade::removeEmployee(Employee employee)
+{
+    try {
+        mapper.remove(employee);
+    } catch (std::exception &e) {
+        qInfo() << e.what();
+    }
+}
+
+void EmployeeFacade::updateEmployee(Employee employee)
+{
+    try {
+        mapper.update(employee);
+    } catch (std::exception &e) {
+        qInfo() << e.what();
+    }
+}

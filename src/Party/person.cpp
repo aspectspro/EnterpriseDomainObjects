@@ -134,6 +134,7 @@ const QMetaObject &Employee::metaObject() const
 
 void Employee::registerConverter()
 {
+    qRegisterMetaType<Employee>();
 }
 
 QString Employee::getBir_number() const

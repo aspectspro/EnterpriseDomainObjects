@@ -95,43 +95,24 @@ void Test::test_person()
 
 void Test::test_employee()
 {
-    Employee person;
-    person.generateId();
-    person.setDate_of_birth(DateTime::getNow());
 
-    EmployeeMapper mapper;
-    try {
-        mapper.insert(person);
-    } catch (std::exception &e) {
-        qInfo() << e.what();
-    }
+    EmployeeFacade facade;
+    auto emp = facade.employeeFactory();
 
-    person.setFirst_name("Greg");
-    person.setLast_name("Dillon");
-    person.setPassport_number("5533234");
-    person.setDriver_permit_number("55221122");
-    person.setIdentification_number("899747397234");
-    person.setAddress("#38 Iere Village Princes Town");
-    person.setEmail_address("greg@aspectspro.com");
-    person.setTelephone_number("868-269-6529");
+    emp.setFirst_name("Greg");
+    emp.setLast_name("Dillon");
+    emp.setAddress("38 Iere Village, Princes Town");
+    emp.setTelephone_number("868-269-6529");
+    emp.setEmail_address("greg@amapgo.com");
 
-    person.setBir_number("12412039");
-    person.setNis_number("0399903");
-    person.setDate_of_employment(DateTime::getNow());
+    emp.setIdentification_number(QString::number(qrand()));
+    emp.setDriver_permit_number(QString::number(qrand()));
+    emp.setPassport_number(QString::number(qrand()));
 
+    emp.setDate_of_employment(DateTime::getNow());
 
-    try {
-        mapper.update(person);
-    } catch (std::exception &e) {
-        qInfo() << e.what();
-    }
+    qDebug() << emp.toJsonObject();
 
-    auto all = mapper.loadAll();
-
-    foreach (auto i, all) {
-        mapper.remove(i);
-        qDebug() << i.toJsonObject() << endl;
-    }
 }
 
 QTEST_MAIN(Test)

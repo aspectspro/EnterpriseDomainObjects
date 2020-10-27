@@ -59,9 +59,9 @@ SetupModule &PartyModule::installSchema()
     personTable.appendTableColumn({"id",TableColumn::TypeString,true});
     personTable.appendTableColumn({"first_name",TableColumn::TypeString});
     personTable.appendTableColumn({"last_name",TableColumn::TypeString});
-    personTable.appendTableColumn({"identification_number",TableColumn::TypeString,true});
-    personTable.appendTableColumn({"driver_permit_number",TableColumn::TypeString,true});
-    personTable.appendTableColumn({"passport_number",TableColumn::TypeString,true});
+    personTable.appendTableColumn({"identification_number",TableColumn::TypeString});
+    personTable.appendTableColumn({"driver_permit_number",TableColumn::TypeString});
+    personTable.appendTableColumn({"passport_number",TableColumn::TypeString});
     personTable.appendTableColumn({"date_of_birth",TableColumn::TypeInt});
     personTable.setPrimaryKey("id");
     insertTable(personTable);
@@ -74,8 +74,8 @@ SetupModule &PartyModule::installSchema()
 
     auto employeeTable = initializeModuleTable("employee");
     employeeTable.appendTableColumn({"id",TableColumn::TypeString,true});
-    employeeTable.appendTableColumn({"bir_number",TableColumn::TypeString,true});
-    employeeTable.appendTableColumn({"nis_number",TableColumn::TypeString,true});
+    employeeTable.appendTableColumn({"bir_number",TableColumn::TypeString});
+    employeeTable.appendTableColumn({"nis_number",TableColumn::TypeString});
     employeeTable.appendTableColumn({"date_of_employment",TableColumn::TypeInt});
     employeeTable.appendTableColumn({"date_of_discharge",TableColumn::TypeInt});
     employeeTable.setPrimaryKey("id");
