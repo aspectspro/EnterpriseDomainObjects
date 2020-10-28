@@ -59,6 +59,7 @@ public slots:
     void saveEmployee(Employee employee);
     void removeEmployee(Employee employee);
     void updateEmployee(Employee employee);
+    Employee find(QString id = "");
 
     QAbstractItemModel *getEmployeeModel();
 

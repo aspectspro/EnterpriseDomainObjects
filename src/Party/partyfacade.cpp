@@ -100,6 +100,20 @@ void EmployeeFacade::updateEmployee(Employee employee)
     }
 }
 
+Employee EmployeeFacade::find(QString id)
+{
+    if(id.length() == 0){
+        return Employee();
+    }else{
+        try {
+            return mapper.find(id);
+        } catch (std::exception &e) {
+            Q_UNUSED(e)
+            return Employee();
+        }
+    }
+}
+
 QAbstractItemModel *EmployeeFacade::getEmployeeModel()
 {
     return this->employeeModel.get();
