@@ -70,7 +70,6 @@ EmployeeFacade::EmployeeFacade()
 Employee EmployeeFacade::employeeFactory()
 {
     Employee employee;
-    employee.generateId();
     return employee;
 }
 
