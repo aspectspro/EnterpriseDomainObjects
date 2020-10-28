@@ -49,6 +49,10 @@ private:
 class EmployeeFacade : public QObject{
 
     Q_OBJECT
+    Q_PROPERTY(QAbstractItemModel* employeeModel READ getEmployeeModel)
+
+public:
+    EmployeeFacade();
 
 public slots:
     static Employee employeeFactory();
@@ -56,8 +60,13 @@ public slots:
     void removeEmployee(Employee employee);
     void updateEmployee(Employee employee);
 
+    QAbstractItemModel *getEmployeeModel();
+
+    void loadEmployees();
+
 private:
     EmployeeMapper mapper;
+    DomainModelPtr employeeModel;
 };
 
 #endif // PARTYFACADE_H

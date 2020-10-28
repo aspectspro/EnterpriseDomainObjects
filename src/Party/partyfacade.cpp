@@ -62,6 +62,11 @@ void PartyFacade::load()
 
 }
 
+EmployeeFacade::EmployeeFacade()
+{
+    employeeModel = ModelFactory::createModel<Employee>();
+}
+
 Employee EmployeeFacade::employeeFactory()
 {
     Employee employee;
@@ -94,6 +99,23 @@ void EmployeeFacade::updateEmployee(Employee employee)
     } catch (std::exception &e) {
         qInfo() << e.what();
     }
+}
+
+QAbstractItemModel *EmployeeFacade::getEmployeeModel()
+{
+    return this->employeeModel.get();
+}
+
+void EmployeeFacade::loadEmployees()
+{
+    auto all = mapper.loadAll();
+    DomainObjectListPtr data = std::make_shared<QList<DomainObjectPtr>>();
+
+    foreach (auto i, all) {
+        data->append(i.clone());
+    }
+
+    employeeModel->changeDomainList(data);
 }
 
 DateTime EnterpriseDateUtils::now(){

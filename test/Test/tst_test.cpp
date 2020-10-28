@@ -42,7 +42,7 @@ void Test::initTestCase()
 
 void Test::cleanupTestCase()
 {
-//    DatabaseSingleton::getInstance()->removeDatabaseFolder();
+    DatabaseSingleton::getInstance()->removeDatabaseFolder();
 }
 
 void Test::test_party()
@@ -111,8 +111,7 @@ void Test::test_employee()
 
     facade.saveEmployee(emp);
 
-    qDebug() << emp.toJsonObject();
-
+    facade.loadEmployees();
 }
 
 QTEST_MAIN(Test)
