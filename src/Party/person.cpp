@@ -96,6 +96,21 @@ QString DateTime::getDateTimeAsString()
     return QDateTime::fromSecsSinceEpoch(getTimestamp()).toString("dddd dd MMMM yyyy, hh:mm:ss ap");
 }
 
+QString DateTime::toString()
+{
+    return getDateTimeAsString();
+}
+
+QString DateTime::toDate()
+{
+    return QDateTime::fromSecsSinceEpoch(getTimestamp()).toString("dddd dd MMMM yyyy");
+}
+
+QString DateTime::toTime()
+{
+    return QDateTime::fromSecsSinceEpoch(getTimestamp()).toString("hh:mm:ss ap");
+}
+
 DateTime DateTime::getNow()
 {
     DateTime time;

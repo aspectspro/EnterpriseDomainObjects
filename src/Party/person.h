@@ -11,6 +11,9 @@ public:
     Q_INVOKABLE int getTimestamp() const;
     Q_INVOKABLE void setTimestamp(int value);
     Q_INVOKABLE QString getDateTimeAsString();
+    Q_INVOKABLE QString toString();
+    Q_INVOKABLE QString toDate();
+    Q_INVOKABLE QString toTime();
     Q_INVOKABLE static DateTime getNow();
 
 private:

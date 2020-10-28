@@ -76,6 +76,9 @@ Employee EmployeeFacade::employeeFactory()
 void EmployeeFacade::saveEmployee(Employee employee)
 {
     try {
+        if(employee.getId().length() == 0)
+            employee.generateId();
+
         mapper.insert(employee);
     } catch (std::exception &e) {
         qInfo() << e.what();
