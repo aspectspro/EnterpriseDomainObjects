@@ -71,7 +71,7 @@ void Test::test_person()
     person.setDate_of_birth(DateTime::getNow());
 
     PersonMapper mapper;
-    mapper.insert(person);
+
 
     person.setFirst_name("Greg");
     person.setLast_name("Dillon");
@@ -81,6 +81,12 @@ void Test::test_person()
     person.setAddress("#38 Iere Village Princes Town");
     person.setEmail_address("greg@aspectspro.com");
     person.setTelephone_number("868-269-6529");
+
+    try {
+        mapper.insert(person);
+    } catch (std::exception &e) {
+        qInfo() << e.what();
+    }
 
     try {
         mapper.update(person);

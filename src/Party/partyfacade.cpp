@@ -79,9 +79,13 @@ void EmployeeFacade::saveEmployee(Employee employee)
         if(employee.getId().length() == 0)
             employee.generateId();
 
+        if(employee.getFirst_name().isEmpty() || employee.getLast_name().isEmpty()){
+            throw std::exception("Empty Name");
+        }
+
         mapper.insert(employee);
     } catch (std::exception &e) {
-        qInfo() << e.what();
+        emit error(e.what());
     }
 }
 
@@ -90,7 +94,7 @@ void EmployeeFacade::removeEmployee(Employee employee)
     try {
         mapper.remove(employee);
     } catch (std::exception &e) {
-        qInfo() << e.what();
+        emit error(e.what());
     }
 }
 
@@ -99,7 +103,7 @@ void EmployeeFacade::updateEmployee(Employee employee)
     try {
         mapper.update(employee);
     } catch (std::exception &e) {
-        qInfo() << e.what();
+        emit error(e.what());
     }
 }
 
@@ -111,7 +115,7 @@ Employee EmployeeFacade::find(QString id)
         try {
             return mapper.find(id);
         } catch (std::exception &e) {
-            Q_UNUSED(e)
+            emit error(e.what());
             return Employee();
         }
     }
@@ -124,14 +128,18 @@ QAbstractItemModel *EmployeeFacade::getEmployeeModel()
 
 void EmployeeFacade::loadEmployees()
 {
-    auto all = mapper.loadAll();
-    DomainObjectListPtr data = std::make_shared<QList<DomainObjectPtr>>();
+    try {
+        auto all = mapper.loadAll();
+        DomainObjectListPtr data = std::make_shared<QList<DomainObjectPtr>>();
 
-    foreach (auto i, all) {
-        data->append(i.clone());
+        foreach (auto i, all) {
+            data->append(i.clone());
+        }
+
+        employeeModel->changeDomainList(data);
+    } catch (std::exception &e) {
+        qInfo() << e.what();
     }
-
-    employeeModel->changeDomainList(data);
 }
 
 DateTime EnterpriseDateUtils::now(){

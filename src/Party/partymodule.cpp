@@ -57,8 +57,18 @@ SetupModule &PartyModule::installSchema()
 
     auto personTable = initializeModuleTable("person");
     personTable.appendTableColumn({"id",TableColumn::TypeString,true});
-    personTable.appendTableColumn({"first_name",TableColumn::TypeString});
-    personTable.appendTableColumn({"last_name",TableColumn::TypeString});
+
+    TableColumn first_name{"first_name",TableColumn::TypeString};
+    first_name.setNotNull(true);
+    first_name.setDefaultValue("");
+
+    personTable.appendTableColumn(first_name);
+
+    TableColumn last_name{"last_name",TableColumn::TypeString};
+    last_name.setNotNull(true);
+    last_name.setDefaultValue("");
+    personTable.appendTableColumn(last_name);
+
     personTable.appendTableColumn({"identification_number",TableColumn::TypeString});
     personTable.appendTableColumn({"driver_permit_number",TableColumn::TypeString});
     personTable.appendTableColumn({"passport_number",TableColumn::TypeString});

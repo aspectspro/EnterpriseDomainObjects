@@ -51,6 +51,9 @@ class EmployeeFacade : public QObject{
     Q_OBJECT
     Q_PROPERTY(QAbstractItemModel* employeeModel READ getEmployeeModel)
 
+signals:
+    void error(QString message);
+
 public:
     EmployeeFacade();
 
