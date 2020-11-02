@@ -30,6 +30,49 @@ Test::~Test()
 
 }
 
+class SalaryDateRange{
+
+public:
+    SalaryDateRange(QString from, QString to){
+        fromDate = convertFromString(from);
+        toDate = convertFromString(to);
+    }
+
+    /**
+     * @brief getWeekDifference - Returns the difference of week number.
+     * @return
+     */
+    int mondayChecker(){
+
+        auto fromDayOfMonth = fromDate.dayOfYear();
+        auto toDayOfMonth = toDate.dayOfYear();
+        auto daysDifference = toDayOfMonth-fromDayOfMonth;
+        int mondayCounter = 0;
+
+        for(int i = 0; i <= daysDifference; i++){
+            QDate _dtFrom = fromDate.addDays(i);
+            if(_dtFrom.dayOfWeek() == 1){
+                mondayCounter++;
+            }
+        }
+
+        return mondayCounter;
+    }
+
+    /**
+     * @brief convertFromString - Converts from dateString yyyy-MM-dd
+     * @param dateString
+     * @return
+     */
+    static QDate convertFromString(QString dateString){
+        return QDate::fromString(dateString,Qt::ISODate);
+    }
+
+private:
+    QDate fromDate;
+    QDate toDate;
+};
+
 class Salary{
 
 
@@ -40,8 +83,17 @@ public:
         Montly
     };
 
-    Salary(SalaryType type){
-        this->type = type;
+    Salary(SalaryDateRange salaryDates) :
+        salaryDates(salaryDates){
+        auto mondayCounter = salaryDates.mondayChecker();
+
+        if(mondayCounter == 1){
+           type = Weekly;
+        }else if(mondayCounter == 2){
+            type = FortNightly;
+        }else if(mondayCounter >= 3){
+            type = Montly;
+        }
     }
 
     int amount() const;
@@ -49,9 +101,12 @@ public:
 
     SalaryType getType() const;
 
+    SalaryDateRange getSalaryDates() const;
+
 private:
     int _amount = 0;
     SalaryType type;
+    SalaryDateRange salaryDates;
 };
 
 void Test::initTestCase()
@@ -252,19 +307,7 @@ public:
             }
         }
 
-        switch (salary.getType()) {
-
-        case Salary::Montly : return weeklyContribution*4;
-            break;
-
-        case Salary::Weekly : return weeklyContribution;
-            break;
-
-        case Salary::FortNightly : return weeklyContribution*2;
-            break;
-        }
-
-        return 0;
+        return weeklyContribution*salary.getSalaryDates().mondayChecker();
     }
 
 private:
@@ -285,7 +328,7 @@ public:
         case Salary::Weekly : yearlyProjection = salary.amount()*52;
             break;
 
-        case Salary::FortNightly : yearlyProjection = salary.amount()/26;
+        case Salary::FortNightly : yearlyProjection = salary.amount()*26;
             break;
         }
 
@@ -316,7 +359,7 @@ public:
     static int getHealthSurcharge(Salary &salary){
         auto amount = salary.amount();
         auto weeklyAmount = 0;
-        auto healthSurchargeCeiling = 109;
+        auto healthSurchargeCeiling = 10900;
 
         switch (salary.getType()) {
 
@@ -338,68 +381,13 @@ public:
             healthSurcharge = 480;
         }
 
-        switch (salary.getType()) {
-
-        case Salary::Montly : return healthSurcharge*4;
-            break;
-
-        case Salary::Weekly : return healthSurcharge;
-            break;
-
-        case Salary::FortNightly : return healthSurcharge*2;
-            break;
-        }
-
-        return 0;
+        return healthSurcharge*salary.getSalaryDates().mondayChecker();
     }
-};
-
-class SalaryDateRange{
-
-public:
-    SalaryDateRange(QString from, QString to){
-        fromDate = convertFromString(from);
-        toDate = convertFromString(to);
-    }
-
-    /**
-     * @brief getWeekDifference - Returns the difference of week number.
-     * @return
-     */
-    int mondayChecker(){
-
-        auto fromDayOfMonth = fromDate.dayOfYear();
-        auto toDayOfMonth = toDate.dayOfYear();
-        auto daysDifference = toDayOfMonth-fromDayOfMonth;
-        int mondayCounter = 0;
-
-        for(int i = 0; i <= daysDifference; i++){
-            QDate _dtFrom = fromDate.addDays(i);
-            if(_dtFrom.dayOfWeek() == 1){
-                mondayCounter++;
-            }
-        }
-
-        return mondayCounter;
-    }
-
-    /**
-     * @brief convertFromString - Converts from dateString yyyy-MM-dd
-     * @param dateString
-     * @return
-     */
-    static QDate convertFromString(QString dateString){
-        return QDate::fromString(dateString,Qt::ISODate);
-    }
-
-private:
-    QDate fromDate;
-    QDate toDate;
 };
 
 void Test::test_salary()
 {
-    Salary s(Salary::Montly);
+    Salary s({"2020-09-28","2020-10-09"});
     s.setAmount(650000);
 
     NisChecker checker;
@@ -416,10 +404,7 @@ void Test::test_salary()
     qDebug() << "NIS                : " << nis;
     qDebug() << "PAYE               : " << paye;
     qDebug() << "Health Surcharge   : " << healthSurcharge;
-
-    SalaryDateRange dt("2020-11-02","2020-11-30");
-    qDebug() << dt.mondayChecker();
-
+    qDebug() << "Weeks              : " << s.getSalaryDates().mondayChecker();
 }
 
 int Salary::amount() const
@@ -435,6 +420,11 @@ void Salary::setAmount(int amount)
 Salary::SalaryType Salary::getType() const
 {
 return type;
+}
+
+SalaryDateRange Salary::getSalaryDates() const
+{
+return salaryDates;
 }
 
 int SalaryRange::getMin() const
