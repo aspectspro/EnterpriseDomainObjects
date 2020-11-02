@@ -354,10 +354,53 @@ public:
     }
 };
 
+class SalaryDateRange{
+
+public:
+    SalaryDateRange(QString from, QString to){
+        fromDate = convertFromString(from);
+        toDate = convertFromString(to);
+    }
+
+    /**
+     * @brief getWeekDifference - Returns the difference of week number.
+     * @return
+     */
+    int mondayChecker(){
+
+        auto fromDayOfMonth = fromDate.dayOfYear();
+        auto toDayOfMonth = toDate.dayOfYear();
+        auto daysDifference = toDayOfMonth-fromDayOfMonth;
+        int mondayCounter = 0;
+
+        for(int i = 0; i <= daysDifference; i++){
+            QDate _dtFrom = fromDate.addDays(i);
+            if(_dtFrom.dayOfWeek() == 1){
+                mondayCounter++;
+            }
+        }
+
+        return mondayCounter;
+    }
+
+    /**
+     * @brief convertFromString - Converts from dateString yyyy-MM-dd
+     * @param dateString
+     * @return
+     */
+    static QDate convertFromString(QString dateString){
+        return QDate::fromString(dateString,Qt::ISODate);
+    }
+
+private:
+    QDate fromDate;
+    QDate toDate;
+};
+
 void Test::test_salary()
 {
     Salary s(Salary::Montly);
-    s.setAmount(800000);
+    s.setAmount(650000);
 
     NisChecker checker;
     auto nis = checker.getNisForSalary(s);
@@ -374,6 +417,8 @@ void Test::test_salary()
     qDebug() << "PAYE               : " << paye;
     qDebug() << "Health Surcharge   : " << healthSurcharge;
 
+    SalaryDateRange dt("2020-11-02","2020-11-30");
+    qDebug() << dt.mondayChecker();
 
 }
 
