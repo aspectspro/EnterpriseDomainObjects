@@ -221,25 +221,13 @@ public:
 
     int getNisForSalary(Salary &salary){
 
-        int salaryAmount = 0;
-
+        int _salaryAmount = salary.amount();
         SalaryRange range;
-
-        switch (salary.getType()) {
-
-        case Salary::Montly : salaryAmount = salary.amount()/4;
-            break;
-
-        case Salary::Weekly : salaryAmount = salary.amount();
-            break;
-
-        case Salary::FortNightly : salaryAmount = salary.amount()/2;
-            break;
-        }
-
         int weeklyContribution = 0;
 
         foreach (auto i, nisList) {
+
+            auto salaryAmount = _salaryAmount;
 
             switch (salary.getType()) {
 
@@ -249,15 +237,18 @@ public:
             case Salary::Weekly : range = i.getWeeklyRange();
                 break;
 
-            case Salary::FortNightly : i.getWeeklyRange();
+            case Salary::FortNightly : range = i.getWeeklyRange();
+                salaryAmount = salaryAmount/2;
                 break;
             }
 
             if(salaryAmount >= range.getMin() &&
                     salaryAmount <= range.getMax()){
                 weeklyContribution = i.getTotalWeeklyContribution();
+                break;
             }else if(salaryAmount >= range.getMin() && range.getMax() == -1){
                 weeklyContribution = i.getTotalWeeklyContribution();
+                break;
             }
         }
 
@@ -358,18 +349,31 @@ public:
         case Salary::FortNightly : return healthSurcharge*2;
             break;
         }
+
+        return 0;
     }
 };
 
 void Test::test_salary()
 {
     Salary s(Salary::Montly);
-    s.setAmount(1200000);
+    s.setAmount(800000);
 
     NisChecker checker;
-    qDebug() << checker.getNisForSalary(s);
-    qDebug() << PayeChecker::getPayeForSalary(s);
-    qDebug() << HealthSurchargeCalculator::getHealthSurcharge(s);
+    auto nis = checker.getNisForSalary(s);
+    auto paye = PayeChecker::getPayeForSalary(s);
+    auto healthSurcharge = HealthSurchargeCalculator::getHealthSurcharge(s);
+    auto allTaxes = nis
+            + paye
+            + healthSurcharge;
+
+    qDebug() << "Gross Pay          : " << s.amount();
+    qDebug() << "Net Income         : " << s.amount()-allTaxes;
+    qDebug() << "Taxes              : " << allTaxes;
+    qDebug() << "NIS                : " << nis;
+    qDebug() << "PAYE               : " << paye;
+    qDebug() << "Health Surcharge   : " << healthSurcharge;
+
 
 }
 
