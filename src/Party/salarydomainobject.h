@@ -4,21 +4,6 @@
 #include "datetime.h"
 #include "money.h"
 
-//auto payTable = initializeModuleTable("pay");
-//payTable.appendTableColumn({"id",TableColumn::TypeString,true});
-//payTable.appendTableColumn({"employee_id",TableColumn::TypeString});
-//payTable.appendTableColumn({"gross_pay",TableColumn::TypeInt});
-//payTable.appendTableColumn({"net_pay",TableColumn::TypeInt});
-//payTable.appendTableColumn({"employee_nis",TableColumn::TypeInt});
-//payTable.appendTableColumn({"employer_nis",TableColumn::TypeInt});
-//payTable.appendTableColumn({"paye",TableColumn::TypeInt});
-//payTable.appendTableColumn({"health_surcharge",TableColumn::TypeInt});
-//payTable.appendTableColumn({"date_from",TableColumn::TypeInt});
-//payTable.appendTableColumn({"date_to",TableColumn::TypeInt});
-//payTable.appendTableColumn({"date_paid",TableColumn::TypeInt});
-//payTable.setPrimaryKey("id");
-//insertTable(payTable);
-
 class SalaryDomainObject : public AbstractDomainObject
 {
     Q_GADGET
@@ -80,6 +65,14 @@ private:
     Money gross_pay,net_pay,employee_nis,employer_nis,
     paye,health_surcharge;
     DateTime date_from,date_to,date_paid;
+};
+
+class SalaryDomainMapper : public TemplateMapper<SalaryDomainObject>{
+
+
+    // AbstractMapper interface
+public:
+    virtual QString tableName() const override;
 };
 
 #endif // SALARYDOMAINOBJECT_H

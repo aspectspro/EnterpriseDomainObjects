@@ -124,3 +124,8 @@ void SalaryDomainObject::setDate_paid(const DateTime &value)
 {
     date_paid = value;
 }
+
+QString SalaryDomainMapper::tableName() const
+{
+    return "party_pay";
+}
