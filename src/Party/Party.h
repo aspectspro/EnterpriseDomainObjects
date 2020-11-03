@@ -7,4 +7,6 @@
 #include "person.h"
 #include "partymodule.h"
 #include "salary.h"
+#include "salaryfacade.h"
+
 #endif // PARTY_H

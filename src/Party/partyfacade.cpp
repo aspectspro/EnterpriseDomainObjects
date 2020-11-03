@@ -161,7 +161,7 @@ DateTime EnterpriseDateUtils::dateTimeFromUtc(QString utcTime){
 
 QString EnterpriseDateUtils::appDatesView(int timestamp){
     auto dt = QDateTime::fromSecsSinceEpoch(timestamp+43200);
-    return dt.toString("dd/MM/yyyy");
+    return dt.toString("yyyy-MM-dd");
 }
 
 QString EnterpriseDateUtils::appDatesView(QDateTime dateTime){

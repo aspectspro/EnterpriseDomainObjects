@@ -2,6 +2,11 @@
 
 QList<NisEarnings> NisCalculator::nisList;
 
+SalaryDateRange::SalaryDateRange()
+{
+
+}
+
 SalaryDateRange::SalaryDateRange(QString from, QString to){
     fromDate = convertFromString(from);
     toDate = convertFromString(to);
@@ -26,6 +31,11 @@ int SalaryDateRange::mondayChecker(){
 
 QDate SalaryDateRange::convertFromString(QString dateString){
     return QDate::fromString(dateString,Qt::ISODate);
+}
+
+Salary::Salary()
+{
+
 }
 
 Salary::Salary(SalaryDateRange salaryDates) :
@@ -142,6 +152,7 @@ int PayeCalculator::getPayeForSalary(Salary &salary){
     }
 
     if(yearlyProjection > taxCeiling){
+
         auto aboveTax = yearlyProjection-taxCeiling;
         auto taxedAmount = aboveTax/4;
 
@@ -249,4 +260,14 @@ QDate SalaryDateRange::getFromDate() const
 QDate SalaryDateRange::getToDate() const
 {
     return toDate;
+}
+
+void SalaryDateRange::setFromDate(const QString value)
+{
+    fromDate = convertFromString(value);
+}
+
+void SalaryDateRange::setToDate(const QString value)
+{
+    toDate = convertFromString(value);
 }

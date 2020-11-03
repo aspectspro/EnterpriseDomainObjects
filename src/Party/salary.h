@@ -8,6 +8,7 @@
 class SalaryDateRange{
 
 public:
+    SalaryDateRange();
     SalaryDateRange(QString from, QString to);
 
     /**
@@ -26,6 +27,9 @@ public:
     QDate getFromDate() const;
     QDate getToDate() const;
 
+    void setFromDate(const QString value);
+    void setToDate(const QString value);
+
 private:
     QDate fromDate;
     QDate toDate;
@@ -43,6 +47,7 @@ public:
         Montly
     };
 
+    Salary();
     Salary(SalaryDateRange salaryDates);
 
     int amount() const;
