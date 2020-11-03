@@ -1,4 +1,5 @@
 #include "salarydomainobject.h"
+#include "person.h"
 
 SalaryDomainObject::SalaryDomainObject()
 {
@@ -128,4 +129,27 @@ void SalaryDomainObject::setDate_paid(const DateTime &value)
 QString SalaryDomainMapper::tableName() const
 {
     return "party_pay";
+}
+
+
+void SalaryDomainMapper::injectInsert(AbstractDomainObject &domainObject) const
+{
+    auto obj = dynamic_cast<SalaryDomainObject*>(&domainObject);
+
+    auto where = QString("employee_id='%1' AND date_to >= %2")
+            .arg(obj->getEmployee_id())
+            .arg(obj->getDate_from().getTimestamp());
+    QList<SalaryDomainObject> result;
+
+    try {
+        result = this->loadAll(where);
+    } catch (std::exception &e) {
+        Q_UNUSED(e);
+    }
+
+    if(result.count() >= 1){
+        throw std::exception(
+                    QString("Employee has been paid for date. Please set From Date later than '%1'")
+                    .arg(obj->getDate_to().toIsoDate()).toUtf8());
+    }
 }

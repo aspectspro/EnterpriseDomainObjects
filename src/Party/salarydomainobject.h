@@ -69,10 +69,13 @@ private:
 
 class SalaryDomainMapper : public TemplateMapper<SalaryDomainObject>{
 
-
     // AbstractMapper interface
 public:
     virtual QString tableName() const override;
+
+    // AbstractMapper interface
+protected:
+    virtual void injectInsert(AbstractDomainObject &domainObject) const override;
 };
 
 #endif // SALARYDOMAINOBJECT_H

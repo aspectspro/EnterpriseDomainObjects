@@ -54,7 +54,7 @@ void Test::initTestCase()
 
 void Test::cleanupTestCase()
 {
-    DatabaseSingleton::getInstance()->removeDatabaseFolder();
+//    DatabaseSingleton::getInstance()->removeDatabaseFolder();
 }
 
 void Test::test_party()
@@ -419,17 +419,35 @@ void Test::test_money()
 
 void Test::test_salaryDomainObject()
 {
-    SalaryDomainObject obj;
-    obj.generateId();
-    obj.setDate_from(DateTime::fromIsoDate("2020-11-02"));
-    obj.setDate_to(DateTime::fromIsoDate("2020-11-27"));
-    obj.setDate_paid(DateTime::getNow());
-    obj.setGross_pay(Money(600000));
+    Employee e;
+    e.generateId();
+    e.setFirst_name("Greg");
+    e.setLast_name("Dillon");
 
-    SalaryDomainMapper mapper;
-    mapper.insert(obj);
+    SalaryFacade facade;
+    facade.setFrom_date(DateTime::fromIsoDate("2020-11-02"));
+    facade.setTo_date(DateTime::fromIsoDate("2020-11-27"));
+    facade.setGross_salary(650000);
+    try {
+        facade.pay(e);
+    } catch (std::exception &e) {
+        qInfo() << e.what();
+    }
 
-    qDebug() << mapper.find(obj.getId()).getGross_pay().asString();
+    try {
+        facade.pay(e);
+    } catch (std::exception &e) {
+        qInfo() << e.what();
+    }
+
+    try {
+        facade.setFrom_date(DateTime::fromIsoDate("2020-11-28"));
+        facade.setTo_date(DateTime::fromIsoDate("2020-12-04"));
+        facade.pay(e);
+    } catch (std::exception &e) {
+        qInfo() << e.what();
+    }
+
 }
 
 
