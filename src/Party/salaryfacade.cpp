@@ -16,7 +16,9 @@ SalaryFacade::SalaryFacade(QObject *parent) : QObject(parent)
     });
 
     connect(this,&SalaryFacade::salaryChanged,[=](Salary s){
-        auto _nis = NisCalculator::getNisForSalary(s);
+
+        NisCalculator calc(s);
+        auto _nis = calc.getEmployeeContribution();
         setNis(_nis);
 
         auto _paye = PayeCalculator::getPayeForSalary(s);

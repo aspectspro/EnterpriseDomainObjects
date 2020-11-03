@@ -113,10 +113,35 @@ class NisCalculator{
 
 public:
     NisCalculator();
+    NisCalculator(Salary salary) : salary(salary){}
+
+    /**
+     * @brief getNisForSalary
+     * @return
+     */
     static int getNisForSalary(Salary &salary);
+
+    /**
+     * @brief getNisForSalary
+     * @return
+     */
+    int getNisForSalary();
+
+    /**
+     * @brief getEmployeeContribution
+     * @return
+     */
+    int getEmployeeContribution();
+
+    /**
+     * @brief getEmployerContribution
+     * @return
+     */
+    int getEmployerContribution();
 
 private:
     static QList<NisEarnings> nisList;
+    Salary salary;
 };
 
 /**
@@ -137,5 +162,7 @@ class HealthSurchargeCalculator{
 public:
     static int getHealthSurcharge(Salary &salary);
 };
+
+
 
 #endif // SALARY_H

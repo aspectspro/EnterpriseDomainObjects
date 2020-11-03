@@ -8,5 +8,6 @@
 #include "partymodule.h"
 #include "salary.h"
 #include "salaryfacade.h"
+#include "salarydomainobject.h"
 
 #endif // PARTY_H

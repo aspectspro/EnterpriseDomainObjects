@@ -26,6 +26,7 @@ private slots:
     void test_monthly_paye();
 
     void test_money();
+    void test_salaryDomainObject();
 };
 
 Test::Test()
@@ -413,6 +414,15 @@ void Test::test_money()
     auto str = money.asString();
     QVERIFY("$88,560.00" == str);
     QVERIFY(money.unformatMoneyString(str) == 8856000);
+
+}
+
+void Test::test_salaryDomainObject()
+{
+    SalaryDomainObject obj;
+    obj.setDate_from(DateTime::getNow());
+    obj.setGross_pay(Money(600000));
+    qDebug() << obj.toJsonObject();
 
 }
 

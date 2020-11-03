@@ -40,6 +40,10 @@ if(EXISTS ${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
         Party/SalaryFacade.cpp
         Party/Money.h
         Party/Money.cpp
+        Party/SalaryDomainObject.h
+        Party/SalaryDomainObject.cpp
+        Party/DateTime.h
+        Party/DateTime.cpp
         ${PROJECT_NAME}.h
     #        ${RESOURCES}
     )

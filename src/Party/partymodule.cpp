@@ -91,6 +91,21 @@ SetupModule &PartyModule::installSchema()
     employeeTable.setPrimaryKey("id");
     insertTable(employeeTable);
 
+    auto payTable = initializeModuleTable("pay");
+    payTable.appendTableColumn({"id",TableColumn::TypeString,true});
+    payTable.appendTableColumn({"employee_id",TableColumn::TypeString});
+    payTable.appendTableColumn({"gross_pay",TableColumn::TypeInt});
+    payTable.appendTableColumn({"net_pay",TableColumn::TypeInt});
+    payTable.appendTableColumn({"employee_nis",TableColumn::TypeInt});
+    payTable.appendTableColumn({"employer_nis",TableColumn::TypeInt});
+    payTable.appendTableColumn({"paye",TableColumn::TypeInt});
+    payTable.appendTableColumn({"health_surcharge",TableColumn::TypeInt});
+    payTable.appendTableColumn({"date_from",TableColumn::TypeInt});
+    payTable.appendTableColumn({"date_to",TableColumn::TypeInt});
+    payTable.appendTableColumn({"date_paid",TableColumn::TypeInt});
+    payTable.setPrimaryKey("id");
+    insertTable(payTable);
+
     return *this;
 }
 

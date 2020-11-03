@@ -135,6 +135,21 @@ int NisCalculator::getNisForSalary(Salary &salary){
     return weeklyContribution*salary.getSalaryDates().mondayChecker();
 }
 
+int NisCalculator::getNisForSalary()
+{
+    return getNisForSalary(this->salary);
+}
+
+int NisCalculator::getEmployeeContribution()
+{
+    return getNisForSalary()/3;
+}
+
+int NisCalculator::getEmployerContribution()
+{
+    return getNisForSalary()/1.5;
+}
+
 int PayeCalculator::getPayeForSalary(Salary &salary){
     int yearlyProjection = 0;
     int taxCeiling = 7200000;
