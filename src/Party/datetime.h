@@ -15,6 +15,8 @@ public:
     Q_INVOKABLE QString toDate();
     Q_INVOKABLE QString toTime();
     Q_INVOKABLE static DateTime getNow();
+    Q_INVOKABLE QString toIsoDate();
+    Q_INVOKABLE static DateTime fromIsoDate(QString isoDate);
 
 private:
     int timestamp = 0;

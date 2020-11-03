@@ -41,6 +41,20 @@ DateTime DateTime::getNow()
     return time;
 }
 
+QString DateTime::toIsoDate()
+{
+    return QDateTime::fromSecsSinceEpoch(this->getTimestamp()).toString("yyyy-MM-dd");
+
+}
+
+DateTime DateTime::fromIsoDate(QString isoDate)
+{
+    DateTime dt;
+    auto ts = QDateTime::fromString(isoDate,"yyyy-MM-dd").toSecsSinceEpoch();
+    dt.setTimestamp(ts);
+    return dt;
+}
+
 void DateTime::registerMetaType()
 {
     if(QMetaType::hasRegisteredConverterFunction<DateTime,QString>())
