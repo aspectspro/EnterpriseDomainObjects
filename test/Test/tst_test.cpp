@@ -30,84 +30,7 @@ Test::~Test()
 
 }
 
-class SalaryDateRange{
 
-public:
-    SalaryDateRange(QString from, QString to){
-        fromDate = convertFromString(from);
-        toDate = convertFromString(to);
-    }
-
-    /**
-     * @brief getWeekDifference - Returns the difference of week number.
-     * @return
-     */
-    int mondayChecker(){
-
-        auto fromDayOfMonth = fromDate.dayOfYear();
-        auto toDayOfMonth = toDate.dayOfYear();
-        auto daysDifference = toDayOfMonth-fromDayOfMonth;
-        int mondayCounter = 0;
-
-        for(int i = 0; i <= daysDifference; i++){
-            QDate _dtFrom = fromDate.addDays(i);
-            if(_dtFrom.dayOfWeek() == 1){
-                mondayCounter++;
-            }
-        }
-
-        return mondayCounter;
-    }
-
-    /**
-     * @brief convertFromString - Converts from dateString yyyy-MM-dd
-     * @param dateString
-     * @return
-     */
-    static QDate convertFromString(QString dateString){
-        return QDate::fromString(dateString,Qt::ISODate);
-    }
-
-private:
-    QDate fromDate;
-    QDate toDate;
-};
-
-class Salary{
-
-
-public:
-    enum SalaryType{
-        Weekly,
-        FortNightly,
-        Montly
-    };
-
-    Salary(SalaryDateRange salaryDates) :
-        salaryDates(salaryDates){
-        auto mondayCounter = salaryDates.mondayChecker();
-
-        if(mondayCounter == 1){
-           type = Weekly;
-        }else if(mondayCounter == 2){
-            type = FortNightly;
-        }else if(mondayCounter >= 3){
-            type = Montly;
-        }
-    }
-
-    int amount() const;
-    void setAmount(int amount);
-
-    SalaryType getType() const;
-
-    SalaryDateRange getSalaryDates() const;
-
-private:
-    int _amount = 0;
-    SalaryType type;
-    SalaryDateRange salaryDates;
-};
 
 void Test::initTestCase()
 {
@@ -200,262 +123,31 @@ void Test::test_employee()
     facade.loadEmployees();
 }
 
-class SalaryRange{
-
-public:
-    SalaryRange(){}
-    SalaryRange(int min,int max){
-        this->min = min;
-        this->max = max;
-    }
-    int getMin() const;
-
-    int getMax() const;
-
-private:
-    int min;
-    int max;
-};
-
-class NisEarnings{
-
-public:
-    NisEarnings(SalaryRange weeklyRange, SalaryRange monthlyRange, int totalWeeklyContribution) :
-        weeklyRange(weeklyRange),monthlyRange(monthlyRange), totalWeeklyContribution(totalWeeklyContribution){}
-
-    int getAssumedWeekly() const;
-    void setAssumedWeekly(int value);
-
-    int getEmployerWeekly(){
-        return getTotalWeeklyContribution()/1.5;
-    }
-
-    int getEmployeeWeekly(){
-        return getTotalWeeklyContribution()/3;
-    }
-
-    int getTotalWeeklyContribution() const;
-    void setTotalWeeklyContribution(int value);
-
-    SalaryRange getWeeklyRange() const;
-
-    SalaryRange getMonthlyRange() const;
-
-private:
-    SalaryRange weeklyRange;
-    SalaryRange monthlyRange;
-    int totalWeeklyContribution = 0;
-};
-
-class NisChecker{
-public:
-    NisChecker(){
-        NisEarnings i({20000,33999},{86700,147299},3570);
-        NisEarnings ii({34000,44999},{147300,194999},5220);
-        NisEarnings iii({45000,60999},{195000,264299},6990);
-        NisEarnings iv({61000,75999},{264300,329399},9030);
-        NisEarnings v({76000,92999},{329300,402999},11160);
-
-        NisEarnings vi({93000,111999},{403000,485299},13530);
-        NisEarnings vii({112000,129999},{485300,563299},15960);
-        NisEarnings viii({130000,148999},{563300,645699},18420);
-        NisEarnings ix({149000,170999},{645700,740999},21120);
-        NisEarnings x({171000,190999},{741000,827699},23880);
-
-        NisEarnings xi({191000,213999},{827700,927299},26730);
-        NisEarnings xii({214000,237999},{927300,1031299},29820);
-        NisEarnings xiii({238000,262999},{1031300,1139699},33060);
-        NisEarnings xiv({263000,291999},{1139700,1265299},36630);
-        NisEarnings xv({292000,313799},{1265300,1359999},39990);
-
-        NisEarnings xvi({313800,-1},{136000,-1},41430);
-
-        nisList << i << ii << iii << iv << v << vi << vii << viii << ix << x
-                << xi << xii << xiii << xiv << xv << xvi;
-    }
-
-    int getNisForSalary(Salary &salary){
-
-        int _salaryAmount = salary.amount();
-        SalaryRange range;
-        int weeklyContribution = 0;
-
-        foreach (auto i, nisList) {
-
-            auto salaryAmount = _salaryAmount;
-
-            switch (salary.getType()) {
-
-            case Salary::Montly : range = i.getMonthlyRange();
-                break;
-
-            case Salary::Weekly : range = i.getWeeklyRange();
-                break;
-
-            case Salary::FortNightly : range = i.getWeeklyRange();
-                salaryAmount = salaryAmount/2;
-                break;
-            }
-
-            if(salaryAmount >= range.getMin() &&
-                    salaryAmount <= range.getMax()){
-                weeklyContribution = i.getTotalWeeklyContribution();
-                break;
-            }else if(salaryAmount >= range.getMin() && range.getMax() == -1){
-                weeklyContribution = i.getTotalWeeklyContribution();
-                break;
-            }
-        }
-
-        return weeklyContribution*salary.getSalaryDates().mondayChecker();
-    }
-
-private:
-    QList<NisEarnings> nisList;
-};
-
-class PayeChecker{
-public:
-    static int getPayeForSalary(Salary &salary){
-        int yearlyProjection = 0;
-        int taxCeiling = 7200000;
-
-        switch (salary.getType()) {
-
-        case Salary::Montly : yearlyProjection = salary.amount()*12;
-            break;
-
-        case Salary::Weekly : yearlyProjection = salary.amount()*52;
-            break;
-
-        case Salary::FortNightly : yearlyProjection = salary.amount()*26;
-            break;
-        }
-
-        if(yearlyProjection > taxCeiling){
-            auto aboveTax = yearlyProjection-taxCeiling;
-            auto taxedAmount = aboveTax/4;
-
-            switch (salary.getType()) {
-
-            case Salary::Montly : return taxedAmount/12;
-                break;
-
-            case Salary::Weekly : return taxedAmount/52;
-                break;
-
-            case Salary::FortNightly : return taxedAmount/26;
-                break;
-            }
-        }
-
-        return 0;
-    }
-};
-
-
-class HealthSurchargeCalculator{
-public:
-    static int getHealthSurcharge(Salary &salary){
-        auto amount = salary.amount();
-        auto weeklyAmount = 0;
-        auto healthSurchargeCeiling = 10900;
-
-        switch (salary.getType()) {
-
-        case Salary::Montly : weeklyAmount = amount/4;
-            break;
-
-        case Salary::Weekly : weeklyAmount = amount;
-            break;
-
-        case Salary::FortNightly : weeklyAmount = amount/2;
-            break;
-        }
-
-        auto healthSurcharge = 0;
-
-        if(weeklyAmount > healthSurchargeCeiling){
-            healthSurcharge = 825;
-        }else{
-            healthSurcharge = 480;
-        }
-
-        return healthSurcharge*salary.getSalaryDates().mondayChecker();
-    }
-};
-
 void Test::test_salary()
 {
-    Salary s({"2020-09-28","2020-10-09"});
-    s.setAmount(650000);
+    Salary s({"2020-09-28","2020-10-30"});
+    s.setAmount(700000);
 
-    NisChecker checker;
-    auto nis = checker.getNisForSalary(s);
-    auto paye = PayeChecker::getPayeForSalary(s);
+    auto nis = NisCalculator::getNisForSalary(s);
+    auto paye = PayeCalculator::getPayeForSalary(s);
     auto healthSurcharge = HealthSurchargeCalculator::getHealthSurcharge(s);
     auto allTaxes = nis
             + paye
             + healthSurcharge;
 
+    qDebug() << "From               : " << s.getSalaryDates().getFromDate().toString(Qt::ISODate);
+    qDebug() << "To                 : " << s.getSalaryDates().getToDate().toString(Qt::ISODate);
+    qDebug() << "Weeks              : " << s.getSalaryDates().mondayChecker();
     qDebug() << "Gross Pay          : " << s.amount();
     qDebug() << "Net Income         : " << s.amount()-allTaxes;
     qDebug() << "Taxes              : " << allTaxes;
     qDebug() << "NIS                : " << nis;
     qDebug() << "PAYE               : " << paye;
     qDebug() << "Health Surcharge   : " << healthSurcharge;
-    qDebug() << "Weeks              : " << s.getSalaryDates().mondayChecker();
+
 }
 
-int Salary::amount() const
-{
-    return _amount;
-}
 
-void Salary::setAmount(int amount)
-{
-    _amount = amount;
-}
-
-Salary::SalaryType Salary::getType() const
-{
-return type;
-}
-
-SalaryDateRange Salary::getSalaryDates() const
-{
-return salaryDates;
-}
-
-int SalaryRange::getMin() const
-{
-    return min;
-}
-
-int SalaryRange::getMax() const
-{
-    return max;
-}
-
-int NisEarnings::getTotalWeeklyContribution() const
-{
-    return totalWeeklyContribution;
-}
-
-void NisEarnings::setTotalWeeklyContribution(int value)
-{
-    totalWeeklyContribution = value;
-}
-
-SalaryRange NisEarnings::getWeeklyRange() const
-{
-    return weeklyRange;
-}
-
-SalaryRange NisEarnings::getMonthlyRange() const
-{
-return monthlyRange;
-}
 
 QTEST_MAIN(Test)
 

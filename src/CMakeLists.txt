@@ -34,6 +34,8 @@ if(EXISTS ${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
         Party/Person.cpp
         Party/partymodule.h
         Party/partymodule.cpp
+        Party/Salary.h
+        Party/Salary.cpp
         ${PROJECT_NAME}.h
     #        ${RESOURCES}
     )
