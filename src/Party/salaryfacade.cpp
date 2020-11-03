@@ -35,56 +35,56 @@ SalaryFacade::SalaryFacade(QObject *parent) : QObject(parent)
 
 }
 
-int SalaryFacade::getGross_salary() const
+Money SalaryFacade::getGross_salary() const
 {
     return gross_salary;
 }
 
-void SalaryFacade::setGross_salary(int value)
+void SalaryFacade::setGross_salary(Money value)
 {
     gross_salary = value;
     emit grossSalaryChanged(value);
 }
 
-int SalaryFacade::getNet_salary() const
+Money SalaryFacade::getNet_salary() const
 {
     return net_salary;
 }
 
-void SalaryFacade::setNet_salary(int value)
+void SalaryFacade::setNet_salary(Money value)
 {
     net_salary = value;
     emit netSalaryChanged(value);
 }
 
-int SalaryFacade::getNis() const
+Money SalaryFacade::getNis() const
 {
     return nis;
 }
 
-void SalaryFacade::setNis(int value)
+void SalaryFacade::setNis(Money value)
 {
     nis = value;
     emit nisChanged(value);
 }
 
-int SalaryFacade::getPaye() const
+Money SalaryFacade::getPaye() const
 {
     return paye;
 }
 
-void SalaryFacade::setPaye(int value)
+void SalaryFacade::setPaye(Money value)
 {
     paye = value;
     emit payeChanged(value);
 }
 
-int SalaryFacade::getHealth_surcharge() const
+Money SalaryFacade::getHealth_surcharge() const
 {
     return health_surcharge;
 }
 
-void SalaryFacade::setHealth_surcharge(int value)
+void SalaryFacade::setHealth_surcharge(Money value)
 {
     health_surcharge = value;
     emit healthSurchargeChanged(value);

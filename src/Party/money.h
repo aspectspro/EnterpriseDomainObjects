@@ -38,21 +38,38 @@ public:
 
     Q_INVOKABLE void operator=(int value);
     Q_INVOKABLE operator int();
-
-    Q_INVOKABLE int unformatMoneyString(QString moneyString);
-
     /**
      * @brief operator QVariant - Returns int value when returning Variant. Returns QVariant::fromValue()
      */
     Q_INVOKABLE operator QVariant();
     Q_INVOKABLE void operator=(QVariant &value);
-
     void operator=(QString value);
+
+    /**
+     * @brief unformatMoneyString
+     * @param moneyString
+     * @return
+     */
+    Q_INVOKABLE int unformatMoneyString(QString moneyString);
+
+    /**
+     * @brief intAsString
+     * @return
+     */
     Q_INVOKABLE QString intAsString() const;
 
+    /**
+     * @brief toJsonValue
+     * @return
+     */
     QJsonValue toJsonValue() const;
 
-    Money fromInt(int moneyAsInt) const;
+    /**
+     * @brief fromInt
+     * @param moneyAsInt
+     * @return
+     */
+    Q_INVOKABLE Money fromInt(int moneyAsInt) const;
 
 private:
     int value = 0;
