@@ -55,6 +55,12 @@ DateTime DateTime::fromIsoDate(QString isoDate)
     return dt;
 }
 
+DateTime DateTime::setIsoDate(QString isoDate)
+{
+    setTimestamp(QDateTime::fromString(isoDate,"yyyy-MM-dd").toSecsSinceEpoch());
+    return *this;
+}
+
 void DateTime::registerMetaType()
 {
     if(QMetaType::hasRegisteredConverterFunction<DateTime,QString>())

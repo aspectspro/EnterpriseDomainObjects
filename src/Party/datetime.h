@@ -17,6 +17,7 @@ public:
     Q_INVOKABLE static DateTime getNow();
     Q_INVOKABLE QString toIsoDate();
     Q_INVOKABLE static DateTime fromIsoDate(QString isoDate);
+    Q_INVOKABLE DateTime setIsoDate(QString isoDate);
 
 private:
     int timestamp = 0;

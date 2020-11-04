@@ -14,8 +14,8 @@ class SalaryFacade : public QObject
     Q_PROPERTY(DateTime to_date READ getTo_date WRITE setTo_date NOTIFY toDateChanged)
 
     Q_PROPERTY(Money net_salary READ getNet_salary NOTIFY netSalaryChanged)
-    Q_PROPERTY(Money employee_nis READ getEmployee_nis WRITE setEmployee_nis NOTIFY employeeNisChanged)
-    Q_PROPERTY(Money employer_nis READ getEmployer_nis WRITE setEmployer_nis NOTIFY employerNisChanged)
+    Q_PROPERTY(Money employee_nis READ getEmployee_nis NOTIFY employeeNisChanged)
+    Q_PROPERTY(Money employer_nis READ getEmployer_nis NOTIFY employerNisChanged)
     Q_PROPERTY(Money paye READ getPaye  NOTIFY payeChanged)
     Q_PROPERTY(Money health_surcharge READ getHealth_surcharge NOTIFY healthSurchargeChanged)
 
