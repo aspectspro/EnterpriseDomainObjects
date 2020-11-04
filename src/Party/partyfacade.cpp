@@ -79,8 +79,10 @@ void EmployeeFacade::saveEmployee(Employee employee)
         if(employee.getId().length() == 0)
             employee.generateId();
 
-        if(employee.getFirst_name().isEmpty() || employee.getLast_name().isEmpty()){
-            throw std::exception("Empty Name");
+        if(employee.getFirst_name().isEmpty()){
+            throw std::exception("Please enter a first name");
+        }else if(employee.getLast_name().isEmpty()){
+            throw std::exception("Please enter a last name");
         }
 
         mapper.insert(employee);

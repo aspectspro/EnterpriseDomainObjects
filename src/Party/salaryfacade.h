@@ -47,7 +47,9 @@ public:
     void setEmployee_nis(const Money value);
 
 public slots:
-    void pay(Employee e);
+    bool pay(Employee employee);
+    bool pay(QJsonObject employee);
+    SalaryDomainObject findLastSalaryForEmployee(QJsonObject employee);
 
 signals:
     void grossSalaryChanged(Money gross_salary);

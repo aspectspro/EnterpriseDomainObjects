@@ -104,13 +104,13 @@ void SalaryFacade::setTo_date(const DateTime value)
     emit toDateChanged(value);
 }
 
-void SalaryFacade::pay(Employee e)
+bool SalaryFacade::pay(Employee employee)
 {
     SalaryDomainMapper mapper;
     SalaryDomainObject salaryObject;
 
     salaryObject.generateId();
-    salaryObject.setEmployee_id(e.getId());
+    salaryObject.setEmployee_id(employee.getId());
     salaryObject.setGross_pay(this->gross_salary);
     salaryObject.setNet_pay(this->net_salary);
     salaryObject.setPaye(this->paye);
@@ -126,7 +126,34 @@ void SalaryFacade::pay(Employee e)
     } catch (std::exception &e) {
         emit error(e.what());
         qInfo() << e.what();
+        return false;
     }
+    return true;
+}
+
+bool SalaryFacade::pay(QJsonObject employee)
+{
+    Employee e;
+    e.fromJson(employee);
+    return pay(e);
+}
+
+SalaryDomainObject SalaryFacade::findLastSalaryForEmployee(QJsonObject employee)
+{
+    SalaryDomainMapper mapper;
+    Employee e;
+    e.fromJson(employee);
+
+    SalaryDomainObject salary;
+
+    try {
+        salary = mapper.loadAll(QString("employee_id='%1' ORDER BY date_paid DESC").arg(e.getId())).first();
+    } catch (std::exception &e) {
+        Q_UNUSED(e)
+        qInfo() << "Employee hasn't been paid as yet.";
+    }
+
+    return salary;
 }
 
 Money SalaryFacade::getEmployee_nis() const

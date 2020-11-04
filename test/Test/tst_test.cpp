@@ -448,6 +448,8 @@ void Test::test_salaryDomainObject()
         qInfo() << e.what();
     }
 
+    qDebug() << facade.findLastSalaryForEmployee(e.toJsonObject()).getDate_from().toIsoDate();
+
 }
 
 

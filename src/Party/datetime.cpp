@@ -41,9 +41,11 @@ DateTime DateTime::getNow()
     return time;
 }
 
-QString DateTime::toIsoDate()
+QString DateTime::toIsoDate(int addDays)
 {
-    return QDateTime::fromSecsSinceEpoch(this->getTimestamp()).toString("yyyy-MM-dd");
+    return QDateTime::fromSecsSinceEpoch(this->getTimestamp())
+            .addDays(addDays)
+            .toString("yyyy-MM-dd");
 
 }
 
