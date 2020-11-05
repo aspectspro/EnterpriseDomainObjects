@@ -1,5 +1,7 @@
 #include "salaryfacade.h"
 
+DomainModelPtr SalaryFacade::employeeSalaries = ModelFactory::createModel<SalaryDomainObject>();
+
 SalaryFacade::SalaryFacade(QObject *parent) : QObject(parent)
 {    
 
@@ -154,6 +156,39 @@ SalaryDomainObject SalaryFacade::findLastSalaryForEmployee(QJsonObject employee)
     }
 
     return salary;
+}
+
+void SalaryFacade::loadSalaries(QJsonObject employee)
+{
+    Employee _employee;
+    _employee.fromJson(employee);
+
+
+    SalaryDomainMapper mapper;
+
+    DomainObjectListPtr salaries = std::make_shared<QList<DomainObjectPtr>>();
+    salaries->clear();
+
+    try {
+        auto loadedSalaries = mapper.loadAll(QString("employee_id='%1'").arg(_employee.getId()));
+        foreach (auto salary, loadedSalaries) {
+            salaries->append(salary.clone());
+        }
+
+    } catch (std::exception &e) {
+        Q_UNUSED(e)
+        qInfo() << QString("No Salaries available for '%1 %2'").arg(_employee.getFirst_name())
+                   .arg(_employee.getLast_name());
+    }
+
+
+    employeeSalaries->changeDomainList(salaries);
+    emit employeeSalariesChanged(employeeSalaries.get());
+}
+
+QAbstractItemModel *SalaryFacade::getEmployeeSalaries()
+{
+    return employeeSalaries.get();
 }
 
 Money SalaryFacade::getEmployee_nis() const

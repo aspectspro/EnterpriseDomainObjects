@@ -4,7 +4,7 @@
 #include "datetime.h"
 #include "money.h"
 
-class SalaryDomainObject : public AbstractDomainObject
+class SalaryDomainObject : public AbstractDomainObject, public DomainCloneTemplate<SalaryDomainObject>
 {
     Q_GADGET
 public:

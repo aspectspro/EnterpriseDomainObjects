@@ -19,6 +19,8 @@ class SalaryFacade : public QObject
     Q_PROPERTY(Money paye READ getPaye  NOTIFY payeChanged)
     Q_PROPERTY(Money health_surcharge READ getHealth_surcharge NOTIFY healthSurchargeChanged)
 
+    Q_PROPERTY(QAbstractItemModel* employeeSalaries READ getEmployeeSalaries NOTIFY employeeSalariesChanged)
+
 public:
     explicit SalaryFacade(QObject *parent = nullptr);
 
@@ -50,8 +52,12 @@ public slots:
     bool pay(Employee employee);
     bool pay(QJsonObject employee);
     SalaryDomainObject findLastSalaryForEmployee(QJsonObject employee);
+    void loadSalaries(QJsonObject employee);
+
+    QAbstractItemModel *getEmployeeSalaries();
 
 signals:
+    void employeeSalariesChanged(QAbstractItemModel *salaries);
     void grossSalaryChanged(Money gross_salary);
     void netSalaryChanged(Money net_salary);
     void employeeNisChanged(Money employee_nis);
@@ -74,6 +80,8 @@ private:
     DateTime from_date,to_date;
     Salary salary;
     void setSalary();
+
+    static DomainModelPtr employeeSalaries;
 
 };
 
