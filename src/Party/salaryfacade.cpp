@@ -163,9 +163,7 @@ void SalaryFacade::loadSalaries(QJsonObject employee)
     Employee _employee;
     _employee.fromJson(employee);
 
-
     SalaryDomainMapper mapper;
-
     DomainObjectListPtr salaries = std::make_shared<QList<DomainObjectPtr>>();
     salaries->clear();
 

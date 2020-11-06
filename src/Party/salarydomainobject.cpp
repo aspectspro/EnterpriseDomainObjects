@@ -16,6 +16,11 @@ void SalaryDomainObject::registerConverter()
 {
 }
 
+SalaryDomainObject::SalaryDomainObject(QJSValue json)
+{
+    this->fromJson(json.toVariant().toJsonObject());
+}
+
 QString SalaryDomainObject::getId() const
 {
     return id;
@@ -126,6 +131,13 @@ void SalaryDomainObject::setDate_paid(const DateTime &value)
     date_paid = value;
 }
 
+SalaryDomainObject SalaryDomainObject::fromJs(QJsonValue json)
+{
+    SalaryDomainObject obj;
+    obj.fromJson(json.toObject());
+    return obj;
+}
+
 QString SalaryDomainMapper::tableName() const
 {
     return "party_pay";
@@ -152,4 +164,146 @@ void SalaryDomainMapper::injectInsert(AbstractDomainObject &domainObject) const
                     QString("Employee has been paid for date. Please set From Date later than '%1'")
                     .arg(obj->getDate_to().toIsoDate()).toUtf8());
     }
+}
+
+
+SalaryYearToDate::SalaryYearToDate()
+{
+    QDate dt = QDate::currentDate();
+    setCurrentYear(dt.year());
+
+    connect(this,&SalaryYearToDate::salaryChanged,[=](){
+        loadYearToDate();
+    });
+}
+
+int SalaryYearToDate::getCurrentYear() const
+{
+    return currentYear;
+}
+
+void SalaryYearToDate::setCurrentYear(int value)
+{
+    currentYear = value;
+}
+
+
+Money SalaryYearToDate::getYearGross() const
+{
+    return yearGross;
+}
+
+void SalaryYearToDate::setYearGross(const Money value)
+{
+    yearGross = value;
+    emit yearGrossChanged(value);
+}
+
+Money SalaryYearToDate::getYearNet() const
+{
+    return yearNet;
+}
+
+void SalaryYearToDate::setYearNet(const Money value)
+{
+    yearNet = value;
+    emit yearNetChanged(value);
+}
+
+Money SalaryYearToDate::getYearNis() const
+{
+    return yearNis;
+}
+
+void SalaryYearToDate::setYearNis(const Money value)
+{
+    yearNis = value;
+    emit yearNisChanged(value);
+}
+
+Money SalaryYearToDate::getYearHealthSurcharge() const
+{
+    return yearHealthSurcharge;
+}
+
+void SalaryYearToDate::setYearHealthSurcharge(const Money value)
+{
+    yearHealthSurcharge = value;
+    emit yearHealthSurchargeChanged(value);
+}
+
+Money SalaryYearToDate::getYearPaye() const
+{
+    return yearPaye;
+}
+
+void SalaryYearToDate::setYearPaye(const Money value)
+{
+    yearPaye = value;
+    emit yearPayeChanged(value);
+}
+
+void SalaryYearToDate::loadYearToDate()
+{
+    auto currentYear = getCurrentYear();
+    QString yearlyDateFormat = "yyyy-MM-dd,hh:mm:ss a";
+
+    QDateTime startDate;
+    startDate = startDate.fromString(QString("%1-%2-%3,12:00:00 am")
+                                     .arg(currentYear)
+                                     .arg("01")
+                                     .arg("01"),yearlyDateFormat);
+
+    QDateTime endDate;
+
+    auto lastPaid = getSalary().getDate_paid().toIsoDate();
+    auto employeeId = getSalary().getEmployee_id();
+
+    endDate = endDate.fromString(QString("%1,11:59:59 pm")
+                                 .arg(lastPaid),yearlyDateFormat);
+
+    auto startTimestamp = startDate.toSecsSinceEpoch();
+    auto endTimestamp = endDate.toSecsSinceEpoch();
+
+    SalaryDomainMapper mapper;
+
+    try {
+        auto all = mapper.loadAll(QString("employee_id='%1' AND date_paid >= %2 AND date_paid <= %3")
+                                  .arg(employeeId)
+                                  .arg(startTimestamp)
+                                  .arg(endTimestamp));
+
+        int _gross = 0, _net = 0, _nis = 0,
+            _paye = 0 , _hsc;
+
+        foreach (auto salary, all) {
+            _gross += salary.getGross_pay().asInt();
+            _net += salary.getNet_pay().asInt();
+            _nis += salary.getEmployee_nis().asInt();
+            _paye += salary.getPaye().asInt();
+            _hsc = salary.getHealth_surcharge().asInt();
+        }
+
+        setYearGross(_gross);
+        setYearNet(_net);
+        setYearNis(_nis);
+        setYearPaye(_paye);
+        setYearHealthSurcharge(_hsc);
+
+    } catch (std::exception &e) {
+        Q_UNUSED(e);
+        qInfo() << QString("No Salary for '%1' as yet.").arg(currentYear);
+    }
+
+}
+
+SalaryDomainObject SalaryYearToDate::getSalary() const
+{
+    return salary;
+}
+
+void SalaryYearToDate::setSalary(const SalaryDomainObject value)
+{
+    salary = value;
+    emit salaryChanged(value);
 }

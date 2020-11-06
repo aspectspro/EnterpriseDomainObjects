@@ -27,6 +27,7 @@ private slots:
 
     void test_money();
     void test_salaryDomainObject();
+    void test_salaryYearToDate();
 };
 
 Test::Test()
@@ -448,8 +449,19 @@ void Test::test_salaryDomainObject()
         qInfo() << e.what();
     }
 
-    qDebug() << facade.findLastSalaryForEmployee(e.toJsonObject()).getDate_from().toIsoDate();
+    SalaryYearToDate ytd;
+    auto salary = facade.findLastSalaryForEmployee(e.toJsonObject());
+    ytd.setSalary(salary);
 
+    qDebug() << ytd.getYearGross().asString() << salary.getGross_pay().asString();
+
+
+}
+
+void Test::test_salaryYearToDate()
+{
+    SalaryYearToDate ytd;
+    ytd.loadYearToDate();
 }
 
 

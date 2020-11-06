@@ -3,12 +3,14 @@
 #include "AbstractObjects.h"
 #include "datetime.h"
 #include "money.h"
+#include <QtQml/QJSValue>
 
 class SalaryDomainObject : public AbstractDomainObject, public DomainCloneTemplate<SalaryDomainObject>
 {
     Q_GADGET
 public:
     SalaryDomainObject();
+    SalaryDomainObject(QJSValue json);
     Q_PROPERTY(QString id READ getId WRITE setId)
     Q_PROPERTY(QString employee_id READ getEmployee_id WRITE setEmployee_id)
     Q_PROPERTY(Money gross_pay READ getGross_pay WRITE setGross_pay)
@@ -60,6 +62,8 @@ public:
     DateTime getDate_paid() const;
     void setDate_paid(const DateTime &value);
 
+    Q_INVOKABLE static SalaryDomainObject fromJs(QJsonValue json);
+
 private:
     QString id,employee_id;
     Money gross_pay,net_pay,employee_nis,employer_nis,
@@ -76,6 +80,64 @@ public:
     // AbstractMapper interface
 protected:
     virtual void injectInsert(AbstractDomainObject &domainObject) const override;
+};
+
+class SalaryYearToDate : public QObject{
+
+    Q_OBJECT
+    // AbstractDomainObject interface
+
+    Q_PROPERTY(Money yearGross READ getYearGross NOTIFY yearGrossChanged)
+    Q_PROPERTY(Money yearNet READ getYearNet NOTIFY yearNetChanged)
+    Q_PROPERTY(Money yearNis READ getYearNis NOTIFY yearNisChanged)
+    Q_PROPERTY(Money yearHealthSurcharge READ getYearHealthSurcharge NOTIFY yearHealthSurchargeChanged)
+    Q_PROPERTY(Money yearPaye READ getYearPaye NOTIFY yearPayeChanged)
+    Q_PROPERTY(SalaryDomainObject salary READ getSalary WRITE setSalary NOTIFY salaryChanged)
+
+public:
+    SalaryYearToDate();
+
+    int getCurrentYear() const;
+    void setCurrentYear(int value);
+
+    Money getYearGross() const;
+    void setYearGross(const Money value);
+
+    Money getYearNet() const;
+    void setYearNet(const Money value);
+
+    Money getYearNis() const;
+    void setYearNis(const Money value);
+
+    Money getYearHealthSurcharge() const;
+    void setYearHealthSurcharge(const Money value);
+
+    Money getYearPaye() const;
+    void setYearPaye(const Money value);
+
+    Q_INVOKABLE void loadYearToDate();
+
+    SalaryDomainObject getSalary() const;
+    void setSalary(const SalaryDomainObject value);
+
+signals:
+    void employeeIdChanged(QString employeeId);
+    void yearGrossChanged(Money yearGross);
+    void yearNetChanged(Money yearNet);
+    void yearNisChanged(Money yearNis);
+    void yearHealthSurchargeChanged(Money yearHealthSurcharge);
+    void yearPayeChanged(Money yearPaye);
+    void lastPaidChanged(QString lastPaid);
+    void salaryChanged(SalaryDomainObject salary);
+
+private:
+    int currentYear;
+    Money yearGross;
+    Money yearNet;
+    Money yearNis;
+    Money yearHealthSurcharge;
+    Money yearPaye;
+    SalaryDomainObject salary;
 };
 
 #endif // SALARYDOMAINOBJECT_H

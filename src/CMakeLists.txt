@@ -12,7 +12,7 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt5 COMPONENTS Core REQUIRED Sql Concurrent)
+find_package(Qt5 COMPONENTS Core REQUIRED Sql Concurrent Quick Qml)
 
 #qt5_add_resources(RESOURCES resources.qrc)
 
@@ -53,7 +53,7 @@ else()
     add_library(${PROJECT_NAME} STATIC ${PROJECT_NAME}.h)
 endif()
 
-target_link_libraries(${PROJECT_NAME} PUBLIC ${CONAN_LIBS} PRIVATE Qt5::Core Qt5::Sql Qt5::Concurrent)
+target_link_libraries(${PROJECT_NAME} PUBLIC ${CONAN_LIBS} PRIVATE Qt5::Core Qt5::Sql Qt5::Concurrent Qt5::Quick Qt5::Qml)
 
 #target_link_libraries( ${CONAN_LIBS})
 #set_target_properties(${PROJECT_NAME} PROPERTIES DEBUG_POSTFIX _d)
