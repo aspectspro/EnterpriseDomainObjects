@@ -44,6 +44,8 @@ if(EXISTS ${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
         Party/SalaryDomainObject.cpp
         Party/DateTime.h
         Party/DateTime.cpp
+        Party/CompanyInformationFacade.h
+        Party/CompanyInformationFacade.cpp
         ${PROJECT_NAME}.h
     #        ${RESOURCES}
     )

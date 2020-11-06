@@ -28,6 +28,8 @@ private slots:
     void test_money();
     void test_salaryDomainObject();
     void test_salaryYearToDate();
+
+    void test_companyInformation();
 };
 
 Test::Test()
@@ -55,7 +57,7 @@ void Test::initTestCase()
 
 void Test::cleanupTestCase()
 {
-//    DatabaseSingleton::getInstance()->removeDatabaseFolder();
+    DatabaseSingleton::getInstance()->removeDatabaseFolder();
 }
 
 void Test::test_party()
@@ -462,6 +464,26 @@ void Test::test_salaryYearToDate()
 {
     SalaryYearToDate ytd;
     ytd.loadYearToDate();
+}
+
+void Test::test_companyInformation()
+{
+    CompanyInformationFacade company;
+    company.setCompany_name("Aspects Pro");
+    company.setAddress("#38 Iere Village Princes Town");
+    company.setTelephone_number("868-269-6529");
+    company.setEmail_address("greg@aspectspro.com");
+
+    company.saveCompanyInformation();
+
+    CompanyInformationFacade loadedCompany;
+    loadedCompany.loadCompanyInformation();
+
+    QVERIFY(loadedCompany.getCompany_name() == ("Aspects Pro"));
+    QVERIFY(loadedCompany.getAddress() == ("#38 Iere Village Princes Town"));
+    QVERIFY(loadedCompany.getTelephone_number() == ("868-269-6529"));
+    QVERIFY(loadedCompany.getEmail_address() == ("greg@aspectspro.com"));
+
 }
 
 

@@ -42,7 +42,7 @@ Salary::Salary(SalaryDateRange salaryDates) :
     salaryDates(salaryDates){
     auto mondayCounter = salaryDates.mondayChecker();
 
-    if(mondayCounter == 1){
+    if(mondayCounter == 1 || mondayCounter == 0){
         type = Weekly;
     }else if(mondayCounter == 2){
         type = FortNightly;

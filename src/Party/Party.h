@@ -9,5 +9,6 @@
 #include "salary.h"
 #include "salaryfacade.h"
 #include "salarydomainobject.h"
+#include "companyinformationfacade.h"
 
 #endif // PARTY_H

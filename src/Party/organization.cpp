@@ -48,5 +48,5 @@ void OrganizationMapper::injectLoad(AbstractDomainObject &domainObject) const
     auto org = dynamic_cast<Organization*>(&domainObject);
     AbstractPartyMapper partyMapper;
     auto loadedParty = partyMapper.find(org->getId());
-    org->copyFrom<AbstractParty>(domainObject);
+    org->copyFrom<AbstractParty>(loadedParty);
 }
