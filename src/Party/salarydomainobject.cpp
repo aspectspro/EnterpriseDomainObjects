@@ -274,14 +274,14 @@ void SalaryYearToDate::loadYearToDate()
                                   .arg(endTimestamp));
 
         int _gross = 0, _net = 0, _nis = 0,
-            _paye = 0 , _hsc;
+            _paye = 0 , _hsc = 0;
 
-        foreach (auto salary, all) {
-            _gross += salary.getGross_pay().asInt();
-            _net += salary.getNet_pay().asInt();
-            _nis += salary.getEmployee_nis().asInt();
-            _paye += salary.getPaye().asInt();
-            _hsc = salary.getHealth_surcharge().asInt();
+        foreach (auto _salary, all) {
+            _gross += _salary.getGross_pay().asInt();
+            _net += _salary.getNet_pay().asInt();
+            _nis += _salary.getEmployee_nis().asInt();
+            _paye += _salary.getPaye().asInt();
+            _hsc += _salary.getHealth_surcharge().asInt();
         }
 
         setYearGross(_gross);
