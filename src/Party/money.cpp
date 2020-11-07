@@ -156,7 +156,6 @@ void Money::registerConverters()
             });
 
             qRegisterMetaType<Money>("Money");
-
     }
 }
 

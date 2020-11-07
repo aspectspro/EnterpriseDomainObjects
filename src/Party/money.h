@@ -79,4 +79,6 @@ private:
 
 Q_DECLARE_METATYPE(Money)
 
+
+
 #endif // MONEY_H

@@ -30,6 +30,7 @@ private slots:
     void test_salaryYearToDate();
 
     void test_companyInformation();
+    void test_overtimeTable();
 };
 
 Test::Test()
@@ -484,6 +485,24 @@ void Test::test_companyInformation()
     QVERIFY(loadedCompany.getTelephone_number() == ("868-269-6529"));
     QVERIFY(loadedCompany.getEmail_address() == ("greg@aspectspro.com"));
 
+}
+
+void Test::test_overtimeTable()
+{
+    OvertimeDomainObject ot;
+    ot.setId("_this_");
+    ot.setOvertime_rate_one(1.5);
+    ot.setOvertime_rate_two(2.0);
+    ot.setOvertime_rate_three(3.0);
+    OvertimeMapper mp;
+
+    try {
+        mp.insert(ot);
+        auto otLoaded = mp.find("_this_");
+        qDebug() << otLoaded.toJsonObject();
+    } catch (std::exception &e) {
+        qInfo() << e.what();
+    }
 }
 
 
