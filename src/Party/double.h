@@ -11,11 +11,13 @@ struct Double{
     Q_GADGET
     Q_PROPERTY(int asInt READ getValue WRITE setValue)
     Q_PROPERTY(double asDouble READ _intToDouble)
+    Q_PROPERTY(QString formatted READ getFormatted WRITE setFormatted)
 
 public:
     Double();
     Double(int value);
     Double(double value);
+    Double(QString doubleString);
 
     void registerConverter();
 
@@ -26,6 +28,9 @@ public:
     void setValue(int value);
 
     bool operator==(const Double &d);
+
+    QString getFormatted();
+    void setFormatted(QString formatted);
 
 private:
     int value;

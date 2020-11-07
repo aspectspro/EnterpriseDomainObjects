@@ -490,9 +490,11 @@ void Test::test_companyInformation()
 void Test::test_overtimeTable()
 {
     OvertimeFacade facade;
-    facade.setOvertime_rate_one(1.5);
-    facade.setOvertime_rate_two(2);
+    facade.setOvertime_rate_one(2);
+    facade.setOvertime_rate_two(2.3);
     facade.setOvertime_rate_three(3);
+
+    qDebug() << facade.getOvertime_rate_one();
 
     facade.save();
     OvertimeFacade f2;

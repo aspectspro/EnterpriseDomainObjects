@@ -12,6 +12,11 @@ Double::Double(double value) : Double(){
     setValue(_doubleToInt(value));
 }
 
+Double::Double(QString doubleString)
+{
+    setValue(_doubleToInt(QString::number(doubleString.toDouble(),'f',2).toDouble()));
+}
+
 void Double::registerConverter(){
 
     if(QMetaType::hasRegisteredConverterFunction<QString,Double>())
@@ -30,6 +35,7 @@ void Double::registerConverter(){
         return QString::number(value.getValue());
     });
 
+    qRegisterMetaType<Double>("Double");
 }
 
 int Double::_doubleToInt(double value){
@@ -57,6 +63,29 @@ void Double::setValue(int value)
 bool Double::operator==(const Double &d)
 {
     return (getValue() == d.getValue());
+}
+
+QString Double::getFormatted()
+{
+    QString v = QString::number(getValue());
+    if(getValue() >= 0 && getValue() <= 9 ){
+        v = v.prepend("0.0");
+    }else if(getValue() >= 10 && getValue() <= 99 ){
+        v = v.prepend("0.");
+    }
+    else if(getValue() >= 100){
+        v = v.insert(1,".");
+    }
+
+    return v;
+}
+
+void Double::setFormatted(QString formatted)
+{
+    if(!formatted.contains(".")){
+        formatted.append(".00");
+    }
+    value = formatted.remove(".").toInt();
 }
 
 

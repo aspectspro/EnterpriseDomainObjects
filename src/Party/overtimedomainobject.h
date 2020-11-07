@@ -8,9 +8,9 @@ struct OvertimeDomainObject : public AbstractDomainObject, public DomainCloneTem
 {
     Q_GADGET
     Q_PROPERTY(QString id READ getId WRITE setId)
-    Q_PROPERTY(Double overtime_rate_one READ getOvertime_rate_one WRITE setOvertime_rate_one)
-    Q_PROPERTY(Double overtime_rate_two READ getOvertime_rate_two WRITE setOvertime_rate_two)
-    Q_PROPERTY(Double overtime_rate_three READ getOvertime_rate_three WRITE setOvertime_rate_three)
+    Q_PROPERTY(double overtime_rate_one READ getOvertime_rate_one WRITE setOvertime_rate_one)
+    Q_PROPERTY(double overtime_rate_two READ getOvertime_rate_two WRITE setOvertime_rate_two)
+    Q_PROPERTY(double overtime_rate_three READ getOvertime_rate_three WRITE setOvertime_rate_three)
 
 public:
     OvertimeDomainObject();
@@ -18,20 +18,20 @@ public:
     QString getId() const;
     void setId(const QString &value);
 
-    Double getOvertime_rate_one() const;
-    void setOvertime_rate_one(Double value);
+    double getOvertime_rate_one() const;
+    void setOvertime_rate_one(double value);
 
-    Double getOvertime_rate_two() const;
-    void setOvertime_rate_two(Double value);
+    double getOvertime_rate_two() const;
+    void setOvertime_rate_two(double value);
 
-    Double getOvertime_rate_three() const;
-    void setOvertime_rate_three(const Double value);
+    double getOvertime_rate_three() const;
+    void setOvertime_rate_three(const double value);
 
 private:
     QString id;
-    Double overtime_rate_one = 0;
-    Double overtime_rate_two = 0;
-    Double overtime_rate_three = 0;
+    double overtime_rate_one = 0;
+    double overtime_rate_two = 0;
+    double overtime_rate_three = 0;
 
     // AbstractDomainObject interface
 public:
@@ -61,41 +61,41 @@ public slots:
 
 };
 
-class OvertimeFacade : public AbstractFacade
+class OvertimeFacade : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(Double overtime_rate_one READ getOvertime_rate_one WRITE setOvertime_rate_one NOTIFY overtime_rate_oneChanged)
-    Q_PROPERTY(Double overtime_rate_two READ getOvertime_rate_two WRITE setOvertime_rate_two NOTIFY overtime_rate_twoChanged)
-    Q_PROPERTY(Double overtime_rate_three READ getOvertime_rate_three WRITE setOvertime_rate_three NOTIFY overtime_rate_threeChanged)
+    Q_PROPERTY(double overtime_rate_one READ getOvertime_rate_one WRITE setOvertime_rate_one NOTIFY overtime_rate_oneChanged)
+    Q_PROPERTY(double overtime_rate_two READ getOvertime_rate_two WRITE setOvertime_rate_two NOTIFY overtime_rate_twoChanged)
+    Q_PROPERTY(double overtime_rate_three READ getOvertime_rate_three WRITE setOvertime_rate_three NOTIFY overtime_rate_threeChanged)
 
 public:
     OvertimeFacade();
     virtual ~OvertimeFacade() {}
 
-    Double getOvertime_rate_one() const;
-    void setOvertime_rate_one(const Double value);
+    double getOvertime_rate_one() const;
+    void setOvertime_rate_one(const double value);
 
-    Double getOvertime_rate_two() const;
-    void setOvertime_rate_two(const Double value);
+    double getOvertime_rate_two() const;
+    void setOvertime_rate_two(const double value);
 
-    Double getOvertime_rate_three() const;
-    void setOvertime_rate_three(const Double value);
+    double getOvertime_rate_three() const;
+    void setOvertime_rate_three(const double value);
 
 signals:
-    void overtime_rate_oneChanged(Double overtime_rate_one);
-    void overtime_rate_twoChanged(Double overtime_rate_two);
-    void overtime_rate_threeChanged(Double overtime_rate_three);
+    void overtime_rate_oneChanged(double overtime_rate_one);
+    void overtime_rate_twoChanged(double overtime_rate_two);
+    void overtime_rate_threeChanged(double overtime_rate_three);
 
 private:
-    Double overtime_rate_one = 0;
-    Double overtime_rate_two = 0;
-    Double overtime_rate_three = 0;
+    double overtime_rate_one = 0;
+    double overtime_rate_two = 0;
+    double overtime_rate_three = 0;
     OvertimeMapper mapper;
 
     // AbstractFacade interface
 public slots:
-    virtual void save() override;
-    virtual void load() override;
+    virtual void save();
+    virtual void load();
 };
 
 
