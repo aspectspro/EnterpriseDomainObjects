@@ -46,33 +46,4 @@ private:
 
 };
 
-//class EmployeeFacade : public QObject{
-
-//    Q_OBJECT
-//    Q_PROPERTY(QAbstractItemModel* employeeModel READ getEmployeeModel)
-
-//signals:
-//    void error(QString message);
-
-//public:
-//    EmployeeFacade();
-
-//public slots:
-//    static Employee employeeFactory();
-//    void saveEmployee(Employee employee);
-//    void removeEmployee(Employee employee);
-//    void updateEmployee(Employee employee);
-//    Employee find(QString id = "");
-
-//    QAbstractItemModel *getEmployeeModel();
-
-//    void loadEmployees();
-
-//private:
-//    EmployeeMapper mapper;
-//    DomainModelPtr employeeModel;
-//};
-
-
-
 #endif // PARTYFACADE_H

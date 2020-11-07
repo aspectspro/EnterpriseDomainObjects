@@ -553,6 +553,16 @@ void Test::test_payrate()
         qInfo() << e.what();
     }
 
+    PayrateFacade pf;
+    pf.setEmployee_id(pr.getEmployee_id());
+
+    QVERIFY(pf.getPayrate() == pr.getPayrate());
+    QVERIFY(pf.getOvertime_one() == pr.getOvertime_one());
+    QVERIFY(pf.getOvertime_two() == pr.getOvertime_two());
+    QVERIFY(pf.getOvertime_three() == pr.getOvertime_three());
+
+    pf.setOvertime_one(9000);
+    pf.save();
 }
 
 
