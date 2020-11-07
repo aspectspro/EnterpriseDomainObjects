@@ -31,6 +31,11 @@ private slots:
 
     void test_companyInformation();
     void test_overtimeTable();
+    void test_payrate();
+
+private:
+    bool keepDB = false;
+
 };
 
 Test::Test()
@@ -52,13 +57,17 @@ void Test::initTestCase()
     core.initializeCoreTables();
 
     PartyModule module;
-    module.uninstall();
-    module.install();
+    if(!keepDB){
+        module.uninstall();
+        module.install();
+    }
 }
 
 void Test::cleanupTestCase()
 {
-    DatabaseSingleton::getInstance()->removeDatabaseFolder();
+    if(!keepDB){
+        DatabaseSingleton::getInstance()->removeDatabaseFolder();
+    }
 }
 
 void Test::test_party()
@@ -519,6 +528,31 @@ void Test::test_overtimeTable()
     QVERIFY(facade.getOvertime_rate_one() == f2.getOvertime_rate_one());
     QVERIFY(facade.getOvertime_rate_two() == f2.getOvertime_rate_two());
     QVERIFY(facade.getOvertime_rate_three() == f2.getOvertime_rate_three());
+}
+
+void Test::test_payrate()
+{
+    PayrateDomainObject pr;
+    pr.setEmployee_id("_test_");
+    pr.setPayrate(10000);
+    pr.setOvertime_one(15000);
+    pr.setOvertime_two(20000);
+    pr.setOvertime_three(30000);
+
+    PayrateMapper mp;
+
+    try {
+        mp.insert(pr);
+
+        auto pr2 = mp.loadAll("employee_id='_test_'").first();
+        QVERIFY(pr2.getPayrate() == pr.getPayrate());
+        QVERIFY(pr2.getOvertime_one() == pr.getOvertime_one());
+        QVERIFY(pr2.getOvertime_two() == pr.getOvertime_two());
+        QVERIFY(pr2.getOvertime_three() == pr.getOvertime_three());
+    } catch (std::exception &e) {
+        qInfo() << e.what();
+    }
+
 }
 
 

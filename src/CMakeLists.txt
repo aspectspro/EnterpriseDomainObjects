@@ -52,6 +52,8 @@ if(EXISTS ${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
         Party/Double.cpp
         Party/employeefacade.h
         Party/employeefacade.cpp
+        Party/payratedomainobject.h
+        Party/payratedomainobject.cpp
         ${PROJECT_NAME}.h
     #        ${RESOURCES}
     )
