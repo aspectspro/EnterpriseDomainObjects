@@ -1,5 +1,7 @@
 #include "overtimedomainobject.h"
 
+OvertimeMapper OvertimeFacade::mapper;
+
 OvertimeDomainObject::OvertimeDomainObject() {}
 
 QString OvertimeDomainObject::getId() const

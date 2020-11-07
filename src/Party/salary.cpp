@@ -152,7 +152,7 @@ int NisCalculator::getEmployerContribution()
 
 int PayeCalculator::getPayeForSalary(Salary &salary){
     int yearlyProjection = 0;
-    int taxCeiling = 7200000;
+    int taxCeiling = 8400000;
 
     switch (salary.getType()) {
 

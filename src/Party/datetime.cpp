@@ -63,6 +63,11 @@ DateTime DateTime::setIsoDate(QString isoDate)
     return *this;
 }
 
+bool DateTime::operator==(const DateTime &dt)
+{
+    return (getTimestamp() == dt.getTimestamp());
+}
+
 void DateTime::registerMetaType()
 {
     if(QMetaType::hasRegisteredConverterFunction<DateTime,QString>())

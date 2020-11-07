@@ -50,6 +50,8 @@ if(EXISTS ${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
         Party/OverTimeDomainObject.cpp
         Party/Double.h
         Party/Double.cpp
+        Party/employeefacade.h
+        Party/employeefacade.cpp
         ${PROJECT_NAME}.h
     #        ${RESOURCES}
     )

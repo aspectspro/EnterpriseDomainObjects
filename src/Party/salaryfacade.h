@@ -51,10 +51,9 @@ public:
 public slots:
     bool pay(Employee employee);
     bool pay(QJsonObject employee);
-    SalaryDomainObject findLastSalaryForEmployee(QJsonObject employee);
+    static SalaryDomainObject findLastSalaryForEmployee(QJsonObject employee);
     void loadSalaries(QJsonObject employee);
-
-    QAbstractItemModel *getEmployeeSalaries();
+    static QAbstractItemModel *getEmployeeSalaries();
 
 signals:
     void employeeSalariesChanged(QAbstractItemModel *salaries);

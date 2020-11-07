@@ -2,6 +2,7 @@
 #define PERSON_H
 #include "abstractparty.h"
 #include "datetime.h"
+#include "money.h"
 
 class Person : public AbstractParty, public DomainCloneTemplate<Person>{
 
@@ -44,6 +45,8 @@ private:
     QString driver_permit_number;
     QString passport_number;
     DateTime date_of_birth;
+    Money hourly_pay_rate;
+    QString pay_type;
 };
 
 Q_DECLARE_METATYPE(Person)
@@ -112,5 +115,7 @@ protected:
     virtual void injectRemove(AbstractDomainObject &domainObject) const override;
     virtual void injectLoad(AbstractDomainObject &domainObject) const override;
 };
+
+
 
 #endif // PERSON_H

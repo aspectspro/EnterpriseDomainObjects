@@ -90,7 +90,7 @@ private:
     double overtime_rate_one = 0;
     double overtime_rate_two = 0;
     double overtime_rate_three = 0;
-    OvertimeMapper mapper;
+    static OvertimeMapper mapper;
 
     // AbstractFacade interface
 public slots:

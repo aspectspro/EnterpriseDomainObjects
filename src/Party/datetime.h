@@ -19,6 +19,8 @@ public:
     Q_INVOKABLE static DateTime fromIsoDate(QString isoDate);
     Q_INVOKABLE DateTime setIsoDate(QString isoDate);
 
+    bool operator==(const DateTime &dt);
+
 private:
     int timestamp = 0;
     void registerMetaType();
