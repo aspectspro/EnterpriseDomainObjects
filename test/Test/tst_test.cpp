@@ -489,20 +489,17 @@ void Test::test_companyInformation()
 
 void Test::test_overtimeTable()
 {
-    OvertimeDomainObject ot;
-    ot.setId("_this_");
-    ot.setOvertime_rate_one(1.5);
-    ot.setOvertime_rate_two(2.0);
-    ot.setOvertime_rate_three(3.0);
-    OvertimeMapper mp;
+    OvertimeFacade facade;
+    facade.setOvertime_rate_one(1.5);
+    facade.setOvertime_rate_two(2);
+    facade.setOvertime_rate_three(3);
 
-    try {
-        mp.insert(ot);
-        auto otLoaded = mp.find("_this_");
-        qDebug() << otLoaded.toJsonObject();
-    } catch (std::exception &e) {
-        qInfo() << e.what();
-    }
+    facade.save();
+    OvertimeFacade f2;
+
+    QVERIFY(facade.getOvertime_rate_one() == f2.getOvertime_rate_one());
+    QVERIFY(facade.getOvertime_rate_two() == f2.getOvertime_rate_two());
+    QVERIFY(facade.getOvertime_rate_three() == f2.getOvertime_rate_three());
 }
 
 

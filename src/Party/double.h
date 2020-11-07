@@ -25,6 +25,8 @@ public:
     int getValue() const;
     void setValue(int value);
 
+    bool operator==(const Double &d);
+
 private:
     int value;
 };

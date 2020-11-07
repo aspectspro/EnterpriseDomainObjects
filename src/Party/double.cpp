@@ -53,3 +53,10 @@ void Double::setValue(int value)
 {
     this->value = value;
 }
+
+bool Double::operator==(const Double &d)
+{
+    return (getValue() == d.getValue());
+}
+
+

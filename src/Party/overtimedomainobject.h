@@ -48,6 +48,56 @@ public:
     virtual QString tableName() const override;
 };
 
+struct AbstractFacade : public QObject{
+    Q_OBJECT
+
+signals:
+    void error(QString message);
+
+public slots:
+    virtual void save(){}
+    virtual void load(){}
+
+
+};
+
+class OvertimeFacade : public AbstractFacade
+{
+    Q_OBJECT
+    Q_PROPERTY(Double overtime_rate_one READ getOvertime_rate_one WRITE setOvertime_rate_one NOTIFY overtime_rate_oneChanged)
+    Q_PROPERTY(Double overtime_rate_two READ getOvertime_rate_two WRITE setOvertime_rate_two NOTIFY overtime_rate_twoChanged)
+    Q_PROPERTY(Double overtime_rate_three READ getOvertime_rate_three WRITE setOvertime_rate_three NOTIFY overtime_rate_threeChanged)
+
+public:
+    OvertimeFacade();
+    virtual ~OvertimeFacade() {}
+
+    Double getOvertime_rate_one() const;
+    void setOvertime_rate_one(const Double value);
+
+    Double getOvertime_rate_two() const;
+    void setOvertime_rate_two(const Double value);
+
+    Double getOvertime_rate_three() const;
+    void setOvertime_rate_three(const Double value);
+
+signals:
+    void overtime_rate_oneChanged(Double overtime_rate_one);
+    void overtime_rate_twoChanged(Double overtime_rate_two);
+    void overtime_rate_threeChanged(Double overtime_rate_three);
+
+private:
+    Double overtime_rate_one = 0;
+    Double overtime_rate_two = 0;
+    Double overtime_rate_three = 0;
+    OvertimeMapper mapper;
+
+    // AbstractFacade interface
+public slots:
+    virtual void save() override;
+    virtual void load() override;
+};
+
 
 
 #endif // OVERTIMEDOMAINOBJECT_H
