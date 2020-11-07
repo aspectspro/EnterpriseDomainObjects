@@ -27,10 +27,6 @@ public:
     QString getId() const;
     void setId(const QString value);
 
-    void copyBaseParty(AbstractParty &party){
-        this->fromJson(party.toJsonObject());
-    }
-
 private:
     QString telephone_number;
     QString address;

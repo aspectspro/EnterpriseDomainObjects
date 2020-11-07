@@ -6,5 +6,12 @@
 #include "partyfacade.h"
 #include "person.h"
 #include "partymodule.h"
+#include "salary.h"
+#include "salaryfacade.h"
+#include "salarydomainobject.h"
+#include "companyinformationfacade.h"
+#include "overtimedomainobject.h"
+#include "employeefacade.h"
+#include "payratedomainobject.h"
 
 #endif // PARTY_H

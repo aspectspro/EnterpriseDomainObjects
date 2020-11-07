@@ -61,3 +61,29 @@ void PartyFacade::load()
     _organizationModel->changeDomainList(data);
 
 }
+
+DateTime EnterpriseDateUtils::now(){
+    return DateTime::getNow();
+}
+
+DateTime EnterpriseDateUtils::dateTimeFromTimestamp(int timestamp){
+    DateTime dt;
+    dt.setTimestamp(timestamp);
+    return dt;
+}
+
+DateTime EnterpriseDateUtils::dateTimeFromUtc(QString utcTime){
+    auto secs = QDateTime::fromString(utcTime).toSecsSinceEpoch()+43200;
+    DateTime dt;
+    dt.setTimestamp(secs);
+    return dt;
+}
+
+QString EnterpriseDateUtils::appDatesView(int timestamp){
+    auto dt = QDateTime::fromSecsSinceEpoch(timestamp+43200);
+    return dt.toString("yyyy-MM-dd");
+}
+
+QString EnterpriseDateUtils::appDatesView(QDateTime dateTime){
+    return appDatesView(dateTime.toSecsSinceEpoch());
+}

@@ -7,7 +7,7 @@ class DatabaseConan(ConanFile):
     description = "Enterprise Domain Objects"
 
     def requirements(self):
-        self.requires("AbstractObjects/2.0-alpha")
+        self.requires("AbstractObjects/2.1.1")
 
 #dynamically sets version number from master tag or testing if other branches
     def set_version(self):

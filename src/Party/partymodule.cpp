@@ -44,6 +44,7 @@ SetupModule &PartyModule::installSchema()
     auto organizationTable = initializeModuleTable("organization");
     organizationTable.appendTableColumn({"id",TableColumn::TypeString,true});
     organizationTable.appendTableColumn({"company_name",TableColumn::TypeString,true});
+    organizationTable.setPrimaryKey("id");
     insertTable(organizationTable);
 
 //    Properties for Person
@@ -56,12 +57,23 @@ SetupModule &PartyModule::installSchema()
 
     auto personTable = initializeModuleTable("person");
     personTable.appendTableColumn({"id",TableColumn::TypeString,true});
-    personTable.appendTableColumn({"first_name",TableColumn::TypeString});
-    personTable.appendTableColumn({"last_name",TableColumn::TypeString});
-    personTable.appendTableColumn({"identification_number",TableColumn::TypeString,true});
-    personTable.appendTableColumn({"driver_permit_number",TableColumn::TypeString,true});
-    personTable.appendTableColumn({"passport_number",TableColumn::TypeString,true});
+
+    TableColumn first_name{"first_name",TableColumn::TypeString};
+    first_name.setNotNull(true);
+    first_name.setDefaultValue("");
+
+    personTable.appendTableColumn(first_name);
+
+    TableColumn last_name{"last_name",TableColumn::TypeString};
+    last_name.setNotNull(true);
+    last_name.setDefaultValue("");
+    personTable.appendTableColumn(last_name);
+
+    personTable.appendTableColumn({"identification_number",TableColumn::TypeString});
+    personTable.appendTableColumn({"driver_permit_number",TableColumn::TypeString});
+    personTable.appendTableColumn({"passport_number",TableColumn::TypeString});
     personTable.appendTableColumn({"date_of_birth",TableColumn::TypeInt});
+    personTable.setPrimaryKey("id");
     insertTable(personTable);
 
 //    Properties for Employee
@@ -72,11 +84,47 @@ SetupModule &PartyModule::installSchema()
 
     auto employeeTable = initializeModuleTable("employee");
     employeeTable.appendTableColumn({"id",TableColumn::TypeString,true});
-    employeeTable.appendTableColumn({"bir_number",TableColumn::TypeString,true});
-    employeeTable.appendTableColumn({"nis_number",TableColumn::TypeString,true});
+    employeeTable.appendTableColumn({"bir_number",TableColumn::TypeString});
+    employeeTable.appendTableColumn({"nis_number",TableColumn::TypeString});
     employeeTable.appendTableColumn({"date_of_employment",TableColumn::TypeInt});
     employeeTable.appendTableColumn({"date_of_discharge",TableColumn::TypeInt});
+    employeeTable.setPrimaryKey("id");
     insertTable(employeeTable);
+
+    //Salary
+    auto payTable = initializeModuleTable("pay");
+    payTable.appendTableColumn({"id",TableColumn::TypeString,true});
+    payTable.appendTableColumn({"employee_id",TableColumn::TypeString});
+    payTable.appendTableColumn({"gross_pay",TableColumn::TypeInt});
+    payTable.appendTableColumn({"net_pay",TableColumn::TypeInt});
+    payTable.appendTableColumn({"employee_nis",TableColumn::TypeInt});
+    payTable.appendTableColumn({"employer_nis",TableColumn::TypeInt});
+    payTable.appendTableColumn({"paye",TableColumn::TypeInt});
+    payTable.appendTableColumn({"health_surcharge",TableColumn::TypeInt});
+    payTable.appendTableColumn({"date_from",TableColumn::TypeInt});
+    payTable.appendTableColumn({"date_to",TableColumn::TypeInt});
+    payTable.appendTableColumn({"date_paid",TableColumn::TypeInt});
+    payTable.setPrimaryKey("id");
+    insertTable(payTable);
+
+    //Overtime Table
+    auto overtimeTable = initializeModuleTable("overtime_settings");
+    overtimeTable.appendTableColumn({"id",TableColumn::TypeString,true});
+    overtimeTable.appendTableColumn({"overtime_rate_one",TableColumn::TypeString,true});
+    overtimeTable.appendTableColumn({"overtime_rate_two",TableColumn::TypeString,true});
+    overtimeTable.appendTableColumn({"overtime_rate_three",TableColumn::TypeString,true});
+    insertTable(overtimeTable);
+
+
+
+    //Payrate Table
+    auto payrateTable = initializeModuleTable("payrate");
+    payrateTable.appendTableColumn({"employee_id",TableColumn::TypeString,true});
+    payrateTable.appendTableColumn({"payrate",TableColumn::TypeInt});
+    payrateTable.appendTableColumn({"overtime_one",TableColumn::TypeInt});
+    payrateTable.appendTableColumn({"overtime_two",TableColumn::TypeInt});
+    payrateTable.appendTableColumn({"overtime_three",TableColumn::TypeInt});
+    insertTable(payrateTable);
 
     return *this;
 }

@@ -1,23 +1,8 @@
 #ifndef PERSON_H
 #define PERSON_H
 #include "abstractparty.h"
-
-class DateTime{
-
-    Q_GADGET
-public:
-    DateTime();
-    int getTimestamp() const;
-    void setTimestamp(int value);
-    QString getDateTimeAsString();
-    static DateTime getNow();
-
-private:
-    int timestamp = 0;
-    void registerMetaType();
-};
-
-Q_DECLARE_METATYPE(DateTime)
+#include "datetime.h"
+#include "money.h"
 
 class Person : public AbstractParty, public DomainCloneTemplate<Person>{
 
@@ -31,6 +16,7 @@ class Person : public AbstractParty, public DomainCloneTemplate<Person>{
 
     // AbstractDomainObject interface
 public:
+    Person();
     virtual const QMetaObject &metaObject() const override;
     virtual void registerConverter() override;
 
@@ -59,9 +45,25 @@ private:
     QString driver_permit_number;
     QString passport_number;
     DateTime date_of_birth;
+    Money hourly_pay_rate;
+    QString pay_type;
 };
 
 Q_DECLARE_METATYPE(Person)
+
+class PersonMapper : public TemplateMapper<Person>{
+
+
+    // AbstractMapper interface
+public:
+    virtual QString tableName() const override;
+
+protected:
+    virtual void injectInsert(AbstractDomainObject &domainObject) const override;
+    virtual void injectUpdate(AbstractDomainObject &domainObject) const override;
+    virtual void injectRemove(AbstractDomainObject &domainObject) const override;
+    virtual void injectLoad(AbstractDomainObject &domainObject) const override;
+};
 
 class Employee : public Person, public DomainCloneTemplate<Employee>{
 
@@ -73,6 +75,7 @@ class Employee : public Person, public DomainCloneTemplate<Employee>{
 
     // AbstractDomainObject interface
 public:
+    Employee();
     using DomainCloneTemplate<Employee>::clone;
 
     virtual const QMetaObject &metaObject() const override;
@@ -98,5 +101,21 @@ private:
 };
 
 Q_DECLARE_METATYPE(Employee)
+
+class EmployeeMapper : public TemplateMapper<Employee>{
+
+
+    // AbstractMapper interface
+public:
+    virtual QString tableName() const override;
+
+protected:
+    virtual void injectInsert(AbstractDomainObject &domainObject) const override;
+    virtual void injectUpdate(AbstractDomainObject &domainObject) const override;
+    virtual void injectRemove(AbstractDomainObject &domainObject) const override;
+    virtual void injectLoad(AbstractDomainObject &domainObject) const override;
+};
+
+
 
 #endif // PERSON_H

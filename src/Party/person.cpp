@@ -1,5 +1,10 @@
 #include "person.h"
 
+Person::Person()
+{
+    registerConverter();
+}
+
 const QMetaObject &Person::metaObject() const
 {
     return staticMetaObject;
@@ -70,62 +75,10 @@ void Person::setDate_of_birth(const DateTime value)
     date_of_birth = value;
 }
 
-
-DateTime::DateTime()
+Employee::Employee()
 {
-    registerMetaType();
+    registerConverter();
 }
-
-int DateTime::getTimestamp() const
-{
-    return timestamp;
-}
-
-void DateTime::setTimestamp(int value)
-{
-    timestamp = value;
-}
-
-QString DateTime::getDateTimeAsString()
-{
-    return QDateTime::fromSecsSinceEpoch(getTimestamp()).toString("dddd dd MMMM yyyy, hh:mm:ss ap");
-}
-
-DateTime DateTime::getNow()
-{
-    DateTime time;
-    time.setTimestamp(QDateTime::currentDateTime().toSecsSinceEpoch());
-    return time;
-}
-
-void DateTime::registerMetaType()
-{
-    if(QMetaType::hasRegisteredConverterFunction<DateTime,QString>())
-        return;
-
-    qRegisterMetaType<DateTime>();
-
-    QMetaType::registerConverter<DateTime,QString>([=](DateTime dateTime) -> QString{
-        return QString::number(dateTime.getTimestamp());
-    });
-
-    QMetaType::registerConverter<QString,DateTime>([=](QString dateTime) -> DateTime{
-        DateTime dt;
-        dt.setTimestamp(dateTime.toInt());
-        return dt;
-    });
-
-    QMetaType::registerConverter<DateTime,QJsonValue>([=](DateTime dateTime) -> QJsonValue{
-        return QString::number(dateTime.getTimestamp());
-    });
-
-    QMetaType::registerConverter<QJsonValue,DateTime>([=](QJsonValue dateTime) -> DateTime{
-        DateTime dt;
-        dt.setTimestamp(dateTime.toInt());
-        return dt;
-    });
-}
-
 
 const QMetaObject &Employee::metaObject() const
 {
@@ -134,6 +87,7 @@ const QMetaObject &Employee::metaObject() const
 
 void Employee::registerConverter()
 {
+    qRegisterMetaType<Employee>();
 }
 
 QString Employee::getBir_number() const
@@ -174,4 +128,68 @@ DateTime Employee::getDate_of_discharge() const
 void Employee::setDate_of_discharge(const DateTime value)
 {
     date_of_discharge = value;
+}
+
+
+QString PersonMapper::tableName() const
+{
+    return "party_person";
+}
+
+void PersonMapper::injectInsert(AbstractDomainObject &domainObject) const
+{
+    AbstractPartyMapper apMapper;
+    apMapper.insert(domainObject);
+}
+
+void PersonMapper::injectUpdate(AbstractDomainObject &domainObject) const
+{
+    AbstractPartyMapper apMapper;
+    apMapper.update(domainObject);
+}
+
+void PersonMapper::injectRemove(AbstractDomainObject &domainObject) const
+{
+    AbstractPartyMapper apMapper;
+    apMapper.remove(domainObject);
+}
+
+void PersonMapper::injectLoad(AbstractDomainObject &domainObject) const
+{
+    AbstractPartyMapper apMapper;
+    auto person = dynamic_cast<Person*>(&domainObject);
+    auto party = apMapper.find(person->getId());
+    person->copyFrom<AbstractParty>(party);
+}
+
+
+QString EmployeeMapper::tableName() const
+{
+    return "party_employee";
+}
+
+void EmployeeMapper::injectInsert(AbstractDomainObject &domainObject) const
+{
+    PersonMapper mapper;
+    mapper.insert(domainObject);
+}
+
+void EmployeeMapper::injectUpdate(AbstractDomainObject &domainObject) const
+{
+    PersonMapper mapper;
+    mapper.update(domainObject);
+}
+
+void EmployeeMapper::injectRemove(AbstractDomainObject &domainObject) const
+{
+    PersonMapper mapper;
+    mapper.remove(domainObject);
+}
+
+void EmployeeMapper::injectLoad(AbstractDomainObject &domainObject) const
+{
+    PersonMapper mapper;
+    auto employee = dynamic_cast<Employee*>(&domainObject);
+    auto person = mapper.find(employee->getId());
+    employee->copyFrom<Person>(person);
 }
