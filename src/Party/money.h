@@ -79,6 +79,34 @@ private:
 
 Q_DECLARE_METATYPE(Money)
 
+class MoneyFacade : public QObject
+{
+    Q_OBJECT
+    Q_PROPERTY(QString formatted READ getFormatted WRITE setFormatted NOTIFY formattedChanged)
+    Q_PROPERTY(int raw READ getRaw NOTIFY rawChanged)
 
+public:
+    MoneyFacade();
+    virtual ~MoneyFacade() {}
+
+
+    QString getFormatted() const;
+    void setFormatted(const QString &value);
+
+    int getRaw() const;
+    void setRaw(int value);
+
+public slots:
+    Money asMoney();
+
+signals:
+    void formattedChanged(QString formatted);
+    void rawChanged(int raw);
+
+private:
+    QString formatted;
+    int raw;
+    Money money;
+};
 
 #endif // MONEY_H

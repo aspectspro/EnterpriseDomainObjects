@@ -53,16 +53,15 @@ void PayrateDomainObject::setOvertime_three(const Money &value)
     overtime_three = value;
 }
 
-QString PayrateDomainObject::getEmployee_id() const
+QString PayrateDomainObject::getId() const
 {
-    return employee_id;
+    return id;
 }
 
-void PayrateDomainObject::setEmployee_id(const QString &value)
+void PayrateDomainObject::setId(const QString &value)
 {
-    employee_id = value;
+    id = value;
 }
-
 
 QString PayrateMapper::tableName() const
 {
@@ -133,26 +132,30 @@ void PayrateFacade::setOvertime_three(const Money &value)
 void PayrateFacade::save()
 {
     PayrateDomainObject pr;
-    pr.setEmployee_id(getEmployee_id());
+    pr.setId(getEmployee_id());
+    pr.setPayrate(getPayrate());
     pr.setOvertime_one(getOvertime_one());
     pr.setOvertime_two(getOvertime_two());
     pr.setOvertime_three(getOvertime_three());
 
-    if(pr.getEmployee_id() == ""){
+    if(pr.getId() == ""){
         qInfo() << "Must set employee id";
         return;
     }
 
     try {
         mapper.insert(pr);
+        emit saved(pr);
+
     } catch (std::exception &e) {
 
         Q_UNUSED(e)
         try {
             mapper.update(pr);
+            emit saved(pr);
         } catch (std::exception &e) {
             Q_UNUSED(e)
-            qInfo() << "Couldn't save Payrate";
+            qInfo() << "Couldn't save Payrate : "<< e.what();
         }
     }
 }
@@ -160,7 +163,7 @@ void PayrateFacade::save()
 void PayrateFacade::load()
 {
     try {
-        auto pr = mapper.loadAll(QString("employee_id='%1'").arg(getEmployee_id())).first();
+        auto pr = mapper.find(getEmployee_id());
         setPayrate(pr.getPayrate());
         setOvertime_one(pr.getOvertime_one());
         setOvertime_two(pr.getOvertime_two());

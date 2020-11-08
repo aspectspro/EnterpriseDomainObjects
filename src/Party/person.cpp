@@ -1,4 +1,5 @@
 #include "person.h"
+#include "payratedomainobject.h"
 
 Person::Person()
 {
@@ -140,6 +141,10 @@ void PersonMapper::injectInsert(AbstractDomainObject &domainObject) const
 {
     AbstractPartyMapper apMapper;
     apMapper.insert(domainObject);
+
+    PayrateFacade pr;
+    pr.setEmployee_id(domainObject.getProperty("id").toString());
+    pr.save();
 }
 
 void PersonMapper::injectUpdate(AbstractDomainObject &domainObject) const
