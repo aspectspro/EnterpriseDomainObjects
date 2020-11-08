@@ -93,6 +93,11 @@ const QMetaObject &PayPeriod::metaObject() const
     return staticMetaObject;
 }
 
+bool PayPeriod::operator==(const PayPeriod &period)
+{
+    return (period.getId() == getId() && getName() == period.getName());
+}
+
 QString PayPeriod::getName() const
 {
     return name;
@@ -231,5 +236,81 @@ void EmploymentTypeFacade::initializeEmploymentTypes()
     } catch (std::exception &e) {
         Q_UNUSED(e);
     }
+
+}
+
+PayPeriodMapper PayPeriodFacade::mapper;
+
+PayPeriodFacade::PayPeriodFacade() {
+    initializePayPeriod();
+    connect(this,&PayPeriodFacade::idChanged,[=](PayPeriodEnum payPeriod){
+        Q_UNUSED(payPeriod);
+        load();
+    });
+}
+
+PayPeriodFacade::PayPeriodEnum PayPeriodFacade::getId() const
+{
+    return id;
+}
+
+void PayPeriodFacade::setId(const PayPeriodEnum value)
+{
+    id = value;
+    emit idChanged(value);
+}
+
+QString PayPeriodFacade::getName() const
+{
+    return name;
+}
+
+void PayPeriodFacade::setName(const QString &value)
+{
+    name = value;
+    emit nameChanged(value);
+}
+
+void PayPeriodFacade::load()
+{
+    try {
+        auto payPeriod = mapper.find(QString::number(getId()));
+        setName(payPeriod.getName());
+    } catch (std::exception &e) {
+        qInfo() << e.what() << "Couldn't load pay period";
+    }
+
+}
+
+void PayPeriodFacade::initializePayPeriod()
+{
+    PayPeriod daily;
+    daily.setId(QString::number(DAILY));
+    daily.setName("Daily");
+
+    PayPeriod weekly;
+    weekly.setId(QString::number(WEEKLY));
+    weekly.setName("Weekly");
+
+    PayPeriod fortnightly;
+    fortnightly.setId(QString::number(FORTNIGHTLY));
+    fortnightly.setName("Fortnighly");
+
+
+    PayPeriod monthly;
+    monthly.setId(QString::number(MONTHLY));
+    monthly.setName("Monthly");
+
+    try {
+        mapper.insert(daily);
+        mapper.insert(weekly);
+        mapper.insert(fortnightly);
+        mapper.insert(monthly);
+    } catch (std::exception &e) {
+        Q_UNUSED(e);
+//        qInfo() << e.what();
+    }
+
+
 
 }

@@ -53,6 +53,8 @@ public:
     PayPeriod();
     virtual const QMetaObject &metaObject() const override;
 
+    bool operator==(const PayPeriod &period);
+
     QString getId() const;
     void setId(const QString &value);
 
@@ -156,6 +158,49 @@ private:
     EmploymentTypeEnum id;
     QString name;
     static EmploymentTypeMapper mapper;
+};
+
+
+class PayPeriodFacade : public QObject
+{
+    Q_OBJECT
+    Q_PROPERTY(PayPeriodEnum id READ getId WRITE setId NOTIFY idChanged)
+    Q_PROPERTY(QString name READ getName WRITE setName NOTIFY nameChanged)
+
+public:
+
+    enum PayPeriodEnum{
+        DAILY,
+        WEEKLY,
+        FORTNIGHTLY,
+        MONTHLY
+    };
+
+    Q_ENUM(PayPeriodEnum)
+
+    PayPeriodFacade();
+
+    virtual ~PayPeriodFacade() {}
+
+    PayPeriodEnum getId() const;
+    void setId(const PayPeriodFacade::PayPeriodEnum value);
+
+    QString getName() const;
+    void setName(const QString &value);
+
+    void load();
+
+    static void initializePayPeriod();
+
+signals:
+    void idChanged(PayPeriodEnum id);
+    void nameChanged(QString name);
+
+private:
+    PayPeriodEnum id;
+    QString name;
+    static PayPeriodMapper mapper;
+
 };
 
 class PaytypeFacade : public QObject

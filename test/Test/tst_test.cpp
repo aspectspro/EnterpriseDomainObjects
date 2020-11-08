@@ -578,6 +578,12 @@ void Test::test_paytype()
     EmploymentTypeFacade facade;
     facade.setId(facade.SALARIED);
 
+    PayPeriodFacade period;
+    period.setId(period.DAILY);
+
+    QVERIFY(facade.getName() == "Salaried");
+    QVERIFY(period.getName() == "Daily");
+
 }
 
 QTEST_MAIN(Test)
