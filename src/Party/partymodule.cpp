@@ -115,8 +115,6 @@ SetupModule &PartyModule::installSchema()
     overtimeTable.appendTableColumn({"overtime_rate_three",TableColumn::TypeString,true});
     insertTable(overtimeTable);
 
-
-
     //Payrate Table
     auto payrateTable = initializeModuleTable("payrate");
     payrateTable.appendTableColumn({"id",TableColumn::TypeString,true});
@@ -132,6 +130,19 @@ SetupModule &PartyModule::installSchema()
     paytypeTable.appendTableColumn({"pay_period",TableColumn::TypeString});
     paytypeTable.appendTableColumn({"employment_type",TableColumn::TypeString});
     insertTable(paytypeTable);
+
+    //PayPeriod
+    auto payperiodTable = initializeModuleTable("pay_period");
+    payperiodTable.appendTableColumn({"id",TableColumn::TypeString,true});
+    payperiodTable.appendTableColumn({"name",TableColumn::TypeString,true});
+    insertTable(payperiodTable);
+
+    //Employment Period
+    auto employmentTypeTable = initializeModuleTable("employment_type");
+    employmentTypeTable.appendTableColumn({"id",TableColumn::TypeString,true});
+    employmentTypeTable.appendTableColumn({"name",TableColumn::TypeString,true});
+    insertTable(employmentTypeTable);
+
 
     return *this;
 }
