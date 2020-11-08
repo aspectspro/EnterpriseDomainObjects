@@ -123,7 +123,7 @@ protected:
 class EmploymentTypeFacade : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(EmploymentTypeEnum id READ getId WRITE setId NOTIFY idChanged)
+    Q_PROPERTY(EmploymentTypeEnum _id READ getId WRITE setId NOTIFY idChanged)
     Q_PROPERTY(QString name READ getName WRITE setName NOTIFY nameChanged)
 
 
@@ -155,7 +155,7 @@ signals:
     void nameChanged(QString name);
 
 private:
-    EmploymentTypeEnum id;
+    EmploymentTypeEnum id = HOURLY;
     QString name;
     static EmploymentTypeMapper mapper;
 };
@@ -164,7 +164,7 @@ private:
 class PayPeriodFacade : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(PayPeriodEnum id READ getId WRITE setId NOTIFY idChanged)
+    Q_PROPERTY(PayPeriodEnum _id READ getId WRITE setId NOTIFY idChanged)
     Q_PROPERTY(QString name READ getName WRITE setName NOTIFY nameChanged)
 
 public:
@@ -197,36 +197,45 @@ signals:
     void nameChanged(QString name);
 
 private:
-    PayPeriodEnum id;
+    PayPeriodEnum id = MONTHLY;
     QString name;
     static PayPeriodMapper mapper;
-
 };
 
 class PaytypeFacade : public QObject
 {
     Q_OBJECT
-
-    enum EmploymentType{
-        HOURLY,
-        SALARY,
-        COMMISSION
-    };
-
-    enum PayPeriod{
-        DAILY,
-        WEEKLY,
-        FORTNIGHTLY,
-        MONTHLY
-    };
+    Q_PROPERTY(QString _id READ getId WRITE setId NOTIFY idChanged)
+    Q_PROPERTY(int payPeriod READ getPayPeriod WRITE setPayPeriod NOTIFY payPeriodChanged)
+    Q_PROPERTY(int employmentType READ getEmploymentType WRITE setEmploymentType NOTIFY employmentTypeChanged)
 
 public:
-    PaytypeFacade() {}
+    PaytypeFacade();
+
     virtual ~PaytypeFacade() {}
 
+    QString getId() const;
+    void setId(const QString &value);
+
+    void load();
+    void save();
+
+    int getPayPeriod() const;
+    void setPayPeriod(int value);
+
+    int getEmploymentType() const;
+    void setEmploymentType(int value);
+
+signals:
+    void idChanged(QString id);
+    void payPeriodChanged(int payPeriod);
+    void employmentTypeChanged(int employmentType);
 
 private:
-
+    QString id;
+    int payPeriod = PayPeriodFacade::MONTHLY;
+    int employmentType = EmploymentTypeFacade::HOURLY;
+    static PaytypeMapper mapper;
 };
 
 #endif // PAYTYPEDOMAINOBJECT_H

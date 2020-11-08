@@ -1,6 +1,7 @@
 #include "paytypedomainobject.h"
 
 EmploymentTypeMapper EmploymentTypeFacade::mapper;
+PaytypeMapper PaytypeFacade::mapper;
 
 const QMetaObject &PaytypeDomainObject::metaObject() const
 {
@@ -161,12 +162,14 @@ void PayPeriod::registerConverter()
 
 void PaytypeMapper::injectLoad(AbstractDomainObject &domainObject) const
 {
-    static PayPeriodMapper payPeriodMapper;
-    static EmploymentTypeMapper empMapper;
+    PayPeriodMapper payPeriodMapper;
+    EmploymentTypeMapper empMapper;
 
     auto paytype = dynamic_cast<PaytypeDomainObject*>(&domainObject);
+
     auto empType = empMapper.find(paytype->getEmployment_type().getId());
     auto payPeriod = payPeriodMapper.find(paytype->getPay_period().getId());
+
     paytype->setPay_period(payPeriod);
     paytype->setEmployment_type(empType);
 }
@@ -310,7 +313,95 @@ void PayPeriodFacade::initializePayPeriod()
         Q_UNUSED(e);
 //        qInfo() << e.what();
     }
+}
+
+PaytypeFacade::PaytypeFacade() {
+
+    PayPeriodFacade::initializePayPeriod();
+    EmploymentTypeFacade::initializeEmploymentTypes();
+
+    connect(this,&PaytypeFacade::idChanged,[=](QString id){
+        Q_UNUSED(id);
+        load();
+    });
+}
+
+QString PaytypeFacade::getId() const
+{
+    return id;
+}
+
+void PaytypeFacade::setId(const QString &value)
+{
+    id = value;
+    emit idChanged(value);
+}
+
+void PaytypeFacade::load()
+{
+    try {
+        PaytypeMapper mapper;
+        auto pt = mapper.find(getId());
+
+        setPayPeriod(pt.getPay_period().getId().toInt());
+        setEmploymentType(pt.getEmployment_type().getId().toInt());
+
+    } catch (std::exception &e) {
+
+        qInfo() << e.what() << QString("Couldn't load Paytype '%1'").arg(getId());
+    }
+}
+
+void PaytypeFacade::save()
+{
+    PaytypeDomainObject paytype;
+    PayPeriod payperiod;
+    EmploymentType employmentType;
 
 
+    payperiod.setId(QString::number(getPayPeriod()));
+    employmentType.setId(QString::number(getEmploymentType()));
 
+    paytype.setId(getId());
+    paytype.setPay_period(payperiod);
+    paytype.setEmployment_type(employmentType);
+
+
+    PaytypeMapper mapper;
+
+    try {
+
+        mapper.insert(paytype);
+
+    } catch (std::exception &e) {
+        Q_UNUSED(e);
+        try {
+            mapper.update(paytype);
+
+        } catch (std::exception &e) {
+            qInfo() << e.what() << "Could not save PaytypeFacade";
+        }
+    }
+}
+
+int PaytypeFacade::getPayPeriod() const
+{
+    return payPeriod;
+}
+
+void PaytypeFacade::setPayPeriod(int value)
+{
+    payPeriod = value;
+    emit payPeriodChanged(value);
+}
+
+int PaytypeFacade::getEmploymentType() const
+{
+    return employmentType;
+}
+
+void PaytypeFacade::setEmploymentType(int value)
+{
+    employmentType = value;
+    emit employmentTypeChanged(value);
 }

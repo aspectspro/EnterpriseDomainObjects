@@ -36,7 +36,7 @@ private slots:
     void test_paytype();
 
 private:
-    bool keepDB = true;
+    bool keepDB = false;
 
 };
 
@@ -546,7 +546,7 @@ void Test::test_payrate()
     try {
         mp.insert(pr);
 
-        auto pr2 = mp.find(pr.getId());
+        auto pr2 = mp.find( pr.getId());
 //        QVERIFY(pr2.getPayrate() == pr.getPayrate());
 //        QVERIFY(pr2.getOvertime_one() == pr.getOvertime_one());
 //        QVERIFY(pr2.getOvertime_two() == pr.getOvertime_two());
@@ -575,14 +575,10 @@ void Test::test_payrate()
 
 void Test::test_paytype()
 {
-    EmploymentTypeFacade facade;
-    facade.setId(facade.SALARIED);
-
-    PayPeriodFacade period;
-    period.setId(period.DAILY);
-
-    QVERIFY(facade.getName() == "Salaried");
-    QVERIFY(period.getName() == "Daily");
+    EmployeeFacade emp;
+    emp.setFirst_name("Greg");
+    emp.setLast_name("Dillon");
+    emp.save();
 
 }
 
