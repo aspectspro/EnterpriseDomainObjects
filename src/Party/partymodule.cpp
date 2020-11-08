@@ -126,6 +126,13 @@ SetupModule &PartyModule::installSchema()
     payrateTable.appendTableColumn({"overtime_three",TableColumn::TypeInt});
     insertTable(payrateTable);
 
+    //Paytype table
+    auto paytypeTable = initializeModuleTable(("paytype"));
+    paytypeTable.appendTableColumn({"id",TableColumn::TypeString,true});
+    paytypeTable.appendTableColumn({"pay_period",TableColumn::TypeString});
+    paytypeTable.appendTableColumn({"employment_type",TableColumn::TypeString});
+    insertTable(paytypeTable);
+
     return *this;
 }
 

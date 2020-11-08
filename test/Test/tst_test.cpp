@@ -33,6 +33,8 @@ private slots:
     void test_overtimeTable();
     void test_payrate();
 
+    void test_paytype();
+
 private:
     bool keepDB = false;
 
@@ -565,7 +567,22 @@ void Test::test_payrate()
     pf.save();
 }
 
+void Test::test_paytype()
+{
+    PaytypeDomainObject pt;
+    pt.generateId();
+    pt.setPay_period("weekly");
+    pt.setEmployment_type("hourly");
 
+    PaytypeMapper mapper;
+    mapper.insert(pt);
+
+    auto loadedPt = mapper.find(pt.getId());
+
+    QVERIFY(loadedPt.getPay_period() == pt.getPay_period());
+    QVERIFY(loadedPt.getEmployment_type() == pt.getEmployment_type());
+
+}
 
 QTEST_MAIN(Test)
 

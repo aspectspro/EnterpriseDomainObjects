@@ -13,5 +13,6 @@
 #include "overtimedomainobject.h"
 #include "employeefacade.h"
 #include "payratedomainobject.h"
+#include "paytypedomainobject.h"
 
 #endif // PARTY_H
