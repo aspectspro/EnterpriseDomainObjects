@@ -533,7 +533,7 @@ void Test::test_overtimeTable()
 void Test::test_payrate()
 {
     PayrateDomainObject pr;
-    pr.setEmployee_id("_test_");
+    pr.setId("_test_");
     pr.setPayrate(10000);
     pr.setOvertime_one(15000);
     pr.setOvertime_two(20000);
@@ -544,7 +544,7 @@ void Test::test_payrate()
     try {
         mp.insert(pr);
 
-        auto pr2 = mp.loadAll("employee_id='_test_'").first();
+        auto pr2 = mp.find(pr.getId());
         QVERIFY(pr2.getPayrate() == pr.getPayrate());
         QVERIFY(pr2.getOvertime_one() == pr.getOvertime_one());
         QVERIFY(pr2.getOvertime_two() == pr.getOvertime_two());
@@ -553,6 +553,16 @@ void Test::test_payrate()
         qInfo() << e.what();
     }
 
+    PayrateFacade pf;
+    pf.setEmployee_id(pr.getId());
+
+    QVERIFY(pf.getPayrate() == pr.getPayrate());
+    QVERIFY(pf.getOvertime_one() == pr.getOvertime_one());
+    QVERIFY(pf.getOvertime_two() == pr.getOvertime_two());
+    QVERIFY(pf.getOvertime_three() == pr.getOvertime_three());
+
+    pf.setOvertime_one(9000);
+    pf.save();
 }
 
 

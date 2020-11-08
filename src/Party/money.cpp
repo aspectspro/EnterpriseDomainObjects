@@ -174,3 +174,36 @@ Money Money::fromInt(int moneyAsInt) const
     return Money(moneyAsInt);
 }
 
+
+MoneyFacade::MoneyFacade() {
+    connect(this,&MoneyFacade::formattedChanged,[=](QString formatted){
+        setRaw(money.unformatMoneyString(formatted));
+    });
+}
+
+QString MoneyFacade::getFormatted() const
+{
+    return formatted;
+}
+
+void MoneyFacade::setFormatted(const QString &value)
+{
+    formatted = value;
+    emit formattedChanged(value);
+}
+
+int MoneyFacade::getRaw() const
+{
+    return raw;
+}
+
+void MoneyFacade::setRaw(int value)
+{
+    raw = value;
+    emit rawChanged(value);
+}
+
+Money MoneyFacade::asMoney()
+{
+    return money.fromInt(getRaw());
+}
