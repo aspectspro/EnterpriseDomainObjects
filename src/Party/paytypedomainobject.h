@@ -20,6 +20,8 @@ public:
     QString getName() const;
     void setName(const QString &value);
 
+    bool operator==(const EmploymentType &empType);
+
 private:
     QString id;
     QString name;
@@ -113,6 +115,47 @@ public:
     // AbstractMapper interface
 protected:
     virtual void injectLoad(AbstractDomainObject &domainObject) const override;
+};
+
+
+class EmploymentTypeFacade : public QObject
+{
+    Q_OBJECT
+    Q_PROPERTY(EmploymentTypeEnum id READ getId WRITE setId NOTIFY idChanged)
+    Q_PROPERTY(QString name READ getName WRITE setName NOTIFY nameChanged)
+
+
+public:
+    enum EmploymentTypeEnum{
+        HOURLY = 0,
+        SALARIED = 1,
+        COMMISSIONED = 2
+    };
+
+    Q_ENUM(EmploymentTypeEnum)
+
+    EmploymentTypeFacade();
+
+    virtual ~EmploymentTypeFacade() {}
+
+    QString getName() const;
+    void setName(const QString &value);
+
+    EmploymentTypeEnum getId() const;
+    void setId(const EmploymentTypeFacade::EmploymentTypeEnum value);
+
+    void load();
+
+    static void initializeEmploymentTypes();
+
+signals:
+    void idChanged(EmploymentTypeEnum id);
+    void nameChanged(QString name);
+
+private:
+    EmploymentTypeEnum id;
+    QString name;
+    static EmploymentTypeMapper mapper;
 };
 
 class PaytypeFacade : public QObject

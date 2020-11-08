@@ -36,7 +36,7 @@ private slots:
     void test_paytype();
 
 private:
-    bool keepDB = false;
+    bool keepDB = true;
 
 };
 
@@ -575,46 +575,8 @@ void Test::test_payrate()
 
 void Test::test_paytype()
 {
-    PayPeriod pr1;
-    pr1.setId("1");
-    pr1.setName("Daily");
-
-    EmploymentType empType;
-    empType.setId("1");
-    empType.setName("hourly");
-
-    EmploymentTypeMapper empTypeMapper;
-    PayPeriodMapper prMapper;
-
-
-    try {
-        prMapper.insert(pr1);
-        empTypeMapper.insert(empType);
-
-    } catch (std::exception &e) {
-        qInfo() << e.what();
-    }
-
-    auto loadedPr = prMapper.find(pr1.getId());
-    auto loadEmp = empTypeMapper.find(empType.getId());
-
-    PaytypeDomainObject pt;
-    pt.generateId();
-    pt.setPay_period(pr1);
-    pt.setEmployment_type(empType);
-
-    PaytypeMapper mp;
-    mp.insert(pt);
-
-    try {
-        auto load = mp.find(pt.getId());
-        qDebug() << load.getPay_period().getName();
-        qDebug() << load.getEmployment_type().getName();
-
-    } catch (std::exception &e) {
-        qInfo() << e.what();
-    }
-
+    EmploymentTypeFacade facade;
+    facade.setId(facade.SALARIED);
 
 }
 
