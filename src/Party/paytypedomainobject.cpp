@@ -1,7 +1,12 @@
 #include "paytypedomainobject.h"
 
 EmploymentTypeMapper EmploymentTypeFacade::mapper;
+
 PaytypeMapper PaytypeFacade::mapper;
+
+DomainModelPtr PayPeriodFacade::payPeriodModel = ModelFactory::createModel<PayPeriod>();
+
+DomainModelPtr EmploymentTypeFacade::employmentTypeModel = ModelFactory::createModel<EmploymentType>();
 
 const QMetaObject &PaytypeDomainObject::metaObject() const
 {
@@ -36,6 +41,16 @@ EmploymentType PaytypeDomainObject::getEmployment_type() const
 void PaytypeDomainObject::setEmployment_type(const EmploymentType &value)
 {
     employment_type = value;
+}
+
+QString PaytypeDomainObject::getEmployee_title() const
+{
+    return employee_title;
+}
+
+void PaytypeDomainObject::setEmployee_title(const QString &value)
+{
+    employee_title = value;
 }
 
 QString PaytypeMapper::tableName() const
@@ -240,6 +255,30 @@ void EmploymentTypeFacade::initializeEmploymentTypes()
         Q_UNUSED(e);
     }
 
+    if(employmentTypeModel->rowCount() > 0)
+        return;
+
+    DomainObjectListPtr data = std::make_shared<QList<DomainObjectPtr>>();
+    data->clear();
+
+    try {
+        auto all = mapper.loadAll();
+        foreach (auto employmentType, all) {
+            data->append(employmentType.clone());
+        }
+
+    } catch (std::exception &e) {
+        qInfo() << e.what();
+    }
+
+    employmentTypeModel->changeDomainList(data);
+
+}
+
+QAbstractItemModel *EmploymentTypeFacade::getModel()
+{
+    return employmentTypeModel.get();
+
 }
 
 PayPeriodMapper PayPeriodFacade::mapper;
@@ -297,7 +336,7 @@ void PayPeriodFacade::initializePayPeriod()
 
     PayPeriod fortnightly;
     fortnightly.setId(QString::number(FORTNIGHTLY));
-    fortnightly.setName("Fortnighly");
+    fortnightly.setName("Fortnightly");
 
 
     PayPeriod monthly;
@@ -311,8 +350,33 @@ void PayPeriodFacade::initializePayPeriod()
         mapper.insert(monthly);
     } catch (std::exception &e) {
         Q_UNUSED(e);
-//        qInfo() << e.what();
     }
+
+    if(payPeriodModel->rowCount() > 0)
+        return;
+
+    DomainObjectListPtr data = std::make_shared<QList<DomainObjectPtr>>();
+    data->clear();
+
+
+    try {
+
+        auto all = mapper.loadAll();
+
+        foreach (auto payPeriod, all) {
+            data->append(payPeriod.clone());
+        }
+
+    } catch (std::exception &e) {
+        qInfo() << e.what();
+    }
+
+    payPeriodModel->changeDomainList(data);
+}
+
+QAbstractItemModel *PayPeriodFacade::getModel()
+{
+    return payPeriodModel.get();
 }
 
 PaytypeFacade::PaytypeFacade() {
@@ -345,6 +409,7 @@ void PaytypeFacade::load()
 
         setPayPeriod(pt.getPay_period().getId().toInt());
         setEmploymentType(pt.getEmployment_type().getId().toInt());
+        setEmployee_title(pt.getEmployee_title());
 
     } catch (std::exception &e) {
 
@@ -358,30 +423,42 @@ void PaytypeFacade::save()
     PayPeriod payperiod;
     EmploymentType employmentType;
 
-
     payperiod.setId(QString::number(getPayPeriod()));
     employmentType.setId(QString::number(getEmploymentType()));
 
     paytype.setId(getId());
     paytype.setPay_period(payperiod);
     paytype.setEmployment_type(employmentType);
-
+    paytype.setEmployee_title(getEmployee_title());
 
     PaytypeMapper mapper;
 
     try {
 
         mapper.insert(paytype);
+        emit saved();
 
     } catch (std::exception &e) {
         Q_UNUSED(e);
         try {
             mapper.update(paytype);
+            emit saved();
 
         } catch (std::exception &e) {
             qInfo() << e.what() << "Could not save PaytypeFacade";
         }
     }
+}
+
+QString PaytypeFacade::getEmployee_title() const
+{
+    return employee_title;
+}
+
+void PaytypeFacade::setEmployee_title(const QString &value)
+{
+    employee_title = value;
+    emit employee_titleChanged(value);
 }
 
 int PaytypeFacade::getPayPeriod() const

@@ -580,6 +580,19 @@ void Test::test_paytype()
     emp.setLast_name("Dillon");
     emp.save();
 
+    PaytypeFacade pt;
+    pt.setId(emp.getId());
+
+    pt.setEmployee_title("Pharmacist");
+    pt.save();
+
+    PaytypeFacade loaded;
+    loaded.setId(emp.getId());
+
+    QVERIFY(loaded.getEmployee_title() == "Pharmacist");
+
+
+
 }
 
 QTEST_MAIN(Test)

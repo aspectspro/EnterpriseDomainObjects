@@ -129,6 +129,7 @@ SetupModule &PartyModule::installSchema()
     paytypeTable.appendTableColumn({"id",TableColumn::TypeString,true});
     paytypeTable.appendTableColumn({"pay_period",TableColumn::TypeString});
     paytypeTable.appendTableColumn({"employment_type",TableColumn::TypeString});
+    paytypeTable.appendTableColumn({"employee_title",TableColumn::TypeString});
     insertTable(paytypeTable);
 
     //PayPeriod
