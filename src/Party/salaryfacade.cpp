@@ -2,8 +2,14 @@
 
 DomainModelPtr SalaryFacade::employeeSalaries = ModelFactory::createModel<SalaryDomainObject>();
 
+SalaryDomainMapper SalaryFacade::mapper;
+
 SalaryFacade::SalaryFacade(QObject *parent) : QObject(parent)
 {    
+
+    connect(this,&SalaryFacade::idChanged,[=](){
+        load();
+    });
 
     connect(this,&SalaryFacade::fromDateChanged,[=](){
         this->setSalary();
@@ -189,6 +195,66 @@ QAbstractItemModel *SalaryFacade::getEmployeeSalaries()
     return employeeSalaries.get();
 }
 
+void SalaryFacade::load()
+{
+    try {
+        auto salary = mapper.find(getId());
+        setPaye(salary.getPaye());
+        setDate_paid(salary.getDate_paid());
+        setTo_date(salary.getDate_to());
+        setFrom_date(salary.getDate_from());
+        setNet_salary(salary.getNet_pay());
+        setEmployee_id(salary.getEmployee_id());
+        setEmployee_nis(salary.getEmployee_nis());
+        setEmployer_nis(salary.getEmployer_nis());
+        setGross_salary(salary.getGross_pay());
+        setHealth_surcharge(salary.getHealth_surcharge());
+
+    } catch (std::exception &e) {
+        qInfo() << e.what() << QString("Couldn't load Salary '%1'").arg(getId());
+    }
+
+
+}
+
+void SalaryFacade::save()
+{
+    SalaryDomainObject salaryObject;
+
+    salaryObject.generateId();
+    salaryObject.setEmployee_id(getEmployee_id());
+    salaryObject.setGross_pay(this->gross_salary);
+    salaryObject.setNet_pay(this->net_salary);
+    salaryObject.setPaye(this->paye);
+    salaryObject.setEmployee_nis(this->getEmployee_nis());
+    salaryObject.setEmployer_nis(this->getEmployer_nis());
+    salaryObject.setHealth_surcharge(this->health_surcharge);
+    salaryObject.setDate_from(this->from_date);
+    salaryObject.setDate_to(this->to_date);
+    salaryObject.setDate_paid(DateTime::getNow());
+
+    try {
+        mapper.insert(salaryObject);
+        id = salaryObject.getId();
+
+    } catch (std::exception &e) {
+        emit error(e.what());
+        qInfo() << e.what();
+    }
+
+}
+
+DateTime SalaryFacade::getDate_paid() const
+{
+    return date_paid;
+}
+
+void SalaryFacade::setDate_paid(const DateTime &value)
+{
+    date_paid = value;
+    emit date_paidChanged(value);
+}
+
 Money SalaryFacade::getEmployee_nis() const
 {
     return employee_nis;
@@ -217,4 +283,26 @@ void SalaryFacade::setSalary()
     s.setAmount(gross_salary);
     this->salary = s;
     emit salaryChanged(s);
+}
+
+QString SalaryFacade::getId() const
+{
+    return id;
+}
+
+void SalaryFacade::setId(const QString &value)
+{
+    id = value;
+    emit idChanged(value);
+}
+
+QString SalaryFacade::getEmployee_id() const
+{
+    return employee_id;
+}
+
+void SalaryFacade::setEmployee_id(const QString &value)
+{
+    employee_id = value;
+    emit employee_idChanged(value);
 }

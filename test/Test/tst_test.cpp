@@ -575,23 +575,36 @@ void Test::test_payrate()
 
 void Test::test_paytype()
 {
+
     EmployeeFacade emp;
     emp.setFirst_name("Greg");
     emp.setLast_name("Dillon");
+    emp.setNis_number("NN-88732");
+    emp.setBir_number("BIR-9903");
     emp.save();
 
     PaytypeFacade pt;
     pt.setId(emp.getId());
-
     pt.setEmployee_title("Pharmacist");
     pt.save();
 
+    SalaryFacade sl;
+    sl.setEmployee_id(emp.getId());
+    sl.setGross_salary(1000000);
+    sl.setFrom_date(DateTime::fromIsoDate("2020-10-01"));
+    sl.setTo_date(DateTime::fromIsoDate("2020-10-20"));
+    sl.save();
+
+    SalaryFacade s2;
+    s2.setEmployee_id(emp.getId());
+    s2.setGross_salary(320000);
+    s2.setFrom_date(DateTime::fromIsoDate("2020-10-21"));
+    s2.setTo_date(DateTime::fromIsoDate("2020-10-31"));
+    s2.save();
+
     PrinterFacade p;
+    p.setSalary_id(s2.getId());
     p.print();
-
-
-
-
 }
 
 QTEST_MAIN(Test)

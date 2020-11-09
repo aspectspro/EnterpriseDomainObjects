@@ -94,6 +94,8 @@ class SalaryYearToDate : public QObject{
     Q_PROPERTY(Money yearPaye READ getYearPaye NOTIFY yearPayeChanged)
     Q_PROPERTY(SalaryDomainObject salary READ getSalary WRITE setSalary NOTIFY salaryChanged)
 
+    Q_PROPERTY(QString salary_id READ getSalary_id WRITE setSalary_id NOTIFY salary_idChanged)
+
 public:
     SalaryYearToDate();
 
@@ -120,6 +122,9 @@ public:
     SalaryDomainObject getSalary() const;
     void setSalary(const SalaryDomainObject value);
 
+    QString getSalary_id() const;
+    void setSalary_id(const QString &value);
+
 signals:
     void employeeIdChanged(QString employeeId);
     void yearGrossChanged(Money yearGross);
@@ -130,6 +135,8 @@ signals:
     void lastPaidChanged(QString lastPaid);
     void salaryChanged(SalaryDomainObject salary);
 
+    void salary_idChanged(QString salary_id);
+
 private:
     int currentYear;
     Money yearGross;
@@ -138,6 +145,9 @@ private:
     Money yearHealthSurcharge;
     Money yearPaye;
     SalaryDomainObject salary;
+    QString salary_id;
+
+    static SalaryDomainMapper mapper;
 };
 
 #endif // SALARYDOMAINOBJECT_H
