@@ -586,13 +586,11 @@ void Test::test_paytype()
     pt.setEmployee_title("Pharmacist");
     pt.save();
 
-//    PaytypeFacade payType;
-//    payType.setId(emp.getId());
+    PrinterFacade p;
+    p.print();
 
-//    PayrateFacade pRate;
-//    pRate.setEmployee_id(emp.getId());
 
-//    pRate.getPayrate().asInt();
+
 
 }
 

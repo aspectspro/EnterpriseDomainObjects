@@ -14,5 +14,6 @@
 #include "employeefacade.h"
 #include "payratedomainobject.h"
 #include "paytypedomainobject.h"
+#include "printerfacade.h"
 
 #endif // PARTY_H
