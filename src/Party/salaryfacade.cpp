@@ -38,7 +38,6 @@ SalaryFacade::SalaryFacade(QObject *parent) : QObject(parent)
 
         auto taxes = _nis+_paye+_healthSurcharge;
         setNet_salary(gross_salary-taxes);
-
     });
 
     setFrom_date(DateTime::getNow());

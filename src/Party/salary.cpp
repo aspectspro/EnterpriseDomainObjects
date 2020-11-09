@@ -14,19 +14,23 @@ SalaryDateRange::SalaryDateRange(QString from, QString to){
 
 int SalaryDateRange::mondayChecker(){
 
-    auto fromDayOfMonth = fromDate.dayOfYear();
-    auto toDayOfMonth = toDate.dayOfYear();
-    auto daysDifference = toDayOfMonth-fromDayOfMonth;
+//    auto fromDayOfMonth = fromDate.dayOfYear();
+//    auto toDayOfMonth = toDate.dayOfYear();
+    auto daysDifference = fromDate.daysTo(toDate);
     int mondayCounter = 0;
 
     for(int i = 0; i <= daysDifference; i++){
         QDate _dtFrom = fromDate.addDays(i);
         if(_dtFrom.dayOfWeek() == 1){
-            mondayCounter++;
+            mondayCounter = mondayCounter+1;
         }
     }
 
-    return mondayCounter;
+    auto wks = mondayCounter == 0 ? 1 : mondayCounter;
+
+    qDebug() << "wks" << mondayCounter;
+
+    return wks;
 }
 
 QDate SalaryDateRange::convertFromString(QString dateString){
@@ -104,6 +108,7 @@ int NisCalculator::getNisForSalary(Salary &salary){
     int _salaryAmount = salary.amount();
     SalaryRange range;
     int weeklyContribution = 0;
+    auto weeks = salary.getSalaryDates().mondayChecker();
 
     foreach (auto i, nisList) {
 
@@ -120,6 +125,10 @@ int NisCalculator::getNisForSalary(Salary &salary){
         case Salary::FortNightly : range = i.getWeeklyRange();
             salaryAmount = salaryAmount/2;
             break;
+
+        default:
+            salaryAmount = salaryAmount/weeks;
+            range = i.getWeeklyRange();
         }
 
         if(salaryAmount >= range.getMin() &&
@@ -130,9 +139,9 @@ int NisCalculator::getNisForSalary(Salary &salary){
             weeklyContribution = i.getTotalWeeklyContribution();
             break;
         }
-    }
+    }   
 
-    return weeklyContribution*salary.getSalaryDates().mondayChecker();
+    return weeklyContribution*weeks;
 }
 
 int NisCalculator::getNisForSalary()
@@ -154,21 +163,13 @@ int PayeCalculator::getPayeForSalary(Salary &salary){
     int yearlyProjection = 0;
     int taxCeiling = 7200000;
 
-    auto weeks = salary.getSalaryDates().mondayChecker() == 0 ? 1 : salary.getSalaryDates().mondayChecker();
+//    auto from = salary.getSalaryDates().getFromDate();
+//    auto to = salary.getSalaryDates().getToDate();
+//    auto dayChecker = from.daysTo(to) == 0 ? 1 : from.daysTo(to);
+
+    auto weeks = salary.getSalaryDates().mondayChecker();
 
     yearlyProjection = (salary.amount()/weeks)*52;
-
-//    switch (salary.getType()) {
-
-//    case Salary::Montly : yearlyProjection = salary.amount()*12;
-//        break;
-
-//    case Salary::Weekly : yearlyProjection = salary.amount()*52;
-//        break;
-
-//    case Salary::FortNightly : yearlyProjection = salary.amount()*26;
-//        break;
-//    }
 
     if(yearlyProjection > taxCeiling){
 
@@ -176,18 +177,6 @@ int PayeCalculator::getPayeForSalary(Salary &salary){
         auto taxedAmount = aboveTax/4;
 
         return taxedAmount/52;
-
-//        switch (salary.getType()) {
-
-//        case Salary::Montly : return taxedAmount/12;
-//            break;
-
-//        case Salary::Weekly : return taxedAmount/52;
-//            break;
-
-//        case Salary::FortNightly : return taxedAmount/26;
-//            break;
-//        }
     }
 
     return 0;
@@ -197,6 +186,8 @@ int HealthSurchargeCalculator::getHealthSurcharge(Salary &salary){
     auto amount = salary.amount();
     auto weeklyAmount = 0;
     auto healthSurchargeCeiling = 10900;
+
+    auto weeks = salary.getSalaryDates().mondayChecker();
 
     switch (salary.getType()) {
 
@@ -208,6 +199,9 @@ int HealthSurchargeCalculator::getHealthSurcharge(Salary &salary){
 
     case Salary::FortNightly : weeklyAmount = amount/2;
         break;
+
+    default:
+        weeklyAmount = amount/weeks;
     }
 
     auto healthSurcharge = 0;
@@ -218,7 +212,7 @@ int HealthSurchargeCalculator::getHealthSurcharge(Salary &salary){
         healthSurcharge = 480;
     }
 
-    return healthSurcharge*salary.getSalaryDates().mondayChecker();
+    return healthSurcharge*weeks;
 }
 
 int Salary::amount() const
