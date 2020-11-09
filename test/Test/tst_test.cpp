@@ -586,12 +586,13 @@ void Test::test_paytype()
     pt.setEmployee_title("Pharmacist");
     pt.save();
 
-    PaytypeFacade loaded;
-    loaded.setId(emp.getId());
+//    PaytypeFacade payType;
+//    payType.setId(emp.getId());
 
-    QVERIFY(loaded.getEmployee_title() == "Pharmacist");
+//    PayrateFacade pRate;
+//    pRate.setEmployee_id(emp.getId());
 
-
+//    pRate.getPayrate().asInt();
 
 }
 

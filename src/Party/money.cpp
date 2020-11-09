@@ -205,5 +205,15 @@ void MoneyFacade::setRaw(int value)
 
 Money MoneyFacade::asMoney()
 {
-    return money.fromInt(getRaw());
+    return Money(getRaw());
+}
+
+QString MoneyFacade::asString()
+{
+    return money.fromInt(getRaw()).asString();
+}
+
+Money MoneyFacade::fromInt(int number)
+{
+    return Money(number);
 }

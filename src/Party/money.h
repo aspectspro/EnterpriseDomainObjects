@@ -98,6 +98,8 @@ public:
 
 public slots:
     Money asMoney();
+    QString asString();
+    Money fromInt(int number);
 
 signals:
     void formattedChanged(QString formatted);
