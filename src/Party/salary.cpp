@@ -152,36 +152,42 @@ int NisCalculator::getEmployerContribution()
 
 int PayeCalculator::getPayeForSalary(Salary &salary){
     int yearlyProjection = 0;
-    int taxCeiling = 8400000;
+    int taxCeiling = 7200000;
 
-    switch (salary.getType()) {
+    auto weeks = salary.getSalaryDates().mondayChecker() == 0 ? 1 : salary.getSalaryDates().mondayChecker();
 
-    case Salary::Montly : yearlyProjection = salary.amount()*12;
-        break;
+    yearlyProjection = (salary.amount()/weeks)*52;
 
-    case Salary::Weekly : yearlyProjection = salary.amount()*52;
-        break;
+//    switch (salary.getType()) {
 
-    case Salary::FortNightly : yearlyProjection = salary.amount()*26;
-        break;
-    }
+//    case Salary::Montly : yearlyProjection = salary.amount()*12;
+//        break;
+
+//    case Salary::Weekly : yearlyProjection = salary.amount()*52;
+//        break;
+
+//    case Salary::FortNightly : yearlyProjection = salary.amount()*26;
+//        break;
+//    }
 
     if(yearlyProjection > taxCeiling){
 
         auto aboveTax = yearlyProjection-taxCeiling;
         auto taxedAmount = aboveTax/4;
 
-        switch (salary.getType()) {
+        return taxedAmount/52;
 
-        case Salary::Montly : return taxedAmount/12;
-            break;
+//        switch (salary.getType()) {
 
-        case Salary::Weekly : return taxedAmount/52;
-            break;
+//        case Salary::Montly : return taxedAmount/12;
+//            break;
 
-        case Salary::FortNightly : return taxedAmount/26;
-            break;
-        }
+//        case Salary::Weekly : return taxedAmount/52;
+//            break;
+
+//        case Salary::FortNightly : return taxedAmount/26;
+//            break;
+//        }
     }
 
     return 0;

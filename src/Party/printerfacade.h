@@ -15,14 +15,17 @@ class PrinterFacade : public QObject
     Q_PROPERTY(QString salary_id READ getSalary_id WRITE setSalary_id NOTIFY salary_idChanged)
 
 public:
-    explicit PrinterFacade(QObject *parent = nullptr);
-    void print();
+    explicit PrinterFacade(QObject *parent = nullptr);    
 
     QString getSalary_id() const;
     void setSalary_id(const QString &value);
 
+public slots:
+    void print();
+
 signals:
     void salary_idChanged(QString salary_id);
+    void finishedPrint();
 
 private:
     std::unique_ptr<QPrintDialog> printer;
@@ -36,7 +39,7 @@ private:
     QTextDocument doc;
 
 private slots:
-    void _sendToPrint();
+    void _sendToPrint(int result);
 
 };
 

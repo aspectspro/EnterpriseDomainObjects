@@ -164,6 +164,21 @@ SalaryDomainObject SalaryFacade::findLastSalaryForEmployee(QJsonObject employee)
     return salary;
 }
 
+SalaryDomainObject SalaryFacade::findLastSalaryForEmployee()
+{
+    SalaryDomainObject salary;
+
+    try {
+        salary = mapper.loadAll(QString("employee_id='%1' ORDER BY date_paid DESC").arg(getEmployee_id())).first();
+    } catch (std::exception &e) {
+        Q_UNUSED(e)
+        qInfo() << "Employee hasn't been paid as yet.";
+    }
+
+    return salary;
+
+}
+
 void SalaryFacade::loadSalaries(QJsonObject employee)
 {
     Employee _employee;
@@ -223,19 +238,20 @@ void SalaryFacade::save()
 
     salaryObject.generateId();
     salaryObject.setEmployee_id(getEmployee_id());
-    salaryObject.setGross_pay(this->gross_salary);
-    salaryObject.setNet_pay(this->net_salary);
-    salaryObject.setPaye(this->paye);
-    salaryObject.setEmployee_nis(this->getEmployee_nis());
-    salaryObject.setEmployer_nis(this->getEmployer_nis());
-    salaryObject.setHealth_surcharge(this->health_surcharge);
-    salaryObject.setDate_from(this->from_date);
-    salaryObject.setDate_to(this->to_date);
+    salaryObject.setGross_pay(getGross_salary());
+    salaryObject.setNet_pay(getNet_salary());
+    salaryObject.setPaye(getPaye());
+    salaryObject.setEmployee_nis(getEmployee_nis());
+    salaryObject.setEmployer_nis(getEmployer_nis());
+    salaryObject.setHealth_surcharge(getHealth_surcharge());
+    salaryObject.setDate_from(getFrom_date());
+    salaryObject.setDate_to(getTo_date());
     salaryObject.setDate_paid(DateTime::getNow());
 
     try {
         mapper.insert(salaryObject);
         id = salaryObject.getId();
+        emit saved(getId());
 
     } catch (std::exception &e) {
         emit error(e.what());
@@ -279,8 +295,8 @@ void SalaryFacade::setEmployer_nis(const Money value)
 
 void SalaryFacade::setSalary()
 {
-    Salary s({from_date.toIsoDate(),to_date.toIsoDate()});
-    s.setAmount(gross_salary);
+    Salary s({getFrom_date().toIsoDate(),getTo_date().toIsoDate()});
+    s.setAmount(getGross_salary());
     this->salary = s;
     emit salaryChanged(s);
 }

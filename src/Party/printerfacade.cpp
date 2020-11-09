@@ -20,7 +20,7 @@ PrinterFacade::PrinterFacade(QObject *parent) : QObject(parent)
         paytypeFacade->setId(salaryFacade->getEmployee_id());
     });
 
-    connect(printer.get(),SIGNAL(accepted()),this,SLOT(_sendToPrint()));
+    connect(printer.get(),SIGNAL(finished(int)),this,SLOT(_sendToPrint(int)));
 }
 
 void PrinterFacade::print()
@@ -134,7 +134,11 @@ void PrinterFacade::setSalary_id(const QString &value)
     emit salary_idChanged(value);
 }
 
-void PrinterFacade::_sendToPrint()
+void PrinterFacade::_sendToPrint(int result)
 {
-    doc.print(printer->printer());
+    if(result == QDialog::Accepted){
+        doc.print(printer->printer());
+    }
+
+    emit finishedPrint();
 }

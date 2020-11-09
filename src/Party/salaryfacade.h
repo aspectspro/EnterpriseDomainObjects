@@ -65,6 +65,7 @@ public slots:
     bool pay(Employee employee);
     bool pay(QJsonObject employee);
     static SalaryDomainObject findLastSalaryForEmployee(QJsonObject employee);
+    SalaryDomainObject findLastSalaryForEmployee();
     void loadSalaries(QJsonObject employee);
     static QAbstractItemModel *getEmployeeSalaries();
 
@@ -82,7 +83,9 @@ signals:
     void fromDateChanged(DateTime from_date);
     void toDateChanged(DateTime to_date);
     void salaryChanged(Salary s);
+
     void error(QString message);
+    void saved(QString salary_id);
 
     void idChanged(QString id);
     void employee_idChanged(QString employee_id);
