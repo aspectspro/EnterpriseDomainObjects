@@ -19,6 +19,8 @@ PrinterFacade::PrinterFacade(QObject *parent) : QObject(parent)
         employeeFacade->setId(salaryFacade->getEmployee_id());
         paytypeFacade->setId(salaryFacade->getEmployee_id());
     });
+
+    connect(printer.get(),SIGNAL(accepted()),this,SLOT(_sendToPrint()));
 }
 
 void PrinterFacade::print()
@@ -70,7 +72,6 @@ void PrinterFacade::print()
 
     auto header = heading.join("<br>").append("<hr>").prepend("<div>").append("</div>");
 
-    QTextDocument doc;
     doc.setDefaultStyleSheet("th,td {padding: 15px; text-align: left;}, .companyDetails{ font-size : 30px }");
 
     QStringList summary;
@@ -118,9 +119,8 @@ void PrinterFacade::print()
 
     doc.setHtml("<body>"+_details+header.append(summaryHtml)+"</body>");
 
-
-    doc.print(printer->printer());
-
+    //Open Print Dialog
+    printer->exec();
 }
 
 QString PrinterFacade::getSalary_id() const
@@ -132,4 +132,9 @@ void PrinterFacade::setSalary_id(const QString &value)
 {
     salary_id = value;
     emit salary_idChanged(value);
+}
+
+void PrinterFacade::_sendToPrint()
+{
+    doc.print(printer->printer());
 }

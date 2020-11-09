@@ -32,8 +32,11 @@ private:
     std::unique_ptr<EmployeeFacade> employeeFacade;
     std::unique_ptr<PaytypeFacade> paytypeFacade;
     std::unique_ptr<CompanyInformationFacade> companyFacade;
-
     QString salary_id;
+    QTextDocument doc;
+
+private slots:
+    void _sendToPrint();
 
 };
 
