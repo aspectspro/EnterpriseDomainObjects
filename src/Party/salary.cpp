@@ -168,14 +168,26 @@ int PayeCalculator::getPayeForSalary(Salary &salary){
 
     auto weeks = salary.getSalaryDates().mondayChecker();
 
-    yearlyProjection = (salary.amount()/weeks)*52;
+    switch (salary.getType()) {
+
+    default: yearlyProjection = (salary.amount()/weeks)*52;
+
+    case Salary::Montly : yearlyProjection = salary.amount()*12;
+        break;
+    }
 
     if(yearlyProjection > taxCeiling){
 
         auto aboveTax = yearlyProjection-taxCeiling;
         auto taxedAmount = aboveTax/4;
 
-        return (taxedAmount/52)*weeks;
+        switch (salary.getType()) {
+
+        default: return taxedAmount/52;
+
+        case Salary::Montly : return taxedAmount/12;
+            break;
+        }
     }
 
     return 0;
@@ -199,8 +211,8 @@ int HealthSurchargeCalculator::getHealthSurcharge(Salary &salary){
     case Salary::FortNightly : weeklyAmount = amount/2;
         break;
 
-    default:
-        weeklyAmount = amount/weeks;
+    case Salary::None : weeklyAmount = amount/weeks;
+        break;
     }
 
     auto healthSurcharge = 0;
