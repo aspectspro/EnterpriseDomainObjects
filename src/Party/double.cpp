@@ -4,13 +4,13 @@ Double::Double(){
     registerConverter();
 }
 
-Double::Double(int value) : Double(){
+Double::Double(qint64 value) : Double(){
     setValue(value);
 }
 
-Double::Double(double value) : Double(){
-    setValue(_doubleToInt(value));
-}
+//Double::Double(double value) : Double(){
+//    setValue(_doubleToInt(value));
+//}
 
 Double::Double(QString doubleString)
 {
@@ -27,7 +27,7 @@ void Double::registerConverter(){
     });
 
     QMetaType::registerConverter<QString, Double>([](QString value)-> Double{
-        Double d(value.toInt());
+        Double d(value.toUInt());
         return d;
     });
 
@@ -38,7 +38,7 @@ void Double::registerConverter(){
     qRegisterMetaType<Double>("Double");
 }
 
-int Double::_doubleToInt(double value){
+qint64 Double::_doubleToInt(double value){
     QString v = QString::number(value,'f',2);
     return v.remove(".").toInt();
 }
@@ -46,16 +46,16 @@ int Double::_doubleToInt(double value){
 double Double::_intToDouble(){
     auto v = QString::number(getValue());
 
-    int decimalPoint = v.length()-2;
+    qint64 decimalPoint = v.length()-2;
     return v.insert(decimalPoint,".").toDouble();
 }
 
-int Double::getValue() const
+qint64 Double::getValue() const
 {
     return value;
 }
 
-void Double::setValue(int value)
+void Double::setValue(qint64 value)
 {
     this->value = value;
 }

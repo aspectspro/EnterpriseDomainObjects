@@ -66,7 +66,7 @@ DateTime EnterpriseDateUtils::now(){
     return DateTime::getNow();
 }
 
-DateTime EnterpriseDateUtils::dateTimeFromTimestamp(int timestamp){
+DateTime EnterpriseDateUtils::dateTimeFromTimestamp(qint64 timestamp){
     DateTime dt;
     dt.setTimestamp(timestamp);
     return dt;
@@ -79,7 +79,7 @@ DateTime EnterpriseDateUtils::dateTimeFromUtc(QString utcTime){
     return dt;
 }
 
-QString EnterpriseDateUtils::appDatesView(int timestamp){
+QString EnterpriseDateUtils::appDatesView(qint64 timestamp){
     auto dt = QDateTime::fromSecsSinceEpoch(timestamp+43200);
     return dt.toString("yyyy-MM-dd");
 }

@@ -39,7 +39,7 @@ private:
     QTextDocument doc;
 
 private slots:
-    void _sendToPrint(int result);
+    void _sendToPrint(qint64 result);
 
 };
 

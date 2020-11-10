@@ -184,12 +184,12 @@ SalaryYearToDate::SalaryYearToDate()
     });
 }
 
-int SalaryYearToDate::getCurrentYear() const
+qint64 SalaryYearToDate::getCurrentYear() const
 {
     return currentYear;
 }
 
-void SalaryYearToDate::setCurrentYear(int value)
+void SalaryYearToDate::setCurrentYear(qint64 value)
 {
     currentYear = value;
 }
@@ -288,7 +288,7 @@ void SalaryYearToDate::loadYearToDate()
                                   .arg(startTimestamp)
                                   .arg(endTimestamp));
 
-        int _gross = 0, _net = 0, _nis = 0,
+        qint64 _gross = 0, _net = 0, _nis = 0,
             _paye = 0 , _hsc = 0;
 
         foreach (auto _salary, all) {

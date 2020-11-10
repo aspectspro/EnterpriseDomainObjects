@@ -99,8 +99,8 @@ class SalaryYearToDate : public QObject{
 public:
     SalaryYearToDate();
 
-    int getCurrentYear() const;
-    void setCurrentYear(int value);
+    qint64 getCurrentYear() const;
+    void setCurrentYear(qint64 value);
 
     Money getYearGross() const;
     void setYearGross(const Money value);
@@ -138,7 +138,7 @@ signals:
     void salary_idChanged(QString salary_id);
 
 private:
-    int currentYear;
+    qint64 currentYear;
     Money yearGross;
     Money yearNet;
     Money yearNis;

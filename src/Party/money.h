@@ -8,19 +8,20 @@ class Money
 
     Q_GADGET
     Q_PROPERTY(QString formatted READ asString)
-    Q_PROPERTY(int raw READ asInt)
+    Q_PROPERTY(qint64 raw READ asInt)
 public:
     Money();
-    Money(int value);
+    Money(qint64 value);
     Money(QVariant value);
     Money(QString intAsString);
 
 
+
     /**
      * @brief getValue
-     * @return - Returns int value of money
+     * @return - Returns qint64 value of money
      */
-    Q_INVOKABLE int asInt() const;
+    Q_INVOKABLE qint64 asInt() const;
 
     /**
      * @brief getValueAsString - Converts money as currency string
@@ -33,13 +34,13 @@ public:
     Q_INVOKABLE Money operator -(Money &money);
     Q_INVOKABLE Money operator /(Money &money);
     Q_INVOKABLE bool operator ==(Money money);
-    Q_INVOKABLE bool operator ==(int value);
+    Q_INVOKABLE bool operator ==(qint64 value);
     Money operator +=(const Money money);
 
-    Q_INVOKABLE void operator=(int value);
-    Q_INVOKABLE operator int();
+    Q_INVOKABLE void operator=(qint64 value);
+    Q_INVOKABLE operator qint64();
     /**
-     * @brief operator QVariant - Returns int value when returning Variant. Returns QVariant::fromValue()
+     * @brief operator QVariant - Returns qint64 value when returning Variant. Returns QVariant::fromValue()
      */
     Q_INVOKABLE operator QVariant();
     Q_INVOKABLE void operator=(QVariant &value);
@@ -50,7 +51,7 @@ public:
      * @param moneyString
      * @return
      */
-    Q_INVOKABLE int unformatMoneyString(QString moneyString);
+    Q_INVOKABLE qint64 unformatMoneyString(QString moneyString);
 
     /**
      * @brief intAsString
@@ -69,11 +70,11 @@ public:
      * @param moneyAsInt
      * @return
      */
-    Q_INVOKABLE Money fromInt(int moneyAsInt) const;
+    Q_INVOKABLE Money fromInt(qint64 moneyAsInt) const;
 
 private:
-    int value = 0;
-    void setValue(int value);
+    qint64 value = 0;
+    void setValue(qint64 value);
     void registerConverters();
 };
 
@@ -83,7 +84,7 @@ class MoneyFacade : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QString formatted READ getFormatted WRITE setFormatted NOTIFY formattedChanged)
-    Q_PROPERTY(int raw READ getRaw NOTIFY rawChanged)
+    Q_PROPERTY(qint64 raw READ getRaw NOTIFY rawChanged)
 
 public:
     MoneyFacade();
@@ -93,21 +94,21 @@ public:
     QString getFormatted() const;
     void setFormatted(const QString &value);
 
-    int getRaw() const;
-    void setRaw(int value);
+    qint64 getRaw() const;
+    void setRaw(qint64 value);
 
 public slots:
     Money asMoney();
     QString asString();
-    Money fromInt(int number);
+    Money fromInt(qint64 number);
 
 signals:
     void formattedChanged(QString formatted);
-    void rawChanged(int raw);
+    void rawChanged(qint64 raw);
 
 private:
     QString formatted;
-    int raw;
+    qint64 raw;
     Money money;
 };
 
