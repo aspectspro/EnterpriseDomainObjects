@@ -6,7 +6,7 @@ Money::Money()
     setValue(0);
 }
 
-Money::Money(int value)
+Money::Money(qint64 value)
 {
     registerConverters();
     setValue(value);
@@ -24,7 +24,7 @@ Money::Money(QString intAsString)
     setValue(intAsString.toInt());
 }
 
-int Money::asInt() const
+qint64 Money::asInt() const
 {
     return value;
 }
@@ -33,7 +33,7 @@ QString Money::asString() const
 {
     auto amount = asInt();
     auto money = QString::number(amount);
-    int decimalPosition = 2;
+    qint64 decimalPosition = 2;
 
     if(amount <= 9 && 0 <= amount){
         money = money.prepend("00");
@@ -47,9 +47,9 @@ QString Money::asString() const
 
     auto idx = money.indexOf(".");
 
-    QList<int> commaIndices;
+    QList<qint64> commaIndices;
 
-    for(int i = idx, q = 0; 0 <= i ; i-- , q++){
+    for(qint64 i = idx, q = 0; 0 <= i ; i-- , q++){
         if(q/3 == 1 && q != 0 && i != 0){
             commaIndices << i;
             q = 0;
@@ -88,7 +88,7 @@ bool Money::operator ==(Money money)
     return asInt() == money.asInt();
 }
 
-bool Money::operator ==(int value)
+bool Money::operator ==(qint64 value)
 {
     return asInt() == value;
 }
@@ -99,11 +99,11 @@ Money Money::operator +=(const Money money)
     return value;
 }
 
-void Money::operator=(int value){
+void Money::operator=(qint64 value){
     this->setValue(value);
 }
 
-int Money::unformatMoneyString(QString moneyString)
+qint64 Money::unformatMoneyString(QString moneyString)
 {
     auto digits = moneyString.remove("$").remove(".").remove(",");
     return digits.toInt();
@@ -125,9 +125,9 @@ void Money::operator=(QString value)
     setValue(i);
 }
 
-Money::operator int() { return asInt(); }
+Money::operator qint64() { return asInt(); }
 
-void Money::setValue(int value)
+void Money::setValue(qint64 value)
 {
     this->value = value;
 }
@@ -138,7 +138,7 @@ void Money::registerConverters()
             QMetaType::registerConverter(&Money::intAsString);
             QMetaType::registerConverter(&Money::toJsonValue);
 
-            QMetaType::registerConverter<int,Money>([](int asInt)-> const Money{
+            QMetaType::registerConverter<qint64,Money>([](qint64 asInt)-> const Money{
                 return Money(asInt);
             });
 
@@ -147,7 +147,7 @@ void Money::registerConverters()
             });
 
             QMetaType::registerConverter<double,Money>([](double fromDouble)->const Money{
-                Money m(static_cast<int>(fromDouble));
+                Money m(static_cast<qint64>(fromDouble));
                 return m;
             });
 
@@ -169,7 +169,7 @@ QJsonValue Money::toJsonValue() const
     return QJsonValue(asInt());
 }
 
-Money Money::fromInt(int moneyAsInt) const
+Money Money::fromInt(qint64 moneyAsInt) const
 {
     return Money(moneyAsInt);
 }
@@ -192,12 +192,12 @@ void MoneyFacade::setFormatted(const QString &value)
     emit formattedChanged(value);
 }
 
-int MoneyFacade::getRaw() const
+qint64 MoneyFacade::getRaw() const
 {
     return raw;
 }
 
-void MoneyFacade::setRaw(int value)
+void MoneyFacade::setRaw(qint64 value)
 {
     raw = value;
     emit rawChanged(value);
@@ -213,7 +213,7 @@ QString MoneyFacade::asString()
     return money.fromInt(getRaw()).asString();
 }
 
-Money MoneyFacade::fromInt(int number)
+Money MoneyFacade::fromInt(qint64 number)
 {
     return Money(number);
 }
