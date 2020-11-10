@@ -44,7 +44,8 @@ public:
     enum SalaryType{
         Weekly,
         FortNightly,
-        Montly
+        Montly,
+        None
     };
 
     Salary();
@@ -58,7 +59,7 @@ public:
 
 private:
     int _amount = 0;
-    SalaryType type;
+    SalaryType type = None;
     SalaryDateRange salaryDates;
 };
 

@@ -61,6 +61,8 @@ public:
     DateTime getDate_paid() const;
     void setDate_paid(const DateTime &value);
 
+
+
 public slots:
     bool pay(Employee employee);
     bool pay(QJsonObject employee);
@@ -71,6 +73,7 @@ public slots:
 
     void load();
     void save();
+    void loadEmployee();
 
 signals:
     void employeeSalariesChanged(QAbstractItemModel *salaries);

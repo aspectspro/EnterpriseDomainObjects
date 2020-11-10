@@ -1,4 +1,6 @@
 #include "salaryfacade.h"
+#include "paytypedomainobject.h"
+#include "employeefacade.h"
 
 DomainModelPtr SalaryFacade::employeeSalaries = ModelFactory::createModel<SalaryDomainObject>();
 
@@ -15,12 +17,16 @@ SalaryFacade::SalaryFacade(QObject *parent) : QObject(parent)
         this->setSalary();
     });
 
-    connect(this,&SalaryFacade::toDateChanged,[=](){
+    connect(this,&SalaryFacade::toDateChanged,[=](){        
         this->setSalary();
     });
 
     connect(this,&SalaryFacade::grossSalaryChanged,[=](){
         this->setSalary();
+    });
+
+    connect(this,&SalaryFacade::employee_idChanged,[=](){
+        loadEmployee();
     });
 
     connect(this,&SalaryFacade::salaryChanged,[=](Salary s){
@@ -42,7 +48,6 @@ SalaryFacade::SalaryFacade(QObject *parent) : QObject(parent)
 
     setFrom_date(DateTime::getNow());
     setTo_date(DateTime::getNow());
-
 }
 
 Money SalaryFacade::getGross_salary() const
@@ -256,6 +261,49 @@ void SalaryFacade::save()
         emit error(e.what());
         qInfo() << e.what();
     }
+
+}
+
+void SalaryFacade::loadEmployee()
+{
+
+    EmployeeFacade emp;
+    emp.setId(getEmployee_id());
+
+    int payPeriod = 0;
+
+    auto employee = findLastSalaryForEmployee();
+    auto from = employee.getDate_from();
+
+    if(from.toString() == "1969-12-31"){
+        from = emp.getDate_of_employment();
+    }
+
+    try {
+        PaytypeFacade payType;
+        payType.setId(getEmployee_id());
+        payPeriod = payType.getPayPeriod();
+    } catch (std::exception &e) {
+        Q_UNUSED(e);
+    }
+
+    QDate fromDate = QDate::fromString(from.toIsoDate(),"yyyy-MM-dd");
+
+
+    switch (payPeriod) {
+    case PayPeriodFacade::DAILY :  fromDate = fromDate.addDays(0);
+        break;
+    case PayPeriodFacade::WEEKLY : fromDate = fromDate.addDays(7);
+        break;
+    case PayPeriodFacade::FORTNIGHTLY : fromDate = fromDate.addDays(14);
+        break;
+    case PayPeriodFacade::MONTHLY : fromDate = fromDate.addMonths(1);
+        break;
+    default: fromDate = fromDate.addDays(5);
+    }
+
+    setFrom_date(from);
+    setTo_date(DateTime::fromIsoDate(fromDate.toString("yyyy-MM-dd")));
 
 }
 

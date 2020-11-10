@@ -14,8 +14,6 @@ SalaryDateRange::SalaryDateRange(QString from, QString to){
 
 int SalaryDateRange::mondayChecker(){
 
-//    auto fromDayOfMonth = fromDate.dayOfYear();
-//    auto toDayOfMonth = toDate.dayOfYear();
     auto daysDifference = fromDate.daysTo(toDate);
     int mondayCounter = 0;
 
@@ -50,8 +48,13 @@ Salary::Salary(SalaryDateRange salaryDates) :
         type = Weekly;
     }else if(mondayCounter == 2){
         type = FortNightly;
-    }else if(mondayCounter >= 3){
+    }else if(mondayCounter == 4){
         type = Montly;
+    }else if(mondayCounter == 5 && salaryDates.getToDate().month() == salaryDates.getFromDate().month()){
+        type = Montly;
+    }
+    else{
+        type = None;
     }
 }
 
@@ -126,9 +129,9 @@ int NisCalculator::getNisForSalary(Salary &salary){
             salaryAmount = salaryAmount/2;
             break;
 
-        default:
-            salaryAmount = salaryAmount/weeks;
-            range = i.getWeeklyRange();
+        case Salary::None : range = i.getWeeklyRange();
+            salaryAmount = (salaryAmount/weeks);
+            break;
         }
 
         if(salaryAmount >= range.getMin() &&
@@ -163,10 +166,6 @@ int PayeCalculator::getPayeForSalary(Salary &salary){
     int yearlyProjection = 0;
     int taxCeiling = 7200000;
 
-//    auto from = salary.getSalaryDates().getFromDate();
-//    auto to = salary.getSalaryDates().getToDate();
-//    auto dayChecker = from.daysTo(to) == 0 ? 1 : from.daysTo(to);
-
     auto weeks = salary.getSalaryDates().mondayChecker();
 
     yearlyProjection = (salary.amount()/weeks)*52;
@@ -176,7 +175,7 @@ int PayeCalculator::getPayeForSalary(Salary &salary){
         auto aboveTax = yearlyProjection-taxCeiling;
         auto taxedAmount = aboveTax/4;
 
-        return taxedAmount/52;
+        return (taxedAmount/52)*weeks;
     }
 
     return 0;
