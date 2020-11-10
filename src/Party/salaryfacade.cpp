@@ -270,7 +270,7 @@ void SalaryFacade::loadEmployee()
     EmployeeFacade emp;
     emp.setId(getEmployee_id());
 
-    int payPeriod = 0;
+    qint64 payPeriod = 0;
 
     auto employee = findLastSalaryForEmployee();
     auto from = employee.getDate_from();

@@ -4,12 +4,12 @@ DateTime::DateTime()
     registerMetaType();
 }
 
-int DateTime::getTimestamp() const
+qint64 DateTime::getTimestamp() const
 {
     return timestamp;
 }
 
-void DateTime::setTimestamp(int value)
+void DateTime::setTimestamp(qint64 value)
 {
     timestamp = value;
 }
@@ -41,7 +41,7 @@ DateTime DateTime::getNow()
     return time;
 }
 
-QString DateTime::toIsoDate(int addDays)
+QString DateTime::toIsoDate(qint64 addDays)
 {
     return QDateTime::fromSecsSinceEpoch(this->getTimestamp())
             .addDays(addDays)

@@ -461,23 +461,23 @@ void PaytypeFacade::setEmployee_title(const QString &value)
     emit employee_titleChanged(value);
 }
 
-int PaytypeFacade::getPayPeriod() const
+qint64 PaytypeFacade::getPayPeriod() const
 {
     return payPeriod;
 }
 
-void PaytypeFacade::setPayPeriod(int value)
+void PaytypeFacade::setPayPeriod(qint64 value)
 {
     payPeriod = value;
     emit payPeriodChanged(value);
 }
 
-int PaytypeFacade::getEmploymentType() const
+qint64 PaytypeFacade::getEmploymentType() const
 {
     return employmentType;
 }
 
-void PaytypeFacade::setEmploymentType(int value)
+void PaytypeFacade::setEmploymentType(qint64 value)
 {
     employmentType = value;
     emit employmentTypeChanged(value);

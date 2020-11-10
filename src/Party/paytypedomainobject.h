@@ -216,8 +216,8 @@ class PaytypeFacade : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QString _id READ getId WRITE setId NOTIFY idChanged)
-    Q_PROPERTY(int payPeriod READ getPayPeriod WRITE setPayPeriod NOTIFY payPeriodChanged)
-    Q_PROPERTY(int employmentType READ getEmploymentType WRITE setEmploymentType NOTIFY employmentTypeChanged)
+    Q_PROPERTY(qint64 payPeriod READ getPayPeriod WRITE setPayPeriod NOTIFY payPeriodChanged)
+    Q_PROPERTY(qint64 employmentType READ getEmploymentType WRITE setEmploymentType NOTIFY employmentTypeChanged)
     Q_PROPERTY(QString employee_title READ getEmployee_title WRITE setEmployee_title NOTIFY employee_titleChanged)
 
 public:
@@ -228,11 +228,11 @@ public:
     QString getId() const;
     void setId(const QString &value);
 
-    int getPayPeriod() const;
-    void setPayPeriod(int value);
+    qint64 getPayPeriod() const;
+    void setPayPeriod(qint64 value);
 
-    int getEmploymentType() const;
-    void setEmploymentType(int value);
+    qint64 getEmploymentType() const;
+    void setEmploymentType(qint64 value);
 
     QString getEmployee_title() const;
     void setEmployee_title(const QString &value);
@@ -243,16 +243,16 @@ public slots:
 
 signals:
     void idChanged(QString id);
-    void payPeriodChanged(int payPeriod);
-    void employmentTypeChanged(int employmentType);
+    void payPeriodChanged(qint64 payPeriod);
+    void employmentTypeChanged(qint64 employmentType);
     void employee_titleChanged(QString employee_title);
     void saved();
 
 private:
     QString id;
     QString employee_title;
-    int payPeriod = PayPeriodFacade::MONTHLY;
-    int employmentType = EmploymentTypeFacade::HOURLY;
+    qint64 payPeriod = PayPeriodFacade::MONTHLY;
+    qint64 employmentType = EmploymentTypeFacade::HOURLY;
     static PaytypeMapper mapper;
 };
 
