@@ -46,6 +46,7 @@ SalaryFacade::SalaryFacade(QObject *parent) : QObject(parent)
         setNet_salary(gross_salary-taxes);
     });
 
+    setDate_paid(DateTime::getNow());
     setFrom_date(DateTime::getNow());
     setTo_date(DateTime::getNow());
 }
