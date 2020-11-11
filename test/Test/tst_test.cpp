@@ -591,8 +591,8 @@ void Test::test_paytype()
     SalaryFacade sl;
     sl.setEmployee_id(emp.getId());
     sl.setGross_salary(1000000);
-    sl.setFrom_date(DateTime::fromIsoDate("2020-10-01"));
-    sl.setTo_date(DateTime::fromIsoDate("2020-10-20"));
+    sl.setFrom_date(DateTime::fromIsoDate("2020-11-01"));
+    sl.setTo_date(DateTime::fromIsoDate("2020-11-16"));
     sl.save();
 
     SalaryFacade s2;
@@ -601,10 +601,6 @@ void Test::test_paytype()
     s2.setFrom_date(DateTime::fromIsoDate("2020-10-21"));
     s2.setTo_date(DateTime::fromIsoDate("2020-10-31"));
     s2.save();
-
-    PrinterFacade p;
-    p.setSalary_id(s2.getId());
-    p.print();
 }
 
 QTEST_MAIN(Test)

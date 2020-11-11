@@ -261,7 +261,6 @@ void SalaryFacade::save()
         emit error(e.what());
         qInfo() << e.what();
     }
-
 }
 
 void SalaryFacade::loadEmployee()
@@ -275,9 +274,13 @@ void SalaryFacade::loadEmployee()
     auto employee = findLastSalaryForEmployee();
     auto from = employee.getDate_from();
 
-    if(from.toString() == "1969-12-31"){
+    if(from.toIsoDate() == "1969-12-31"){
         from = emp.getDate_of_employment();
+    }else{
+        from = DateTime::fromIsoDate(employee.getDate_to().toIsoDate(1));
     }
+
+    qDebug() << "Last Date " << from.toIsoDate();
 
     try {
         PaytypeFacade payType;

@@ -256,16 +256,19 @@ void SalaryYearToDate::loadYearToDate()
 
     try {
         auto loadedSalary = mapper.find(getSalary_id());
-        lastPaid = loadedSalary.getDate_paid().toIsoDate();
+        lastPaid = loadedSalary.getDate_to().toIsoDate();
         employeeId = loadedSalary.getEmployee_id();
 
     } catch (std::exception &e) {
         Q_UNUSED(e);
-        lastPaid = getSalary().getDate_paid().toIsoDate();
+        lastPaid = getSalary().getDate_to().toIsoDate();
         employeeId = getSalary().getEmployee_id();
     }
 
-    auto currentYear = getCurrentYear();
+    auto currentYear = QDate::fromString(lastPaid,"yyyy-MM-dd").year();
+
+    qDebug() << "Last Paid Current Year" << currentYear;
+
     QString yearlyDateFormat = "yyyy-MM-dd,hh:mm:ss a";
 
     QDateTime startDate;
@@ -283,7 +286,7 @@ void SalaryYearToDate::loadYearToDate()
     auto endTimestamp = endDate.toSecsSinceEpoch();    
 
     try {
-        auto all = mapper.loadAll(QString("employee_id='%1' AND date_paid >= %2 AND date_paid <= %3")
+        auto all = mapper.loadAll(QString("employee_id='%1' AND date_to >= %2 AND date_to <= %3")
                                   .arg(employeeId)
                                   .arg(startTimestamp)
                                   .arg(endTimestamp));

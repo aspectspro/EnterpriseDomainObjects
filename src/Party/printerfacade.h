@@ -30,16 +30,17 @@ signals:
 private:
     std::unique_ptr<QPrintDialog> printer;
 
-    std::unique_ptr<SalaryFacade> salaryFacade;
+    std::unique_ptr<SalaryDomainObject> salaryFacade;
     std::unique_ptr<SalaryYearToDate> yearToDateFacade;
     std::unique_ptr<EmployeeFacade> employeeFacade;
     std::unique_ptr<PaytypeFacade> paytypeFacade;
     std::unique_ptr<CompanyInformationFacade> companyFacade;
     QString salary_id;
     QTextDocument doc;
+    static SalaryDomainMapper salaryMapper;
 
 private slots:
-    void _sendToPrint(qint64 result);
+    void _sendToPrint(int result);
 
 };
 

@@ -3,10 +3,11 @@
 #include <QPrinter>
 #include <QFileDialog>
 #include <QtGui>
+SalaryDomainMapper PrinterFacade::salaryMapper;
 
 PrinterFacade::PrinterFacade(QObject *parent) : QObject(parent)
 {
-    salaryFacade = std::make_unique<SalaryFacade>();
+    salaryFacade = std::make_unique<SalaryDomainObject>();
     yearToDateFacade = std::make_unique<SalaryYearToDate>();
     employeeFacade = std::make_unique<EmployeeFacade>();
     paytypeFacade = std::make_unique<PaytypeFacade>();
@@ -14,13 +15,15 @@ PrinterFacade::PrinterFacade(QObject *parent) : QObject(parent)
     printer = std::make_unique<QPrintDialog>();
 
     connect(this,&PrinterFacade::salary_idChanged,[=](QString salary_id){
-        salaryFacade->setId(salary_id);
+        auto s = salaryMapper.find(salary_id);
+        salaryFacade.release();
+        salaryFacade = std::make_unique<SalaryDomainObject>(s);
         yearToDateFacade->setSalary_id(salaryFacade->getId());
         employeeFacade->setId(salaryFacade->getEmployee_id());
         paytypeFacade->setId(salaryFacade->getEmployee_id());
     });
 
-    connect(printer.get(),SIGNAL(finished(int)),this,SLOT(_sendToPrint(qint64)));
+    connect(printer.get(),SIGNAL(finished(int)),this,SLOT(_sendToPrint(int)));
 }
 
 void PrinterFacade::print()
@@ -32,11 +35,11 @@ void PrinterFacade::print()
     auto employmentTitle = paytypeFacade->getEmployee_title();
 
     auto datePaid =  salaryFacade->getDate_paid().toIsoDate();
-    auto dateFrom = salaryFacade->getFrom_date().toIsoDate();
-    auto dateTo = salaryFacade->getTo_date().toIsoDate();
+    auto dateFrom = salaryFacade->getDate_from().toIsoDate();
+    auto dateTo = salaryFacade->getDate_to().toIsoDate();
 
-    auto gross = salaryFacade->getGross_salary();
-    auto net = salaryFacade->getNet_salary();
+    auto gross = salaryFacade->getGross_pay();
+    auto net = salaryFacade->getNet_pay();
     auto nis = salaryFacade->getEmployee_nis();
     auto paye = salaryFacade->getPaye();
     auto hsc = salaryFacade->getHealth_surcharge();
@@ -134,7 +137,7 @@ void PrinterFacade::setSalary_id(const QString &value)
     emit salary_idChanged(value);
 }
 
-void PrinterFacade::_sendToPrint(qint64 result)
+void PrinterFacade::_sendToPrint(int result)
 {
     if(result == QDialog::Accepted){
         doc.print(printer->printer());

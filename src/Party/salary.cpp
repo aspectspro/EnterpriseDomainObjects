@@ -24,9 +24,7 @@ qint64 SalaryDateRange::mondayChecker(){
         }
     }
 
-    auto wks = mondayCounter == 0 ? 1 : mondayCounter;
-
-    qDebug() << "wks" << mondayCounter;
+    auto wks = mondayCounter == 0 ? 1 : mondayCounter;    
 
     return wks;
 }
@@ -166,24 +164,34 @@ qint64 PayeCalculator::getPayeForSalary(Salary &salary){
     qint64 yearlyProjection = 0;
     qint64 taxCeiling = 7200000;
 
-    auto weeks = salary.getSalaryDates().mondayChecker();
+    auto weeks = salary.getSalaryDates().mondayChecker();    
 
     switch (salary.getType()) {
 
-    default: yearlyProjection = (salary.amount()/weeks)*52;
+    case Salary::FortNightly : yearlyProjection = (salary.amount()/2)*52;
+        break;
+
+    case Salary::None : yearlyProjection = (salary.amount()/weeks)*52;
+        break;
+
+    case Salary::Weekly : yearlyProjection = (salary.amount())*52;
+        break;
 
     case Salary::Montly : yearlyProjection = salary.amount()*12;
-        break;
-    }
+        break;        
+
+    }    
 
     if(yearlyProjection > taxCeiling){
 
         auto aboveTax = yearlyProjection-taxCeiling;
         auto taxedAmount = aboveTax/4;
 
+        qDebug() << weeks << "PAYE weeks" << yearlyProjection << (taxedAmount/52)*weeks;
+
         switch (salary.getType()) {
 
-        default: return taxedAmount/52;
+        default: return (taxedAmount/52)*weeks;
 
         case Salary::Montly : return taxedAmount/12;
             break;
