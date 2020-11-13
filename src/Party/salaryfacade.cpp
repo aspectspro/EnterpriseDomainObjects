@@ -251,7 +251,7 @@ void SalaryFacade::save()
     salaryObject.setHealth_surcharge(getHealth_surcharge());
     salaryObject.setDate_from(getFrom_date());
     salaryObject.setDate_to(getTo_date());
-    salaryObject.setDate_paid(DateTime::getNow());
+    salaryObject.setDate_paid(getDate_paid());
 
     try {
         mapper.insert(salaryObject);
