@@ -61,6 +61,7 @@ public:
     DateTime getDate_paid() const;
     void setDate_paid(const DateTime &value);
 
+    static void changeNisCalculator(std::unique_ptr<AbstractNisCalculator> calculator);
 
 
 public slots:
@@ -110,6 +111,8 @@ private:
 
     static DomainModelPtr employeeSalaries;
     static SalaryDomainMapper mapper;
+
+    static std::unique_ptr<AbstractNisCalculator> nisCalculator;
 
 };
 

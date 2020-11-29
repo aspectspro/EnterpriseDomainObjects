@@ -107,14 +107,44 @@ private:
 };
 
 
+class AbstractNisCalculator{
+
+public:
+    AbstractNisCalculator(){}
+    AbstractNisCalculator(Salary salary) : salary(salary){}
+
+    virtual qint64 getEmployeeContribution() = 0;
+
+    virtual qint64 getEmployerContribution() = 0;
+
+    void setSalary(const Salary &value);
+
+protected:
+    Salary salary;
+};
+
+class GuyanaNisCalculator : public AbstractNisCalculator{
+
+    // AbstractNisCalculator interface
+public:
+    GuyanaNisCalculator(){}
+    GuyanaNisCalculator(Salary s) : AbstractNisCalculator(s){}
+
+    virtual qint64 getEmployeeContribution() override;
+    virtual qint64 getEmployerContribution() override;
+
+private:
+    qint64 calculate();
+};
+
 /**
  * @brief The NisChecker class - Calculates NIS from salary.
  */
-class NisCalculator{
+class TrinidadNisCalculator : public AbstractNisCalculator{
 
 public:
-    NisCalculator();
-    NisCalculator(Salary salary) : salary(salary){}
+    TrinidadNisCalculator();
+    TrinidadNisCalculator(Salary salary) : AbstractNisCalculator(salary){}
 
     /**
      * @brief getNisForSalary
@@ -132,17 +162,17 @@ public:
      * @brief getEmployeeContribution
      * @return
      */
-    qint64 getEmployeeContribution();
+    qint64 getEmployeeContribution() override;
 
     /**
      * @brief getEmployerContribution
      * @return
      */
-    qint64 getEmployerContribution();
+    qint64 getEmployerContribution() override;
 
 private:
     static QList<NisEarnings> nisList;
-    Salary salary;
+//    Salary salary;
 };
 
 /**

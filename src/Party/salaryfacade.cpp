@@ -3,8 +3,9 @@
 #include "employeefacade.h"
 
 DomainModelPtr SalaryFacade::employeeSalaries = ModelFactory::createModel<SalaryDomainObject>();
-
 SalaryDomainMapper SalaryFacade::mapper;
+
+std::unique_ptr<AbstractNisCalculator> SalaryFacade::nisCalculator = std::make_unique<TrinidadNisCalculator>();
 
 SalaryFacade::SalaryFacade(QObject *parent) : QObject(parent)
 {    
@@ -31,10 +32,10 @@ SalaryFacade::SalaryFacade(QObject *parent) : QObject(parent)
 
     connect(this,&SalaryFacade::salaryChanged,[=](Salary s){
 
-        NisCalculator calc(s);
-        auto _nis = calc.getEmployeeContribution();
+        nisCalculator->setSalary(s);
+        auto _nis = nisCalculator->getEmployeeContribution();
         setEmployee_nis(_nis);
-        setEmployer_nis(calc.getEmployerContribution());
+        setEmployer_nis(nisCalculator->getEmployerContribution());
 
         auto _paye = PayeCalculator::getPayeForSalary(s);
         setPaye(_paye);
@@ -320,6 +321,11 @@ void SalaryFacade::setDate_paid(const DateTime &value)
 {
     date_paid = value;
     emit date_paidChanged(value);
+}
+
+void SalaryFacade::changeNisCalculator(std::unique_ptr<AbstractNisCalculator> calculator)
+{
+    nisCalculator.swap(calculator);
 }
 
 Money SalaryFacade::getEmployee_nis() const

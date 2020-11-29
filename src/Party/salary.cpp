@@ -1,6 +1,6 @@
 #include "salary.h"
 
-QList<NisEarnings> NisCalculator::nisList;
+QList<NisEarnings> TrinidadNisCalculator::nisList;
 
 SalaryDateRange::SalaryDateRange()
 {
@@ -72,7 +72,7 @@ qint64 NisEarnings::getEmployeeWeekly(){
     return getTotalWeeklyContribution()/3;
 }
 
-NisCalculator::NisCalculator(){
+TrinidadNisCalculator::TrinidadNisCalculator(){
 
     //Checks if nisList is initialized.
     if(nisList.count() > 1)
@@ -102,9 +102,9 @@ NisCalculator::NisCalculator(){
             << xi << xii << xiii << xiv << xv << xvi;
 }
 
-qint64 NisCalculator::getNisForSalary(Salary &salary){
+qint64 TrinidadNisCalculator::getNisForSalary(Salary &salary){
 
-    NisCalculator();
+    TrinidadNisCalculator();
 
     qint64 _salaryAmount = salary.amount();
     SalaryRange range;
@@ -145,17 +145,17 @@ qint64 NisCalculator::getNisForSalary(Salary &salary){
     return weeklyContribution*weeks;
 }
 
-qint64 NisCalculator::getNisForSalary()
+qint64 TrinidadNisCalculator::getNisForSalary()
 {
     return getNisForSalary(this->salary);
 }
 
-qint64 NisCalculator::getEmployeeContribution()
+qint64 TrinidadNisCalculator::getEmployeeContribution()
 {
     return getNisForSalary()/3;
 }
 
-qint64 NisCalculator::getEmployerContribution()
+qint64 TrinidadNisCalculator::getEmployerContribution()
 {
     return getNisForSalary()/1.5;
 }
@@ -304,4 +304,35 @@ void SalaryDateRange::setFromDate(const QString value)
 void SalaryDateRange::setToDate(const QString value)
 {
     toDate = convertFromString(value);
+}
+
+
+qint64 GuyanaNisCalculator::getEmployeeContribution()
+{
+    return calculate()*0.4;
+}
+
+qint64 GuyanaNisCalculator::getEmployerContribution()
+{
+    return calculate()*0.6;
+}
+
+qint64 GuyanaNisCalculator::calculate()
+{
+    auto weeks = salary.getSalaryDates().mondayChecker();
+    auto salaryAmount = salary.amount();
+
+    auto weeklyCeiling = 6461500;
+    auto weeklyProjection = salaryAmount/weeks;
+
+    if(weeklyProjection > weeklyCeiling){
+        return salaryAmount*0.14;
+    }
+
+    return 0;
+}
+
+void AbstractNisCalculator::setSalary(const Salary &value)
+{
+    salary = value;
 }

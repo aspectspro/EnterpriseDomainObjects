@@ -34,6 +34,7 @@ private slots:
     void test_payrate();
 
     void test_paytype();
+    void test_guyanaNis();
 
 private:
     bool keepDB = false;
@@ -172,67 +173,67 @@ void Test::test_weekly_nis()
     auto i = 27000;
 
     s.setAmount(i*m);
-    QVERIFY(NisCalculator::getNisForSalary(s) == 3570*m);
+    QVERIFY(TrinidadNisCalculator::getNisForSalary(s) == 3570*m);
 
     auto ii = 39500;
     s.setAmount(ii*m);
-    QVERIFY(NisCalculator::getNisForSalary(s) == 5220*m);
+    QVERIFY(TrinidadNisCalculator::getNisForSalary(s) == 5220*m);
 
     auto iii = 53000;
     s.setAmount(iii*m);
-    QVERIFY(NisCalculator::getNisForSalary(s) == 6990*m);
+    QVERIFY(TrinidadNisCalculator::getNisForSalary(s) == 6990*m);
 
     auto iv = 68500;
     s.setAmount(iv*m);
-    QVERIFY(NisCalculator::getNisForSalary(s) == 9030*m);
+    QVERIFY(TrinidadNisCalculator::getNisForSalary(s) == 9030*m);
 
     auto v = 84500;
     s.setAmount(v*m);
-    QVERIFY(NisCalculator::getNisForSalary(s) == 11160*m);
+    QVERIFY(TrinidadNisCalculator::getNisForSalary(s) == 11160*m);
 
     auto vi = 102500;
     s.setAmount(vi*m);
-    QVERIFY(NisCalculator::getNisForSalary(s) == 13530*m);
+    QVERIFY(TrinidadNisCalculator::getNisForSalary(s) == 13530*m);
 
     auto vii = 121500;
     s.setAmount(vii*m);
-    QVERIFY(NisCalculator::getNisForSalary(s) == 15960*m);
+    QVERIFY(TrinidadNisCalculator::getNisForSalary(s) == 15960*m);
 
     auto viii = 143900;
     s.setAmount(viii*m);
-    QVERIFY(NisCalculator::getNisForSalary(s) == 18420*m);
+    QVERIFY(TrinidadNisCalculator::getNisForSalary(s) == 18420*m);
 
     auto ix = 160000;
     s.setAmount(ix*m);
-    QVERIFY(NisCalculator::getNisForSalary(s) == 21120*m);
+    QVERIFY(TrinidadNisCalculator::getNisForSalary(s) == 21120*m);
 
     auto x = 181000;
     s.setAmount(x*m);
-    QVERIFY(NisCalculator::getNisForSalary(s) == 23880*m);
+    QVERIFY(TrinidadNisCalculator::getNisForSalary(s) == 23880*m);
 
     auto xi = 202500;
     s.setAmount(xi*m);
-    QVERIFY(NisCalculator::getNisForSalary(s) == 26730*m);
+    QVERIFY(TrinidadNisCalculator::getNisForSalary(s) == 26730*m);
 
     auto xii = 226000;
     s.setAmount(xii*m);
-    QVERIFY(NisCalculator::getNisForSalary(s) == 29820*m);
+    QVERIFY(TrinidadNisCalculator::getNisForSalary(s) == 29820*m);
 
     auto xiii = 250500;
     s.setAmount(xiii*m);
-    QVERIFY(NisCalculator::getNisForSalary(s) == 33060*m);
+    QVERIFY(TrinidadNisCalculator::getNisForSalary(s) == 33060*m);
 
     auto xiv = 277500;
     s.setAmount(xiv*m);
-    QVERIFY(NisCalculator::getNisForSalary(s) == 36630*m);
+    QVERIFY(TrinidadNisCalculator::getNisForSalary(s) == 36630*m);
 
     auto xv = 302900;
     s.setAmount(xv*m);
-    QVERIFY(NisCalculator::getNisForSalary(s) == 39990*m);
+    QVERIFY(TrinidadNisCalculator::getNisForSalary(s) == 39990*m);
 
     auto xvi = 313800;
     s.setAmount(xvi*m);
-    QVERIFY(NisCalculator::getNisForSalary(s) == 41430*m);
+    QVERIFY(TrinidadNisCalculator::getNisForSalary(s) == 41430*m);
 
 }
 
@@ -246,67 +247,67 @@ void Test::test_fortnightly_nis()
     auto i = 27000;
 
     s.setAmount(i*m);
-    QVERIFY(NisCalculator::getNisForSalary(s) == 3570*m);
+    QVERIFY(TrinidadNisCalculator::getNisForSalary(s) == 3570*m);
 
     auto ii = 39500;
     s.setAmount(ii*m);
-    QVERIFY(NisCalculator::getNisForSalary(s) == 5220*m);
+    QVERIFY(TrinidadNisCalculator::getNisForSalary(s) == 5220*m);
 
     auto iii = 53000;
     s.setAmount(iii*m);
-    QVERIFY(NisCalculator::getNisForSalary(s) == 6990*m);
+    QVERIFY(TrinidadNisCalculator::getNisForSalary(s) == 6990*m);
 
     auto iv = 68500;
     s.setAmount(iv*m);
-    QVERIFY(NisCalculator::getNisForSalary(s) == 9030*m);
+    QVERIFY(TrinidadNisCalculator::getNisForSalary(s) == 9030*m);
 
     auto v = 84500;
     s.setAmount(v*m);
-    QVERIFY(NisCalculator::getNisForSalary(s) == 11160*m);
+    QVERIFY(TrinidadNisCalculator::getNisForSalary(s) == 11160*m);
 
     auto vi = 102500;
     s.setAmount(vi*m);
-    QVERIFY(NisCalculator::getNisForSalary(s) == 13530*m);
+    QVERIFY(TrinidadNisCalculator::getNisForSalary(s) == 13530*m);
 
     auto vii = 121500;
     s.setAmount(vii*m);
-    QVERIFY(NisCalculator::getNisForSalary(s) == 15960*m);
+    QVERIFY(TrinidadNisCalculator::getNisForSalary(s) == 15960*m);
 
     auto viii = 143900;
     s.setAmount(viii*m);
-    QVERIFY(NisCalculator::getNisForSalary(s) == 18420*m);
+    QVERIFY(TrinidadNisCalculator::getNisForSalary(s) == 18420*m);
 
     auto ix = 160000;
     s.setAmount(ix*m);
-    QVERIFY(NisCalculator::getNisForSalary(s) == 21120*m);
+    QVERIFY(TrinidadNisCalculator::getNisForSalary(s) == 21120*m);
 
     auto x = 181000;
     s.setAmount(x*m);
-    QVERIFY(NisCalculator::getNisForSalary(s) == 23880*m);
+    QVERIFY(TrinidadNisCalculator::getNisForSalary(s) == 23880*m);
 
     auto xi = 202500;
     s.setAmount(xi*m);
-    QVERIFY(NisCalculator::getNisForSalary(s) == 26730*m);
+    QVERIFY(TrinidadNisCalculator::getNisForSalary(s) == 26730*m);
 
     auto xii = 226000;
     s.setAmount(xii*m);
-    QVERIFY(NisCalculator::getNisForSalary(s) == 29820*m);
+    QVERIFY(TrinidadNisCalculator::getNisForSalary(s) == 29820*m);
 
     auto xiii = 250500;
     s.setAmount(xiii*m);
-    QVERIFY(NisCalculator::getNisForSalary(s) == 33060*m);
+    QVERIFY(TrinidadNisCalculator::getNisForSalary(s) == 33060*m);
 
     auto xiv = 277500;
     s.setAmount(xiv*m);
-    QVERIFY(NisCalculator::getNisForSalary(s) == 36630*m);
+    QVERIFY(TrinidadNisCalculator::getNisForSalary(s) == 36630*m);
 
     auto xv = 302900;
     s.setAmount(xv*m);
-    QVERIFY(NisCalculator::getNisForSalary(s) == 39990*m);
+    QVERIFY(TrinidadNisCalculator::getNisForSalary(s) == 39990*m);
 
     auto xvi = 313800;
     s.setAmount(xvi*m);
-    QVERIFY(NisCalculator::getNisForSalary(s) == 41430*m);
+    QVERIFY(TrinidadNisCalculator::getNisForSalary(s) == 41430*m);
 }
 
 void Test::test_monthly_nis()
@@ -319,68 +320,68 @@ void Test::test_monthly_nis()
     auto i = 27000;
 
     s.setAmount(i*m);
-    QVERIFY(NisCalculator::getNisForSalary(s) == 3570*m);
+    QVERIFY(TrinidadNisCalculator::getNisForSalary(s) == 3570*m);
 
     auto ii = 39500;
     s.setAmount(ii*m);
-    QVERIFY(NisCalculator::getNisForSalary(s) == 5220*m);
+    QVERIFY(TrinidadNisCalculator::getNisForSalary(s) == 5220*m);
 
     auto iii = 53000;
     s.setAmount(iii*m);
-    QVERIFY(NisCalculator::getNisForSalary(s) == 6990*m);
+    QVERIFY(TrinidadNisCalculator::getNisForSalary(s) == 6990*m);
 
     auto iv = 68500;
     s.setAmount(iv*m);
-    QVERIFY(NisCalculator::getNisForSalary(s) == 9030*m);
+    QVERIFY(TrinidadNisCalculator::getNisForSalary(s) == 9030*m);
 
     auto v = 84500;
     s.setAmount(v*m);
-    QVERIFY(NisCalculator::getNisForSalary(s) == 11160*m);
+    QVERIFY(TrinidadNisCalculator::getNisForSalary(s) == 11160*m);
 
     auto vi = 102500;
     s.setAmount(vi*m);
-    QVERIFY(NisCalculator::getNisForSalary(s) == 13530*m);
+    QVERIFY(TrinidadNisCalculator::getNisForSalary(s) == 13530*m);
 
     auto vii = 121500;
     s.setAmount(vii*m);
-    QVERIFY(NisCalculator::getNisForSalary(s) == 15960*m);
+    QVERIFY(TrinidadNisCalculator::getNisForSalary(s) == 15960*m);
 
     auto viii = 143900;
     s.setAmount(viii*m);
-    QVERIFY(NisCalculator::getNisForSalary(s) == 18420*m);
+    QVERIFY(TrinidadNisCalculator::getNisForSalary(s) == 18420*m);
 
 
     auto ix = 165000;
     s.setAmount(ix*m);
-    QVERIFY(NisCalculator::getNisForSalary(s) == 21120*m);
+    QVERIFY(TrinidadNisCalculator::getNisForSalary(s) == 21120*m);
 
     auto x = 185500;
     s.setAmount(x*m);
-    QVERIFY(NisCalculator::getNisForSalary(s) == 23880*m);
+    QVERIFY(TrinidadNisCalculator::getNisForSalary(s) == 23880*m);
 
     auto xi = 207500;
     s.setAmount(xi*m);
-    QVERIFY(NisCalculator::getNisForSalary(s) == 26730*m);
+    QVERIFY(TrinidadNisCalculator::getNisForSalary(s) == 26730*m);
 
     auto xii = 233000;
     s.setAmount(xii*m);
-    QVERIFY(NisCalculator::getNisForSalary(s) == 29820*m);
+    QVERIFY(TrinidadNisCalculator::getNisForSalary(s) == 29820*m);
 
     auto xiii = 260500;
     s.setAmount(xiii*m);
-    QVERIFY(NisCalculator::getNisForSalary(s) == 33060*m);
+    QVERIFY(TrinidadNisCalculator::getNisForSalary(s) == 33060*m);
 
     auto xiv = 285000;
     s.setAmount(xiv*m);
-    QVERIFY(NisCalculator::getNisForSalary(s) == 36630*m);
+    QVERIFY(TrinidadNisCalculator::getNisForSalary(s) == 36630*m);
 
     auto xv = 322900;
     s.setAmount(xv*m);
-    QVERIFY(NisCalculator::getNisForSalary(s) == 39990*m);
+    QVERIFY(TrinidadNisCalculator::getNisForSalary(s) == 39990*m);
 
     auto xvi = 353800;
     s.setAmount(xvi*m);
-    QVERIFY(NisCalculator::getNisForSalary(s) == 41430*m);
+    QVERIFY(TrinidadNisCalculator::getNisForSalary(s) == 41430*m);
 }
 
 void Test::test_weekly_paye()
@@ -601,6 +602,18 @@ void Test::test_paytype()
     s2.setFrom_date(DateTime::fromIsoDate("2020-10-21"));
     s2.setTo_date(DateTime::fromIsoDate("2020-10-31"));
     s2.save();
+}
+
+void Test::test_guyanaNis()
+{
+    Salary s{{"2020-10-21","2020-10-31"}};
+    s.setAmount(8000000);
+
+
+    GuyanaNisCalculator nis(s);
+    qDebug() << nis.getEmployeeContribution();
+    qDebug() << nis.getEmployerContribution();
+
 }
 
 QTEST_MAIN(Test)
