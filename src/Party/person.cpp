@@ -1,5 +1,6 @@
 #include "person.h"
 #include "payratedomainobject.h"
+#include "paytypedomainobject.h"
 
 Person::Person()
 {
@@ -141,10 +142,6 @@ void PersonMapper::injectInsert(AbstractDomainObject &domainObject) const
 {
     AbstractPartyMapper apMapper;
     apMapper.insert(domainObject);
-
-    PayrateFacade pr;
-    pr.setEmployee_id(domainObject.getProperty("id").toString());
-    pr.save();
 }
 
 void PersonMapper::injectUpdate(AbstractDomainObject &domainObject) const
@@ -177,6 +174,16 @@ void EmployeeMapper::injectInsert(AbstractDomainObject &domainObject) const
 {
     PersonMapper mapper;
     mapper.insert(domainObject);
+
+    auto employee = dynamic_cast<Employee*>(&domainObject);
+
+    PayrateFacade pr;
+    pr.setEmployee_id(employee->getId());
+    pr.save();
+
+    PaytypeFacade payType;
+    payType.setId(employee->getId());
+    payType.save();
 }
 
 void EmployeeMapper::injectUpdate(AbstractDomainObject &domainObject) const

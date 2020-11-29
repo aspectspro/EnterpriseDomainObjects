@@ -1,6 +1,8 @@
 #include "salarydomainobject.h"
 #include "person.h"
 
+SalaryDomainMapper SalaryYearToDate::mapper;
+
 SalaryDomainObject::SalaryDomainObject()
 {
 
@@ -172,17 +174,22 @@ SalaryYearToDate::SalaryYearToDate()
     QDate dt = QDate::currentDate();
     setCurrentYear(dt.year());
 
+    connect(this,&SalaryYearToDate::salary_idChanged,[=](QString salary_id){
+        Q_UNUSED(salary_id);
+        loadYearToDate();
+    });
+
     connect(this,&SalaryYearToDate::salaryChanged,[=](){
         loadYearToDate();
     });
 }
 
-int SalaryYearToDate::getCurrentYear() const
+qint64 SalaryYearToDate::getCurrentYear() const
 {
     return currentYear;
 }
 
-void SalaryYearToDate::setCurrentYear(int value)
+void SalaryYearToDate::setCurrentYear(qint64 value)
 {
     currentYear = value;
 }
@@ -245,7 +252,23 @@ void SalaryYearToDate::setYearPaye(const Money value)
 
 void SalaryYearToDate::loadYearToDate()
 {
-    auto currentYear = getCurrentYear();
+    QString lastPaid,employeeId;
+
+    try {
+        auto loadedSalary = mapper.find(getSalary_id());
+        lastPaid = loadedSalary.getDate_paid().toIsoDate();
+        employeeId = loadedSalary.getEmployee_id();
+
+    } catch (std::exception &e) {
+        Q_UNUSED(e);
+        lastPaid = getSalary().getDate_paid().toIsoDate();
+        employeeId = getSalary().getEmployee_id();
+    }
+
+    auto currentYear = QDate::fromString(lastPaid,"yyyy-MM-dd").year();
+
+    qDebug() << "Last Paid Current Year" << currentYear;
+
     QString yearlyDateFormat = "yyyy-MM-dd,hh:mm:ss a";
 
     QDateTime startDate;
@@ -254,18 +277,13 @@ void SalaryYearToDate::loadYearToDate()
                                      .arg("01")
                                      .arg("01"),yearlyDateFormat);
 
-    QDateTime endDate;
-
-    auto lastPaid = getSalary().getDate_paid().toIsoDate();
-    auto employeeId = getSalary().getEmployee_id();
+    QDateTime endDate;    
 
     endDate = endDate.fromString(QString("%1,11:59:59 pm")
                                  .arg(lastPaid),yearlyDateFormat);
 
     auto startTimestamp = startDate.toSecsSinceEpoch();
-    auto endTimestamp = endDate.toSecsSinceEpoch();
-
-    SalaryDomainMapper mapper;
+    auto endTimestamp = endDate.toSecsSinceEpoch();    
 
     try {
         auto all = mapper.loadAll(QString("employee_id='%1' AND date_paid >= %2 AND date_paid <= %3")
@@ -273,7 +291,7 @@ void SalaryYearToDate::loadYearToDate()
                                   .arg(startTimestamp)
                                   .arg(endTimestamp));
 
-        int _gross = 0, _net = 0, _nis = 0,
+        qint64 _gross = 0, _net = 0, _nis = 0,
             _paye = 0 , _hsc = 0;
 
         foreach (auto _salary, all) {
@@ -306,4 +324,15 @@ void SalaryYearToDate::setSalary(const SalaryDomainObject value)
 {
     salary = value;
     emit salaryChanged(value);
+}
+
+QString SalaryYearToDate::getSalary_id() const
+{
+    return salary_id;
+}
+
+void SalaryYearToDate::setSalary_id(const QString &value)
+{
+    salary_id = value;
+    emit salary_idChanged(value);
 }

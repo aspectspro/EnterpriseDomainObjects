@@ -15,7 +15,7 @@ public:
      * @brief getWeekDifference - Returns the difference of week number.
      * @return
      */
-    int mondayChecker();
+    qint64 mondayChecker();
 
     /**
      * @brief convertFromString - Converts from dateString yyyy-MM-dd
@@ -44,21 +44,22 @@ public:
     enum SalaryType{
         Weekly,
         FortNightly,
-        Montly
+        Montly,
+        None
     };
 
     Salary();
     Salary(SalaryDateRange salaryDates);
 
-    int amount() const;
-    void setAmount(int amount);
+    qint64 amount() const;
+    void setAmount(qint64 amount);
 
     SalaryType getType() const;
     SalaryDateRange getSalaryDates() const;
 
 private:
-    int _amount = 0;
-    SalaryType type;
+    qint64 _amount = 0;
+    SalaryType type = None;
     SalaryDateRange salaryDates;
 };
 
@@ -69,14 +70,14 @@ class SalaryRange{
 
 public:
     SalaryRange(){}
-    SalaryRange(int min,int max);
-    int getMin() const;
+    SalaryRange(qint64 min,qint64 max);
+    qint64 getMin() const;
 
-    int getMax() const;
+    qint64 getMax() const;
 
 private:
-    int min;
-    int max;
+    qint64 min;
+    qint64 max;
 };
 
 /**
@@ -85,16 +86,16 @@ private:
 class NisEarnings{
 
 public:
-    NisEarnings(SalaryRange weeklyRange, SalaryRange monthlyRange, int totalWeeklyContribution);
+    NisEarnings(SalaryRange weeklyRange, SalaryRange monthlyRange, qint64 totalWeeklyContribution);
 
-    int getAssumedWeekly() const;
-    void setAssumedWeekly(int value);
+    qint64 getAssumedWeekly() const;
+    void setAssumedWeekly(qint64 value);
 
-    int getEmployerWeekly();
-    int getEmployeeWeekly();
+    qint64 getEmployerWeekly();
+    qint64 getEmployeeWeekly();
 
-    int getTotalWeeklyContribution() const;
-    void setTotalWeeklyContribution(int value);
+    qint64 getTotalWeeklyContribution() const;
+    void setTotalWeeklyContribution(qint64 value);
 
     SalaryRange getWeeklyRange() const;
     SalaryRange getMonthlyRange() const;
@@ -102,7 +103,7 @@ public:
 private:
     SalaryRange weeklyRange;
     SalaryRange monthlyRange;
-    int totalWeeklyContribution = 0;
+    qint64 totalWeeklyContribution = 0;
 };
 
 
@@ -119,25 +120,25 @@ public:
      * @brief getNisForSalary
      * @return
      */
-    static int getNisForSalary(Salary &salary);
+    static qint64 getNisForSalary(Salary &salary);
 
     /**
      * @brief getNisForSalary
      * @return
      */
-    int getNisForSalary();
+    qint64 getNisForSalary();
 
     /**
      * @brief getEmployeeContribution
      * @return
      */
-    int getEmployeeContribution();
+    qint64 getEmployeeContribution();
 
     /**
      * @brief getEmployerContribution
      * @return
      */
-    int getEmployerContribution();
+    qint64 getEmployerContribution();
 
 private:
     static QList<NisEarnings> nisList;
@@ -150,7 +151,7 @@ private:
  */
 class PayeCalculator{
 public:
-    static int getPayeForSalary(Salary &salary);
+    static qint64 getPayeForSalary(Salary &salary);
 };
 
 /**
@@ -160,7 +161,7 @@ public:
  */
 class HealthSurchargeCalculator{
 public:
-    static int getHealthSurcharge(Salary &salary);
+    static qint64 getHealthSurcharge(Salary &salary);
 };
 
 

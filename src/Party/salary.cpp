@@ -12,21 +12,21 @@ SalaryDateRange::SalaryDateRange(QString from, QString to){
     toDate = convertFromString(to);
 }
 
-int SalaryDateRange::mondayChecker(){
+qint64 SalaryDateRange::mondayChecker(){
 
-    auto fromDayOfMonth = fromDate.dayOfYear();
-    auto toDayOfMonth = toDate.dayOfYear();
-    auto daysDifference = toDayOfMonth-fromDayOfMonth;
-    int mondayCounter = 0;
+    auto daysDifference = fromDate.daysTo(toDate);
+    qint64 mondayCounter = 0;
 
-    for(int i = 0; i <= daysDifference; i++){
+    for(qint64 i = 0; i <= daysDifference; i++){
         QDate _dtFrom = fromDate.addDays(i);
         if(_dtFrom.dayOfWeek() == 1){
-            mondayCounter++;
+            mondayCounter = mondayCounter+1;
         }
     }
 
-    return mondayCounter;
+    auto wks = mondayCounter == 0 ? 1 : mondayCounter;    
+
+    return wks;
 }
 
 QDate SalaryDateRange::convertFromString(QString dateString){
@@ -46,24 +46,29 @@ Salary::Salary(SalaryDateRange salaryDates) :
         type = Weekly;
     }else if(mondayCounter == 2){
         type = FortNightly;
-    }else if(mondayCounter >= 3){
+    }else if(mondayCounter == 4){
         type = Montly;
+    }else if(mondayCounter == 5 && salaryDates.getToDate().month() == salaryDates.getFromDate().month()){
+        type = Montly;
+    }
+    else{
+        type = None;
     }
 }
 
-SalaryRange::SalaryRange(int min, int max){
+SalaryRange::SalaryRange(qint64 min, qint64 max){
     this->min = min;
     this->max = max;
 }
 
-NisEarnings::NisEarnings(SalaryRange weeklyRange, SalaryRange monthlyRange, int totalWeeklyContribution) :
+NisEarnings::NisEarnings(SalaryRange weeklyRange, SalaryRange monthlyRange, qint64 totalWeeklyContribution) :
     weeklyRange(weeklyRange),monthlyRange(monthlyRange), totalWeeklyContribution(totalWeeklyContribution){}
 
-int NisEarnings::getEmployerWeekly(){
+qint64 NisEarnings::getEmployerWeekly(){
     return getTotalWeeklyContribution()/1.5;
 }
 
-int NisEarnings::getEmployeeWeekly(){
+qint64 NisEarnings::getEmployeeWeekly(){
     return getTotalWeeklyContribution()/3;
 }
 
@@ -97,13 +102,14 @@ NisCalculator::NisCalculator(){
             << xi << xii << xiii << xiv << xv << xvi;
 }
 
-int NisCalculator::getNisForSalary(Salary &salary){
+qint64 NisCalculator::getNisForSalary(Salary &salary){
 
     NisCalculator();
 
-    int _salaryAmount = salary.amount();
+    qint64 _salaryAmount = salary.amount();
     SalaryRange range;
-    int weeklyContribution = 0;
+    qint64 weeklyContribution = 0;
+    auto weeks = salary.getSalaryDates().mondayChecker();
 
     foreach (auto i, nisList) {
 
@@ -120,6 +126,10 @@ int NisCalculator::getNisForSalary(Salary &salary){
         case Salary::FortNightly : range = i.getWeeklyRange();
             salaryAmount = salaryAmount/2;
             break;
+
+        case Salary::None : range = i.getWeeklyRange();
+            salaryAmount = (salaryAmount/weeks);
+            break;
         }
 
         if(salaryAmount >= range.getMin() &&
@@ -130,56 +140,60 @@ int NisCalculator::getNisForSalary(Salary &salary){
             weeklyContribution = i.getTotalWeeklyContribution();
             break;
         }
-    }
+    }   
 
-    return weeklyContribution*salary.getSalaryDates().mondayChecker();
+    return weeklyContribution*weeks;
 }
 
-int NisCalculator::getNisForSalary()
+qint64 NisCalculator::getNisForSalary()
 {
     return getNisForSalary(this->salary);
 }
 
-int NisCalculator::getEmployeeContribution()
+qint64 NisCalculator::getEmployeeContribution()
 {
     return getNisForSalary()/3;
 }
 
-int NisCalculator::getEmployerContribution()
+qint64 NisCalculator::getEmployerContribution()
 {
     return getNisForSalary()/1.5;
 }
 
-int PayeCalculator::getPayeForSalary(Salary &salary){
-    int yearlyProjection = 0;
-    int taxCeiling = 8400000;
+qint64 PayeCalculator::getPayeForSalary(Salary &salary){
+    qint64 yearlyProjection = 0;
+    qint64 taxCeiling = 7200000;
+
+    auto weeks = salary.getSalaryDates().mondayChecker();    
 
     switch (salary.getType()) {
 
+    case Salary::FortNightly : yearlyProjection = (salary.amount()/2)*52;
+        break;
+
+    case Salary::None : yearlyProjection = (salary.amount()/weeks)*52;
+        break;
+
+    case Salary::Weekly : yearlyProjection = (salary.amount())*52;
+        break;
+
     case Salary::Montly : yearlyProjection = salary.amount()*12;
-        break;
+        break;        
 
-    case Salary::Weekly : yearlyProjection = salary.amount()*52;
-        break;
-
-    case Salary::FortNightly : yearlyProjection = salary.amount()*26;
-        break;
-    }
+    }    
 
     if(yearlyProjection > taxCeiling){
 
         auto aboveTax = yearlyProjection-taxCeiling;
         auto taxedAmount = aboveTax/4;
 
+        qDebug() << weeks << "PAYE weeks" << yearlyProjection << (taxedAmount/52)*weeks;
+
         switch (salary.getType()) {
 
+        default: return (taxedAmount/52)*weeks;
+
         case Salary::Montly : return taxedAmount/12;
-            break;
-
-        case Salary::Weekly : return taxedAmount/52;
-            break;
-
-        case Salary::FortNightly : return taxedAmount/26;
             break;
         }
     }
@@ -187,10 +201,12 @@ int PayeCalculator::getPayeForSalary(Salary &salary){
     return 0;
 }
 
-int HealthSurchargeCalculator::getHealthSurcharge(Salary &salary){
+qint64 HealthSurchargeCalculator::getHealthSurcharge(Salary &salary){
     auto amount = salary.amount();
     auto weeklyAmount = 0;
     auto healthSurchargeCeiling = 10900;
+
+    auto weeks = salary.getSalaryDates().mondayChecker();
 
     switch (salary.getType()) {
 
@@ -202,6 +218,9 @@ int HealthSurchargeCalculator::getHealthSurcharge(Salary &salary){
 
     case Salary::FortNightly : weeklyAmount = amount/2;
         break;
+
+    case Salary::None : weeklyAmount = amount/weeks;
+        break;
     }
 
     auto healthSurcharge = 0;
@@ -212,15 +231,15 @@ int HealthSurchargeCalculator::getHealthSurcharge(Salary &salary){
         healthSurcharge = 480;
     }
 
-    return healthSurcharge*salary.getSalaryDates().mondayChecker();
+    return healthSurcharge*weeks;
 }
 
-int Salary::amount() const
+qint64 Salary::amount() const
 {
     return _amount;
 }
 
-void Salary::setAmount(int amount)
+void Salary::setAmount(qint64 amount)
 {
     _amount = amount;
 }
@@ -235,22 +254,22 @@ SalaryDateRange Salary::getSalaryDates() const
     return salaryDates;
 }
 
-int SalaryRange::getMin() const
+qint64 SalaryRange::getMin() const
 {
     return min;
 }
 
-int SalaryRange::getMax() const
+qint64 SalaryRange::getMax() const
 {
     return max;
 }
 
-int NisEarnings::getTotalWeeklyContribution() const
+qint64 NisEarnings::getTotalWeeklyContribution() const
 {
     return totalWeeklyContribution;
 }
 
-void NisEarnings::setTotalWeeklyContribution(int value)
+void NisEarnings::setTotalWeeklyContribution(qint64 value)
 {
     totalWeeklyContribution = value;
 }

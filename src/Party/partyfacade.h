@@ -13,11 +13,11 @@ class EnterpriseDateUtils : public QObject{
 public slots:
     static DateTime now();
 
-    static DateTime dateTimeFromTimestamp(int timestamp);
+    static DateTime dateTimeFromTimestamp(qint64 timestamp);
 
     static DateTime dateTimeFromUtc(QString utcTime);
 
-    static QString appDatesView(int timestamp);
+    static QString appDatesView(qint64 timestamp);
 
     static QString appDatesView(QDateTime dateTime);
 };
