@@ -319,14 +319,21 @@ qint64 GuyanaNisCalculator::getEmployerContribution()
 
 qint64 GuyanaNisCalculator::calculate()
 {
-    auto weeks = salary.getSalaryDates().mondayChecker();
+//    auto weeks = salary.getSalaryDates().mondayChecker();
     auto salaryAmount = salary.amount();
 
     auto weeklyCeiling = 6461500;
+    auto monthlyCeiling = 28000000;
+
+    if(salary.getType() == Salary::Montly && salaryAmount > monthlyCeiling){
+        return salaryAmount*0.14;
+    }
+
+    auto weeks = salary.getSalaryDates().mondayChecker();
     auto weeklyProjection = salaryAmount/weeks;
 
     if(weeklyProjection > weeklyCeiling){
-        return salaryAmount*0.14;
+        return (salaryAmount/weeks)*0.14;
     }
 
     return 0;
