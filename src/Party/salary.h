@@ -184,6 +184,11 @@ public:
     static qint64 getPayeForSalary(Salary &salary);
 };
 
+class GuyanaPayeCalulator{
+public :
+    static qint64 getPayeForSalary(Salary &salary);
+};
+
 /**
  * @brief The HealthSurchargeCalculator class - Calculates Health surcharge. 4.80 if
  * salary < 10900 per week or 825 if salary >= 10900

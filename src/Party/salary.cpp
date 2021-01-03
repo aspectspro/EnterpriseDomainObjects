@@ -46,6 +46,8 @@ Salary::Salary(SalaryDateRange salaryDates) :
         type = Weekly;
     }else if(mondayCounter == 2){
         type = FortNightly;
+    }else if(mondayCounter == 3){
+        type = Weekly;
     }else if(mondayCounter == 4){
         type = Montly;
     }else if(mondayCounter == 5 && salaryDates.getToDate().month() == salaryDates.getFromDate().month()){
@@ -342,4 +344,43 @@ qint64 GuyanaNisCalculator::calculate()
 void AbstractNisCalculator::setSalary(const Salary &value)
 {
     salary = value;
+}
+
+qint64 GuyanaPayeCalulator::getPayeForSalary(Salary &salary)
+{
+    GuyanaNisCalculator nis(salary);
+
+    qint64 yearlyProjection = 0;
+    qint64 totalPaye = 0;
+
+    auto weeks = salary.getSalaryDates().mondayChecker();
+    auto weeklyAverage = (salary.amount()-nis.getEmployeeContribution())/weeks;
+
+    yearlyProjection = (weeklyAverage*52);
+
+//    If you earn 65,000 or less per month OR 780,00O or less per year, no Income Tax is deducted from your salary.
+
+    if(yearlyProjection <= 78000000){
+        totalPaye = 0;
+    }
+
+//    If you earn more than 65,000 per month and less than or equal to 195,000 per month, 28% Income Tax is deducted
+
+    if(yearlyProjection > 78000000 && yearlyProjection <= 234000000){
+        totalPaye = yearlyProjection*0.28;
+    }
+
+    if(yearlyProjection > 234000000){
+        auto thirdDeduction = yearlyProjection-(yearlyProjection*0.3);
+
+        auto ceiling = 156000000;
+        auto overCeiling = thirdDeduction-ceiling;
+
+        auto ceilingPercentage = ceiling*0.28;
+        auto overCeilingPercentage = overCeiling*0.4;
+
+        totalPaye = ceilingPercentage+overCeilingPercentage;
+    }
+
+    return (totalPaye/52)*weeks;
 }

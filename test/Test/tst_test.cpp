@@ -606,13 +606,16 @@ void Test::test_paytype()
 
 void Test::test_guyanaNis()
 {
-    Salary s{{"2020-10-21","2020-10-31"}};
+    Salary s{{"2020-10-01","2020-10-31"}};
     s.setAmount(8000000);
 
 
     GuyanaNisCalculator nis(s);
     qDebug() << nis.getEmployeeContribution();
     qDebug() << nis.getEmployerContribution();
+
+    GuyanaPayeCalulator paye;
+    qDebug() << paye.getPayeForSalary(s);
 
 }
 
