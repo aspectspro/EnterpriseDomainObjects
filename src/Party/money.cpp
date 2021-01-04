@@ -106,7 +106,7 @@ void Money::operator=(qint64 value){
 qint64 Money::unformatMoneyString(QString moneyString)
 {
     auto digits = moneyString.remove("$").remove(".").remove(",");
-    return digits.toInt();
+    return digits.toUInt();
 }
 
 Money::operator QVariant()

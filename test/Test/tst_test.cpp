@@ -607,7 +607,7 @@ void Test::test_paytype()
 void Test::test_guyanaNis()
 {
     Salary s{{"2020-10-01","2020-10-31"}};
-    s.setAmount(8000000);
+    s.setAmount(28000000);
 
 
     GuyanaNisCalculator nis(s);
@@ -616,7 +616,6 @@ void Test::test_guyanaNis()
 
     GuyanaPayeCalulator paye;
     qDebug() << paye.getPayeForSalary(s);
-
 }
 
 QTEST_MAIN(Test)
