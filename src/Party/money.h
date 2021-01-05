@@ -51,7 +51,14 @@ public:
      * @param moneyString
      * @return
      */
-    Q_INVOKABLE qint64 unformatMoneyString(QString moneyString);
+    Q_INVOKABLE qulonglong unformatMoneyString(QString moneyString);
+
+    /**
+     * @brief unformatString
+     * @param moneyString
+     * @return
+     */
+    Q_INVOKABLE QString unformatString(QString moneyString);;
 
     /**
      * @brief intAsString

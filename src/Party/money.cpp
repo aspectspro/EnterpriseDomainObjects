@@ -103,10 +103,15 @@ void Money::operator=(qint64 value){
     this->setValue(value);
 }
 
-qint64 Money::unformatMoneyString(QString moneyString)
+qulonglong Money::unformatMoneyString(QString moneyString)
 {
     auto digits = moneyString.remove("$").remove(".").remove(",");
-    return digits.toUInt();
+    return digits.toULongLong();
+}
+
+QString Money::unformatString(QString moneyString){
+    auto value = unformatMoneyString(moneyString);
+    return QString::number(value);
 }
 
 Money::operator QVariant()

@@ -616,6 +616,10 @@ void Test::test_guyanaNis()
 
     GuyanaPayeCalulator paye;
     qDebug() << paye.getPayeForSalary(s);
+
+    MoneyFacade m;
+    auto _mValue = m.asMoney().unformatMoneyString("300000000");
+    qDebug() << _mValue;
 }
 
 QTEST_MAIN(Test)
