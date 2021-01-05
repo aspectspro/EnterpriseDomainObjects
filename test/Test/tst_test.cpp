@@ -606,20 +606,26 @@ void Test::test_paytype()
 
 void Test::test_guyanaNis()
 {
-    Salary s{{"2020-10-01","2020-10-31"}};
-    s.setAmount(28000000);
+//    Salary s{{"2020-10-01","2020-10-31"}};
+//    s.setAmount(28000000);
 
 
-    GuyanaNisCalculator nis(s);
-    qDebug() << nis.getEmployeeContribution();
-    qDebug() << nis.getEmployerContribution();
+//    GuyanaNisCalculator nis(s);
+//    qDebug() << nis.getEmployeeContribution();
+//    qDebug() << nis.getEmployerContribution();
 
-    GuyanaPayeCalulator paye;
-    qDebug() << paye.getPayeForSalary(s);
+//    GuyanaPayeCalulator paye;
+//    qDebug() << paye.getPayeForSalary(s);
 
-    MoneyFacade m;
-    auto _mValue = m.asMoney().unformatMoneyString("300000000");
-    qDebug() << _mValue;
+    PayrateDomainObject pr;
+    pr.setId("_test");
+    pr.setPayrate(30000);
+
+    PayrateMapper mp;
+    mp.insert(pr);
+    auto p = mp.find("_test");
+    qDebug() << p.getPayrate().asInt();
+
 }
 
 QTEST_MAIN(Test)

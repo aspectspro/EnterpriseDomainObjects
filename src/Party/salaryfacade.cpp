@@ -39,10 +39,11 @@ SalaryFacade::SalaryFacade(QObject *parent) : QObject(parent)
         setEmployee_nis(_nis);
         setEmployer_nis(nisCalculator->getEmployerContribution());
 
-        auto _paye = PayeCalculator::getPayeForSalary(s);
+        auto _paye = GuyanaPayeCalulator::getPayeForSalary(s);
         setPaye(_paye);
 
-        auto _healthSurcharge = HealthSurchargeCalculator::getHealthSurcharge(s);
+//        auto _healthSurcharge = HealthSurchargeCalculator::getHealthSurcharge(s);
+        auto _healthSurcharge = 0;
         setHealth_surcharge(_healthSurcharge);
 
         auto taxes = _nis+_paye+_healthSurcharge;

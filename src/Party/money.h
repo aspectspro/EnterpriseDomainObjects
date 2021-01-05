@@ -21,7 +21,7 @@ public:
      * @brief getValue
      * @return - Returns qint64 value of money
      */
-    Q_INVOKABLE qint64 asInt() const;
+    Q_INVOKABLE qulonglong asInt() const;
 
     /**
      * @brief getValueAsString - Converts money as currency string
@@ -115,7 +115,7 @@ signals:
 
 private:
     QString formatted;
-    qint64 raw;
+    qulonglong raw;
     Money money;
 };
 

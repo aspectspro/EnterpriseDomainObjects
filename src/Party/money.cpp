@@ -24,7 +24,7 @@ Money::Money(QString intAsString)
     setValue(intAsString.toInt());
 }
 
-qint64 Money::asInt() const
+qulonglong Money::asInt() const
 {
     return value;
 }
@@ -171,7 +171,7 @@ QString Money::intAsString() const
 
 QJsonValue Money::toJsonValue() const
 {
-    return QJsonValue(asInt());
+    return QJsonValue(QString::number(asInt()).toInt());
 }
 
 Money Money::fromInt(qint64 moneyAsInt) const

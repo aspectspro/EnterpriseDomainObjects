@@ -118,7 +118,7 @@ SetupModule &PartyModule::installSchema()
     //Payrate Table
     auto payrateTable = initializeModuleTable("payrate");
     payrateTable.appendTableColumn({"id",TableColumn::TypeString,true});
-    payrateTable.appendTableColumn({"payrate",TableColumn::TypeInt});
+    payrateTable.appendTableColumn({"payrate",TableColumn::TypeString});
     payrateTable.appendTableColumn({"overtime_one",TableColumn::TypeInt});
     payrateTable.appendTableColumn({"overtime_two",TableColumn::TypeInt});
     payrateTable.appendTableColumn({"overtime_three",TableColumn::TypeInt});
