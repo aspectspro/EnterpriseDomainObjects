@@ -3,3 +3,4 @@ project (EnterpriseDomainObjects)
 
 add_subdirectory (src)
 add_subdirectory (test/Test)
+add_subdirectory(test/NewTest)

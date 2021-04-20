@@ -55,7 +55,7 @@ struct TitleMs_Concrete : public Title_Interface{
 public:
     virtual QString name() override
     {
-        return "Ms";
+        return "Ms.";
     }
 };
 
@@ -81,7 +81,7 @@ struct TitleDr_Concrete : public Title_Interface{
 public:
     virtual QString name() override
     {
-        return "Dr";
+        return "Dr.";
     }
 };
 

@@ -82,11 +82,23 @@ void Test::test_party()
     org.setCompany_name("Aspects Pro");
     org.setAddress("#38 Iere Village, Naparima Mayaro Road, Princes Town");
     org.setEmail_address("greg@aspectspro.com");
-    org.setTelephone_number("868-269-6529");    
+    org.setTelephone_number("868-269-6529");
+
+
 
     OrganizationMapper mapper;
+    mapper.insert(org);
+
+    try {
+        mapper.loadAll("id='1'");
+    } catch (std::exception &e) {
+        qInfo() << "Couldn't load id 1" << e.what();
+    }
+
+
     try {
         qDebug() << mapper.loadAll().first().toJsonObject();
+        mapper.remove(org);
     } catch (std::exception &e) {
         qInfo() << e.what();
     }
@@ -99,7 +111,6 @@ void Test::test_person()
     person.setDate_of_birth(DateTime::getNow());
 
     PersonMapper mapper;
-
 
     person.setFirst_name("Greg");
     person.setLast_name("Dillon");
@@ -127,41 +138,41 @@ void Test::test_person()
 
 void Test::test_employee()
 {
-    EmployeeFacade facade;
-    facade.setFirst_name("greg");
-    facade.setLast_name("dillon");
-    facade.setAddress("#38");
-    facade.setBir_number("887332");
-    facade.setNis_number("7764");
-    facade.setDate_of_birth(DateTime::fromIsoDate("1993-03-08"));
-    facade.setEmail_address("greg@aspectspro.com");
-    facade.setPassport_number("PP-89978");
-    facade.setTelephone_number("868-269-6529");
-    facade.setDate_of_discharge(DateTime::getNow());
-    facade.setDate_of_employment(DateTime::getNow());
-    facade.setDriver_permit_number("DP-09");
-    facade.setIdentification_number("id-88373");
+    EmployeeFacade employeeFacade;
+    employeeFacade.setFirst_name("greg");
+    employeeFacade.setLast_name("dillon");
+    employeeFacade.setAddress("#38");
+    employeeFacade.setBir_number("887332");
+    employeeFacade.setNis_number("7764");
+    employeeFacade.setDate_of_birth(DateTime::fromIsoDate("1993-03-08"));
+    employeeFacade.setEmail_address("greg@aspectspro.com");
+    employeeFacade.setPassport_number("PP-89978");
+    employeeFacade.setTelephone_number("868-269-6529");
+    employeeFacade.setDate_of_discharge(DateTime::getNow());
+    employeeFacade.setDate_of_employment(DateTime::getNow());
+    employeeFacade.setDriver_permit_number("DP-09");
+    employeeFacade.setIdentification_number("id-88373");
 
-    facade.save();
+    employeeFacade.save();
 
-    EmployeeFacade f2;
-    f2.setId(facade.getId());
-    f2.load();
+    EmployeeFacade loadedEmployee;
+    loadedEmployee.setId(employeeFacade.getId());
+    loadedEmployee.load();
 
-    QVERIFY(facade.getId() == f2.getId());
-    QVERIFY(facade.getFirst_name() == f2.getFirst_name());
-    QVERIFY(facade.getLast_name() == f2.getLast_name());
-    QVERIFY(facade.getAddress() == f2.getAddress());
-    QVERIFY(facade.getBir_number() == f2.getBir_number());
-    QVERIFY(facade.getNis_number() == f2.getNis_number());
-    QVERIFY(facade.getDate_of_birth() == f2.getDate_of_birth());
-    QVERIFY(facade.getEmail_address() == f2.getEmail_address());
-    QVERIFY(facade.getPassport_number() == f2.getPassport_number());
-    QVERIFY(facade.getTelephone_number() == f2.getTelephone_number());
-    QVERIFY(facade.getDate_of_discharge() == f2.getDate_of_discharge());
-    QVERIFY(facade.getDate_of_employment() == f2.getDate_of_employment());
-    QVERIFY(facade.getDriver_permit_number() == f2.getDriver_permit_number());
-    QVERIFY(facade.getIdentification_number() == f2.getIdentification_number());
+    QVERIFY(employeeFacade.getId() == loadedEmployee.getId());
+    QVERIFY(employeeFacade.getFirst_name() == loadedEmployee.getFirst_name());
+    QVERIFY(employeeFacade.getLast_name() == loadedEmployee.getLast_name());
+    QVERIFY(employeeFacade.getAddress() == loadedEmployee.getAddress());
+    QVERIFY(employeeFacade.getBir_number() == loadedEmployee.getBir_number());
+    QVERIFY(employeeFacade.getNis_number() == loadedEmployee.getNis_number());
+    QVERIFY(employeeFacade.getDate_of_birth() == loadedEmployee.getDate_of_birth());
+    QVERIFY(employeeFacade.getEmail_address() == loadedEmployee.getEmail_address());
+    QVERIFY(employeeFacade.getPassport_number() == loadedEmployee.getPassport_number());
+    QVERIFY(employeeFacade.getTelephone_number() == loadedEmployee.getTelephone_number());
+    QVERIFY(employeeFacade.getDate_of_discharge() == loadedEmployee.getDate_of_discharge());
+    QVERIFY(employeeFacade.getDate_of_employment() == loadedEmployee.getDate_of_employment());
+    QVERIFY(employeeFacade.getDriver_permit_number() == loadedEmployee.getDriver_permit_number());
+    QVERIFY(employeeFacade.getIdentification_number() == loadedEmployee.getIdentification_number());
 
 }
 
@@ -499,6 +510,7 @@ void Test::test_salaryYearToDate()
 void Test::test_companyInformation()
 {
     CompanyInformationFacade company;
+
     company.setCompany_name("Aspects Pro");
     company.setAddress("#38 Iere Village Princes Town");
     company.setTelephone_number("868-269-6529");
@@ -606,9 +618,17 @@ void Test::test_paytype()
 
 void Test::test_guyanaNis()
 {
+    Salary salary({"2021-01-01","2021-01-31"});
+    salary.setAmount(700000);
+    qDebug() << salary.getSalaryDates().mondayChecker();
+
+    TrinidadNisCalculator _nis(salary);
+    qDebug() << _nis.getNisForSalary();
+    qDebug() << _nis.getEmployeeContribution();
+    qDebug() << _nis.getEmployerContribution();
+
 //    Salary s{{"2020-10-01","2020-10-31"}};
 //    s.setAmount(28000000);
-
 
 //    GuyanaNisCalculator nis(s);
 //    qDebug() << nis.getEmployeeContribution();
@@ -617,14 +637,14 @@ void Test::test_guyanaNis()
 //    GuyanaPayeCalulator paye;
 //    qDebug() << paye.getPayeForSalary(s);
 
-    PayrateDomainObject pr;
-    pr.setId("_test");
-    pr.setPayrate(30000);
+//    PayrateDomainObject pr;
+//    pr.setId("_test");
+//    pr.setPayrate(30000);
 
-    PayrateMapper mp;
-    mp.insert(pr);
-    auto p = mp.find("_test");
-    qDebug() << p.getPayrate().asInt();
+//    PayrateMapper mp;
+//    mp.insert(pr);
+//    auto p = mp.find("_test");
+//    qDebug() << p.getPayrate().asInt();
 
 }
 

@@ -74,12 +74,12 @@ void CompanyInformationFacade::saveCompanyInformation()
         mapper.insert(org);
     } catch (std::exception &e) {
         Q_UNUSED(e)
-        qInfo() << "Updating Company Information";
+        qInfo() << "Updating Company Information" << e.what();
         try {
             mapper.update(org);
         } catch (std::exception &e) {
             Q_UNUSED(e)
-            qInfo() << "Error Could not update company Information";
+            qInfo() << "Error Could not update company Information" << e.what();
         }
     }
 }
@@ -98,6 +98,6 @@ void CompanyInformationFacade::loadCompanyInformation()
 
     } catch (std::exception &e) {
         Q_UNUSED(e)
-        qInfo() << "Could not load Company Information";
+        qInfo() << "Could not load Company Information" << e.what();
     }
 }

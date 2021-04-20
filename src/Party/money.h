@@ -15,8 +15,6 @@ public:
     Money(QVariant value);
     Money(QString intAsString);
 
-
-
     /**
      * @brief getValue
      * @return - Returns qint64 value of money
