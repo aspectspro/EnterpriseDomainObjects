@@ -56,24 +56,17 @@ void NewTest::tst_abstractParty()
     TitleMrs_ConcreteFactory titleMrs;
     TitleMs_ConcreteFactory titleMs;
     TitleDr_ConcreteFactory titleDr;
-    FullNameConcreteBuilder builder("Greg","Dillon");
 
+    FullNameConcreteBuilder builder;
 
-    Employee_v_1 emp(titleMr,builder);
-
-    qDebug() << emp.printName();
-
-    emp.setTitle(titleMrs);
+    Employee_v_1 emp(titleMr,builder.setFirstName("Greg").setLastName("Dillon"));
 
     qDebug() << emp.printName();
 
-    emp.setTitle(titleMs);
+    emp.setTitle(titleMrs).setName(builder.setFirstName("Emma").setLastName("Watson-Dillon"));
 
     qDebug() << emp.printName();
 
-    emp.setTitle(titleDr);
-
-    qDebug() << emp.printName();
 
 }
 

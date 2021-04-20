@@ -44,6 +44,9 @@ if(EXISTS ${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
         Title/titlemr.cpp
         Title/titlemr.h
         Name/name.h
+        Name/NameInterface.h
+        Name/fullName.h
+        Name/fullName.cpp
         )
     add_test(NAME ${PROJECT_NAME} COMMAND ${PROJECT_NAME})
 
