@@ -9,7 +9,7 @@ struct FullName_Concrete : public Name_Interface{
 
     // Name_Interface interface
 public:
-    virtual QString printName() override;
+    virtual QString asString() override;
 
     FullName_Concrete &setFirstName(QString firstName);
 
@@ -30,7 +30,7 @@ public:
 struct FullName_ConcreteFactory : public Name_FactoryInterface{
     // Name_FactoryInterface interface
 public:
-    virtual std::unique_ptr<Name_Interface> create() override;
+    virtual Name create() override;
 };
 
 
@@ -45,7 +45,7 @@ public:
 
     FullNameConcreteBuilder(QString firstName, QString lastName, QString middleName = "");
 
-    virtual std::unique_ptr<Name_Interface> build() override;
+    virtual Name build() override;
 
     FullNameConcreteBuilder& setFirstName(QString firstName);
 
@@ -55,7 +55,7 @@ public:
 
 private:
     std::unique_ptr<Name_FactoryInterface> _nameFactory;
-    std::unique_ptr<Name_Interface> _name;
+    Name _name;
 
     // NameBuilder interface
 public:

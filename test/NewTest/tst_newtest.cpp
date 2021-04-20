@@ -52,21 +52,24 @@ void NewTest::tst_partyModule()
 
 void NewTest::tst_abstractParty()
 {
-    TitleMr_ConcreteFactory titleMr;
-    TitleMrs_ConcreteFactory titleMrs;
-    TitleMs_ConcreteFactory titleMs;
-    TitleDr_ConcreteFactory titleDr;
+    TitleMr_ConcreteFactory Mr;
+    TitleMrs_ConcreteFactory Mrs;
+    TitleMs_ConcreteFactory Ms;
+    TitleDr_ConcreteFactory Dr;
 
-    FullNameConcreteBuilder builder;
+    FullNameConcreteBuilder nameBuilder;
+    UuidIdentifier_ConcreteBuilder uuidBuilder;
 
-    Employee_v_1 emp(titleMr,builder.setFirstName("Greg").setLastName("Dillon"));
+    Employee_v_1 emp(Dr,
+                     nameBuilder.setFirstName("Greg").setLastName("Dillon"),
+                     uuidBuilder.setId("id"));
 
     qDebug() << emp.printName();
 
-    emp.setTitle(titleMrs).setName(builder.setFirstName("Emma").setLastName("Watson-Dillon"));
+    emp.setTitle(Mrs).setName(nameBuilder.setFirstName("Emma").setLastName("Watson-Dillon"));
 
-    qDebug() << emp.printName();
-
+    qDebug() << emp.getName()->asString();
+    qDebug() << emp.getIdentifier()->asString();
 
 }
 

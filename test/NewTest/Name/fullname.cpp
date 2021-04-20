@@ -1,6 +1,6 @@
 #include "fullname.h"
 
-QString FullName_Concrete::printName()
+QString FullName_Concrete::asString()
 {
     auto _fullName = QString("%1%2%3")
             .arg(getFirstName().append(" "))
@@ -37,7 +37,7 @@ QString FullName_Concrete::getMiddleName() const {
     return _data.value("middleName");
 }
 
-std::unique_ptr<Name_Interface> FullName_ConcreteFactory::create()
+Name FullName_ConcreteFactory::create()
 {
     return std::make_unique<FullName_Concrete>();
 }
@@ -51,7 +51,7 @@ FullNameConcreteBuilder::FullNameConcreteBuilder(QString firstName, QString last
     setFirstName(firstName).setLastName(lastName).setMiddleName(middleName);
 }
 
-std::unique_ptr<Name_Interface> FullNameConcreteBuilder::build()
+Name FullNameConcreteBuilder::build()
 {
     auto _copy = std::move(_name);
     reset();

@@ -9,7 +9,10 @@ struct TitleMr_Concrete : public Title_Interface{
 
     // Title_Interface interface
 public:
-    virtual QString name() override;
+    virtual QString asString() override
+    {
+        return "Mr.";
+    }
 };
 
 /**
@@ -18,7 +21,10 @@ public:
 struct TitleMr_ConcreteFactory : public Title_FactoryInterface{
     // Title_FactoryInterface interface
 public:
-    virtual std::unique_ptr<Title_Interface> create() override;
+    virtual Title create() override
+    {
+        return std::make_unique<TitleMr_Concrete>();
+    }
 };
 
 /**
@@ -28,7 +34,7 @@ struct TitleMrs_Concrete : public Title_Interface{
 
     // Title_Interface interface
 public:
-    virtual QString name() override
+    virtual QString asString() override
     {
         return "Mrs.";
     }
@@ -40,7 +46,7 @@ public:
 struct TitleMrs_ConcreteFactory : public Title_FactoryInterface{
     // Title_FactoryInterface interface
 public:
-    virtual std::unique_ptr<Title_Interface> create() override
+    virtual Title create() override
     {
         return std::make_unique<TitleMrs_Concrete>();
     }
@@ -53,7 +59,7 @@ struct TitleMs_Concrete : public Title_Interface{
 
     // Title_Interface interface
 public:
-    virtual QString name() override
+    virtual QString asString() override
     {
         return "Ms.";
     }
@@ -65,7 +71,7 @@ public:
 struct TitleMs_ConcreteFactory : public Title_FactoryInterface{
     // Title_FactoryInterface interface
 public:
-    virtual std::unique_ptr<Title_Interface> create() override
+    virtual Title create() override
     {
         return std::make_unique<TitleMs_Concrete>();
     }
@@ -79,7 +85,7 @@ struct TitleDr_Concrete : public Title_Interface{
 
     // Title_Interface interface
 public:
-    virtual QString name() override
+    virtual QString asString() override
     {
         return "Dr.";
     }
@@ -91,7 +97,7 @@ public:
 struct TitleDr_ConcreteFactory : public Title_FactoryInterface{
     // Title_FactoryInterface interface
 public:
-    virtual std::unique_ptr<Title_Interface> create() override
+    virtual Title create() override
     {
         return std::make_unique<TitleDr_Concrete>();
     }

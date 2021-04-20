@@ -4,6 +4,7 @@
 #include "../src/EnterpriseDomainObjects.h"
 
 
+
 /**
  * @brief The Name_Interface struct
  */
@@ -14,12 +15,14 @@ public:
      * @brief printName - Prints name to string.
      * @return
      */
-    virtual QString printName() = 0;
+    virtual QString asString() = 0;
 
 protected:
     QHash<QString, QString> _data;
 
 };
+
+typedef std::unique_ptr<Name_Interface> Name;
 
 /**
  * @brief The Name_FactoryInterface struct
@@ -30,6 +33,8 @@ public:
     virtual std::unique_ptr<Name_Interface> create() = 0;
 
 };
+
+typedef std::unique_ptr<Name_FactoryInterface> NameFactory;
 
 /**
  * @brief The NameBuilder struct
@@ -47,7 +52,7 @@ public:
      * @brief build - Builds product as unique_ptr, remember to call std::move(unique_ptr);
      * @return
      */
-    virtual std::unique_ptr<Name_Interface> build() = 0;
+    virtual Name build() = 0;
 
 };
 

@@ -10,9 +10,11 @@
 struct Title_Interface{
 
 public:
-    virtual QString name() = 0;
+    virtual QString asString() = 0;
 
 };
+
+typedef std::unique_ptr<Title_Interface> Title;
 
 /**
  * @brief The Title_FactoryInterface struct
@@ -20,7 +22,7 @@ public:
 struct Title_FactoryInterface{
 
 public:
-    virtual std::unique_ptr<Title_Interface> create() = 0;
+    virtual Title create() = 0;
 
 };
 
