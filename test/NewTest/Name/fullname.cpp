@@ -42,42 +42,35 @@ Name FullName_ConcreteFactory::create()
     return std::make_unique<FullName_Concrete>();
 }
 
-FullNameConcreteBuilder::FullNameConcreteBuilder(){
-    _nameFactory = std::make_unique<FullName_ConcreteFactory>();
+FullName_ConcreteBuilder::FullName_ConcreteBuilder(){
+    initializeFactory();
     reset();
 }
 
-FullNameConcreteBuilder::FullNameConcreteBuilder(QString firstName, QString lastName, QString middleName) : FullNameConcreteBuilder(){
+FullName_ConcreteBuilder::FullName_ConcreteBuilder(QString firstName, QString lastName, QString middleName) : FullName_ConcreteBuilder(){
     setFirstName(firstName).setLastName(lastName).setMiddleName(middleName);
 }
 
-Name FullNameConcreteBuilder::build()
-{
-    auto _copy = std::move(_name);
-    reset();
-    return _copy;
-}
-
-FullNameConcreteBuilder &FullNameConcreteBuilder::setFirstName(QString firstName){
+FullName_ConcreteBuilder &FullName_ConcreteBuilder::setFirstName(QString firstName){
     auto fullName = dynamic_cast<FullName_Concrete*>(_name.get());
     fullName->setFirstName(firstName);
     return *this;
 }
 
-FullNameConcreteBuilder &FullNameConcreteBuilder::setMiddleName(QString middleName){
+FullName_ConcreteBuilder &FullName_ConcreteBuilder::setMiddleName(QString middleName){
     auto fullName = dynamic_cast<FullName_Concrete*>(_name.get());
     fullName->setMiddleName(middleName);
     return *this;
 }
 
-FullNameConcreteBuilder &FullNameConcreteBuilder::setLastName(QString lastName){
+FullName_ConcreteBuilder &FullName_ConcreteBuilder::setLastName(QString lastName){
     auto fullName = dynamic_cast<FullName_Concrete*>(_name.get());
     fullName->setLastName(lastName);
     return *this;
 }
 
-NameBuilder &FullNameConcreteBuilder::reset()
+NameBuilder_Interface &FullName_ConcreteBuilder::initializeFactory()
 {
-    _name = _nameFactory->create();
+    this->_nameFactory = std::make_unique<FullName_ConcreteFactory>();
     return *this;
 }

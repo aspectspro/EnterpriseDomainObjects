@@ -57,7 +57,7 @@ void NewTest::tst_abstractParty()
     TitleMs_ConcreteFactory Ms;
     TitleDr_ConcreteFactory Dr;
 
-    FullNameConcreteBuilder nameBuilder;
+    FullName_ConcreteBuilder nameBuilder;
     UuidIdentifier_ConcreteBuilder uuidBuilder;
 
     Employee_v_1 emp(Dr,

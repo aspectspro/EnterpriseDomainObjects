@@ -36,24 +36,60 @@ public:
 
 typedef std::unique_ptr<Name_FactoryInterface> NameFactory;
 
-/**
- * @brief The NameBuilder struct
- */
-struct NameBuilder{
+///**
+// * @brief The NameBuilder struct
+// */
+//struct NameBuilder_Interface{
+
+//public:
+//    /**
+//     * @brief reset - Resets builder product.
+//     * @return
+//     */
+//    virtual NameBuilder_Interface& reset() = 0;
+
+//    /**
+//     * @brief build - Builds product as unique_ptr, remember to call std::move(unique_ptr);
+//     * @return
+//     */
+//    virtual Name build() = 0;
+
+//};
+
+struct NameBuilder_Interface{
 
 public:
     /**
-     * @brief reset - Resets builder product.
+     * @brief reset - Resets builder Name interface.
      * @return
      */
-    virtual NameBuilder& reset() = 0;
+    virtual NameBuilder_Interface& reset(){
+        this->_name = _nameFactory->create();
+        return *this;
+    };
 
     /**
      * @brief build - Builds product as unique_ptr, remember to call std::move(unique_ptr);
      * @return
      */
-    virtual Name build() = 0;
+    virtual Name build(){
+        auto _temp = std::move(_name);
+        reset();
+        return _temp;
+    };
+
+    /**
+      @brief initializeFactory - Initializes Factory; Call from constructor of subclass.
+     */
+
+    virtual NameBuilder_Interface& initializeFactory() = 0;
+
+protected:
+    Name _name;
+    NameFactory _nameFactory;
 
 };
+
+
 
 #endif // NAMEINTERFACE_H

@@ -13,7 +13,7 @@ class Employee_v_1
 
 public:
     Employee_v_1(Title_FactoryInterface &titleFactory,
-                 NameBuilder& nameBuilder,
+                 NameBuilder_Interface& nameBuilder,
                  IdentifierBuilder_Interface& identifierBuilder){
 
         setTitle(titleFactory);
@@ -30,7 +30,7 @@ public:
         return *this;
     }
 
-    Employee_v_1 &setName(NameBuilder& builder){
+    Employee_v_1 &setName(NameBuilder_Interface& builder){
         this->_name = builder.build();
         return *this;
     }

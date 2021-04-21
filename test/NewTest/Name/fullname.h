@@ -37,29 +37,22 @@ public:
 /**
  * @brief The ConcreteBuilder struct
  */
-struct FullNameConcreteBuilder : public NameBuilder{
+struct FullName_ConcreteBuilder : public NameBuilder_Interface{
 
     // NameBuilder interface
 public:
-    FullNameConcreteBuilder();
+    FullName_ConcreteBuilder();
+    FullName_ConcreteBuilder(QString firstName, QString lastName, QString middleName = "");
 
-    FullNameConcreteBuilder(QString firstName, QString lastName, QString middleName = "");
+    FullName_ConcreteBuilder& setFirstName(QString firstName);
 
-    virtual Name build() override;
+    FullName_ConcreteBuilder& setMiddleName(QString middleName);
 
-    FullNameConcreteBuilder& setFirstName(QString firstName);
+    FullName_ConcreteBuilder& setLastName(QString lastName);
 
-    FullNameConcreteBuilder& setMiddleName(QString middleName);
-
-    FullNameConcreteBuilder& setLastName(QString lastName);
-
-private:
-    NameFactory _nameFactory;
-    Name _name;
-
-    // NameBuilder interface
+    // NameBuilder_Interface interface
 public:
-    virtual NameBuilder &reset() override;
+    virtual NameBuilder_Interface &initializeFactory() override;
 };
 
 
