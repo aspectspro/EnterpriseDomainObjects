@@ -51,6 +51,7 @@ if(EXISTS ${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
         Identifier/Identifier.h
         Identifier/IdentifierInterface.h
         Identifier/UuidIdentifier.h
+        Title/TitleSuffix.h
         )
     add_test(NAME ${PROJECT_NAME} COMMAND ${PROJECT_NAME})
 

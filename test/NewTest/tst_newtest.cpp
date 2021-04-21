@@ -18,6 +18,8 @@ private slots:
     void cleanupTestCase();    
     void tst_partyModule();
     void tst_abstractParty();
+    void tst_titleSuffix();
+    void tst_titlePrefix();
 
 };
 
@@ -63,36 +65,24 @@ void NewTest::tst_abstractParty()
             .setFirstName("Emma")
             .setLastName("Watson-Dillon");
 
-    qDebug() << fullNameTitleBuilder.build()->asString();
+    QVERIFY(fullNameTitleBuilder.build()->asString() == "Mrs Emma Watson-Dillon");
 
-    auto _newName = fullNameBuilder
-            .setLastName("Dillon")
-            .setFirstName("Greg")
-            .build();
+}
 
-    auto _me = fullNameTitleBuilder
-            .from(_newName)
-            .setPrefix(prefixBuilder.mr())
-            .build();
+void NewTest::tst_titleSuffix()
+{
+    TitleSuffix_ConcreteBuilder suffix;
+    QVERIFY(suffix.jr().build()->asString() == "Jr");
+    QVERIFY(suffix.sr().build()->asString() == "Sr");
+}
 
-    FullNameTitle_Concrete withoutTitle;
-    withoutTitle.setFirstName("Georgia").setLastName("Dillon").setMiddleName("Eloise");
-    qDebug() << withoutTitle.asString();
-
-    auto withoutTitle2 = fullNameTitleBuilder
-            .setFirstName("Greyson")
-            .setLastName("Dillon")
-            .setMiddleName("Enzo")
-            .build();
-
-    qDebug() << withoutTitle2->asString();
-
-    qDebug() << _me->asString();
-
-    withoutTitle.setPrefix(prefixBuilder.from("Dr"));
-
-    qDebug() << withoutTitle.asString();
-
+void NewTest::tst_titlePrefix()
+{
+    TitlePrefix_ConcreteBuilder prefix;
+    QVERIFY(prefix.dr().build()->asString() == "Dr");
+    QVERIFY(prefix.mr().build()->asString() == "Mr");
+    QVERIFY(prefix.ms().build()->asString() == "Ms");
+    QVERIFY(prefix.mrs().build()->asString() == "Mrs");
 }
 
 QTEST_MAIN(NewTest)
