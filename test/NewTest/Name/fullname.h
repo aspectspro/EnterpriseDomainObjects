@@ -134,13 +134,14 @@ public:
         auto _temp = dynamic_cast<FullNameTitle_Concrete*>(name.get());
         TitlePrefix_ConcreteBuilder builder;
 
+        //Checks if Name is initialized, prevents nullptr error.
         if(_temp != nullptr)
-            setTitle(builder.from(_temp->getPrefix()));
+            setPrefix(builder.from(_temp->getPrefix()));
 
         return *this;
     }
 
-    FullNameTitle_ConcreteBuilder& setTitle(TitleBuilder_Interface &title){
+    FullNameTitle_ConcreteBuilder& setPrefix(TitleBuilder_Interface &title){
         auto _temp = dynamic_cast<FullNameTitle_Concrete*>(_name.get());
         _temp->setPrefix(title);
         return *this;

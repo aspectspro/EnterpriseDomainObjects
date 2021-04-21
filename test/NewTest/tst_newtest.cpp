@@ -59,7 +59,7 @@ void NewTest::tst_abstractParty()
     FullNameTitle_ConcreteBuilder fullNameTitleBuilder;
 
     fullNameTitleBuilder
-            .setTitle(prefixBuilder.mrs())
+            .setPrefix(prefixBuilder.mrs())
             .setFirstName("Emma")
             .setLastName("Watson-Dillon");
 
@@ -72,7 +72,7 @@ void NewTest::tst_abstractParty()
 
     auto _me = fullNameTitleBuilder
             .from(_newName)
-            .setTitle(prefixBuilder.mr())
+            .setPrefix(prefixBuilder.mr())
             .build();
 
     FullNameTitle_Concrete withoutTitle;
