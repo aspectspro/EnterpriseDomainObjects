@@ -43,6 +43,7 @@ if(EXISTS ${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
         Title/TitleInterface.h
         Title/titlemr.cpp
         Title/titlemr.h
+        Title/TitlePrefix.h
         Name/name.h
         Name/NameInterface.h
         Name/fullName.h

@@ -52,28 +52,24 @@ void NewTest::tst_partyModule()
 
 void NewTest::tst_abstractParty()
 {
-    TitleMr_ConcreteFactory Mr;
-    TitleMrs_ConcreteFactory Mrs;
-    TitleMs_ConcreteFactory Ms;
-    TitleDr_ConcreteFactory Dr;
-
     FullName_ConcreteBuilder nameBuilder;
     UuidIdentifier_ConcreteBuilder uuidBuilder;
+    TitlePrefix_ConcreteBuilder prefixBuilder;
 
-    Employee_v_1 emp(Dr,
-                     nameBuilder.setFirstName("Greg").setLastName("Dillon").setMiddleName("DR"),
+    TitleName_ConcreteBuilder nameTitleBuilder;
+    nameTitleBuilder.setTitle(prefixBuilder.mrs()).setFirstName("Emma").setLastName("Watson-Dillon");
+
+    Employee_v_1 emp(nameTitleBuilder,
                      uuidBuilder.generateNewId());
 
+    Employee_v_1_Mapper mapper;
+    mapper.insert(emp);
 
-    qDebug() << emp.getIdentifier()->asString();
-    qDebug() << emp.getTitle()->asString();
-    qDebug() << emp.getName()->asString();
+    auto _newName = nameBuilder.setLastName("Dillon").setFirstName("Greg").build();
+    qDebug() << _newName->asString();
 
-    auto _newName = nameBuilder.from(emp.getName()).build();
-    QVERIFY(_newName->asString() == emp.getName()->asString());
-
-    auto _newId = uuidBuilder.from(emp.getIdentifier()).build();
-    QVERIFY(_newId->asString() == emp.getIdentifier()->asString());
+    auto _ne = nameTitleBuilder.setTitle(prefixBuilder.dr()).FullName_ConcreteBuilder::from(_newName).build();
+    qDebug() << _ne->asString();
 
 }
 

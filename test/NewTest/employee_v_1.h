@@ -12,22 +12,11 @@ class Employee_v_1
 {
 
 public:
-    Employee_v_1(Title_FactoryInterface &titleFactory,
-                 NameBuilder_Interface& nameBuilder,
+    Employee_v_1(NameBuilder_Interface& nameBuilder,
                  IdentifierBuilder_Interface& identifierBuilder){
 
-        setTitle(titleFactory);
         setName(nameBuilder);
         setIdentifier(identifierBuilder);
-    }
-
-    Title& getTitle(){
-        return _title;
-    }
-
-    Employee_v_1 &setTitle(Title_FactoryInterface &titleFactory){
-        this->_title = titleFactory.create();
-        return *this;
     }
 
     Employee_v_1 &setName(NameBuilder_Interface& builder){
@@ -40,7 +29,7 @@ public:
     }
 
     QString printName(){
-        auto _pr = QString("%1 %2").arg(_title->asString()).arg(_name->asString());
+        auto _pr = QString("%1").arg(_name->asString());
         return _pr;
     }
 
@@ -54,7 +43,6 @@ public:
     }
 
 private:
-    Title _title;
     Name _name;
     Identifier _id;
 };
@@ -62,9 +50,24 @@ private:
 class Employee_v_1_Mapper{
 
 public:
-    virtual void insert(Employee_v_1 &employee) = 0;
-    virtual void remove(Employee_v_1 &employee) = 0;
-    virtual void update(Employee_v_1 &employee) = 0;
+    virtual void insert(Employee_v_1 &employee){
+
+        auto _name = employee.getName()->asString();
+        auto _id = employee.getIdentifier()->asString();
+
+        qDebug() << "Inserting Employee";
+
+        qDebug() << _id;
+        qDebug() << _name;
+    };
+
+    virtual void remove(Employee_v_1 &employee){
+
+    }
+
+    virtual void update(Employee_v_1 &employee){
+
+    };
 
 };
 

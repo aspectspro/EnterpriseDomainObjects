@@ -1,6 +1,7 @@
 #ifndef FULLNAME_H
 #define FULLNAME_H
 #include "NameInterface.h"
+#include "../Title/Title.h"
 
 /**
  * @brief The FullName_Concrete struct
@@ -44,7 +45,7 @@ public:
     FullName_ConcreteBuilder();
     FullName_ConcreteBuilder(QString firstName, QString lastName, QString middleName = "");
 
-    FullName_ConcreteBuilder& from(Name &name){
+    virtual FullName_ConcreteBuilder& from(Name &name){
         auto _temp = dynamic_cast<FullName_Concrete*>(name.get());
         setFirstName(_temp->getFirstName());
         setLastName(_temp->getLastName());
@@ -64,5 +65,81 @@ public:
     virtual NameBuilder_Interface &initializeFactory() override;
 };
 
+/**
+ * @brief The TitleName_Concrete struct
+ */
+struct TitleName_Concrete : public FullName_Concrete{
+
+
+    // Name_Interface interface
+public:
+    virtual QString asString() override
+    {
+        auto _name = this->FullName_Concrete::asString();
+        return _name.prepend(getPrefix()->asString().isEmpty() ? "" : getPrefix()->asString().append(" "));
+    }
+
+    TitleName_Concrete& setPrefix(Title prefix){
+        this->_prefix = std::move(prefix);
+        return *this;
+    }
+
+    Title& getPrefix(){
+        return _prefix;
+    }
+
+private:
+    Title _prefix;
+
+};
+
+/**
+ * @brief The TItleName_ConcreteFactory struct
+ */
+struct TItleName_ConcreteFactory : public FullName_ConcreteFactory{
+    // FullName_Concrete_FactoryInterface interface
+public:
+    virtual Name create() override
+    {
+        return std::make_unique<TitleName_Concrete>();
+    }
+};
+
+struct TitleName_ConcreteBuilder : public FullName_ConcreteBuilder{
+
+
+    // NameBuilder_Interface interface
+public:
+    TitleName_ConcreteBuilder(){
+        initializeFactory();
+        reset();
+    }
+
+    virtual NameBuilder_Interface &initializeFactory() override
+    {
+        this->_nameFactory = std::make_unique<TItleName_ConcreteFactory>();
+        return *this;
+    }
+
+    // FullName_ConcreteBuilder interface
+public:
+    virtual FullName_ConcreteBuilder &from(Name &name) override
+    {
+        this->FullName_ConcreteBuilder::from(name);
+
+        auto _temp2 = dynamic_cast<TitleName_Concrete*>(_name.get());
+
+        TitlePrefix_ConcreteBuilder builder;
+        setTitle(builder.from(*_temp2->getPrefix().get()));
+
+        return *this;
+    }
+
+    FullName_ConcreteBuilder& setTitle(TitleBuilder_Interface &title){
+        auto _temp = dynamic_cast<TitleName_Concrete*>(_name.get());
+        _temp->setPrefix(title.build());
+        return *this;
+    }
+};
 
 #endif // FULLNAME_H
