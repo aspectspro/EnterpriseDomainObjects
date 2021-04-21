@@ -68,7 +68,7 @@ public:
 /**
  * @brief The TitleName_Concrete struct
  */
-struct TitleName_Concrete : public FullName_Concrete{
+struct FullNameTitle_Concrete : public FullName_Concrete{
 
 
     // Name_Interface interface
@@ -76,10 +76,15 @@ public:
     virtual QString asString() override
     {
         auto _name = this->FullName_Concrete::asString();
+
+        //Checking if _prefix is initialized, prevents nullptr error.
+        if(_prefix.get() == nullptr)
+            return _name;
+
         return _name.prepend(getPrefix()->asString().isEmpty() ? "" : getPrefix()->asString().append(" "));
     }
 
-    TitleName_Concrete& setPrefix(TitleBuilder_Interface& prefix){
+    FullNameTitle_Concrete& setPrefix(TitleBuilder_Interface& prefix){
         this->_prefix = prefix.build();
         return *this;
     }
@@ -96,37 +101,37 @@ private:
 /**
  * @brief The TItleName_ConcreteFactory struct
  */
-struct TItleName_ConcreteFactory : public FullName_ConcreteFactory{
+struct FullNameTitle_ConcreteFactory : public FullName_ConcreteFactory{
     // FullName_Concrete_FactoryInterface interface
 public:
     virtual Name create() override
     {
-        return std::make_unique<TitleName_Concrete>();
+        return std::make_unique<FullNameTitle_Concrete>();
     }
 };
 
-struct TitleName_ConcreteBuilder : public FullName_ConcreteBuilder{
+struct FullNameTitle_ConcreteBuilder : public FullName_ConcreteBuilder{
 
     // NameBuilder_Interface interface
 public:
-    TitleName_ConcreteBuilder(){
+    FullNameTitle_ConcreteBuilder(){
         initializeFactory();
         reset();
     }
 
     virtual NameBuilder_Interface &initializeFactory() override
     {
-        this->_nameFactory = std::make_unique<TItleName_ConcreteFactory>();
+        this->_nameFactory = std::make_unique<FullNameTitle_ConcreteFactory>();
         return *this;
     }
 
     // FullName_ConcreteBuilder interface
 public:
-    virtual TitleName_ConcreteBuilder &from(Name &name) override
+    virtual FullNameTitle_ConcreteBuilder &from(Name &name) override
     {
         this->FullName_ConcreteBuilder::from(name);
 
-        auto _temp = dynamic_cast<TitleName_Concrete*>(name.get());
+        auto _temp = dynamic_cast<FullNameTitle_Concrete*>(name.get());
         TitlePrefix_ConcreteBuilder builder;
 
         if(_temp != nullptr)
@@ -135,8 +140,8 @@ public:
         return *this;
     }
 
-    TitleName_ConcreteBuilder& setTitle(TitleBuilder_Interface &title){
-        auto _temp = dynamic_cast<TitleName_Concrete*>(_name.get());
+    FullNameTitle_ConcreteBuilder& setTitle(TitleBuilder_Interface &title){
+        auto _temp = dynamic_cast<FullNameTitle_Concrete*>(_name.get());
         _temp->setPrefix(title);
         return *this;
     }
