@@ -26,4 +26,6 @@ public:
 
 };
 
+typedef std::unique_ptr<Title_FactoryInterface> TitleFactory;
+
 #endif // TITLEINTERFACE_H

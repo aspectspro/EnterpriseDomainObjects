@@ -61,15 +61,13 @@ void NewTest::tst_abstractParty()
     UuidIdentifier_ConcreteBuilder uuidBuilder;
 
     Employee_v_1 emp(Dr,
-                     nameBuilder.setFirstName("Greg").setLastName("Dillon"),
-                     uuidBuilder.setId("id"));
+                     nameBuilder.setFirstName("Greg").setLastName("Dillon").setMiddleName("DR"),
+                     uuidBuilder.generateNewId());
 
-    qDebug() << emp.printName();
 
-    emp.setTitle(Mrs).setName(nameBuilder.setFirstName("Emma").setLastName("Watson-Dillon"));
-
-    qDebug() << emp.getName()->asString();
     qDebug() << emp.getIdentifier()->asString();
+    qDebug() << emp.getTitle()->asString();
+    qDebug() << emp.getName()->asString();
 
 }
 

@@ -47,6 +47,9 @@ if(EXISTS ${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
         Name/NameInterface.h
         Name/fullName.h
         Name/fullName.cpp
+        Identifier/Identifier.h
+        Identifier/IdentifierInterface.h
+        Identifier/UuidIdentifier.h
         )
     add_test(NAME ${PROJECT_NAME} COMMAND ${PROJECT_NAME})
 

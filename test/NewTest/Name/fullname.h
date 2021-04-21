@@ -54,7 +54,7 @@ public:
     FullNameConcreteBuilder& setLastName(QString lastName);
 
 private:
-    std::unique_ptr<Name_FactoryInterface> _nameFactory;
+    NameFactory _nameFactory;
     Name _name;
 
     // NameBuilder interface
