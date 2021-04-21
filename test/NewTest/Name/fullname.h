@@ -79,8 +79,8 @@ public:
         return _name.prepend(getPrefix()->asString().isEmpty() ? "" : getPrefix()->asString().append(" "));
     }
 
-    TitleName_Concrete& setPrefix(Title prefix){
-        this->_prefix = std::move(prefix);
+    TitleName_Concrete& setPrefix(TitleBuilder_Interface& prefix){
+        this->_prefix = prefix.build();
         return *this;
     }
 
@@ -107,7 +107,6 @@ public:
 
 struct TitleName_ConcreteBuilder : public FullName_ConcreteBuilder{
 
-
     // NameBuilder_Interface interface
 public:
     TitleName_ConcreteBuilder(){
@@ -123,21 +122,22 @@ public:
 
     // FullName_ConcreteBuilder interface
 public:
-    virtual FullName_ConcreteBuilder &from(Name &name) override
+    virtual TitleName_ConcreteBuilder &from(Name &name) override
     {
         this->FullName_ConcreteBuilder::from(name);
 
-        auto _temp2 = dynamic_cast<TitleName_Concrete*>(_name.get());
-
+        auto _temp = dynamic_cast<TitleName_Concrete*>(name.get());
         TitlePrefix_ConcreteBuilder builder;
-        setTitle(builder.from(*_temp2->getPrefix().get()));
+
+        if(_temp != nullptr)
+            setTitle(builder.from(_temp->getPrefix()));
 
         return *this;
     }
 
-    FullName_ConcreteBuilder& setTitle(TitleBuilder_Interface &title){
+    TitleName_ConcreteBuilder& setTitle(TitleBuilder_Interface &title){
         auto _temp = dynamic_cast<TitleName_Concrete*>(_name.get());
-        _temp->setPrefix(title.build());
+        _temp->setPrefix(title);
         return *this;
     }
 };

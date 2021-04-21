@@ -46,8 +46,8 @@ public:
         return *this;
     }
 
-    TitlePrefix_ConcreteBuilder &from(Title_Interface &title){
-        _cast()->setTitle(title.asString());
+    TitlePrefix_ConcreteBuilder &from(Title &title){
+        _cast()->setTitle(title->asString());
         return *this;
     }
 

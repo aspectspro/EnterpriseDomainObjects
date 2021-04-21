@@ -57,20 +57,25 @@ void NewTest::tst_abstractParty()
     TitlePrefix_ConcreteBuilder prefixBuilder;
 
     TitleName_ConcreteBuilder nameTitleBuilder;
-    nameTitleBuilder.setTitle(prefixBuilder.mrs()).setFirstName("Emma").setLastName("Watson-Dillon");
 
-    Employee_v_1 emp(nameTitleBuilder,
-                     uuidBuilder.generateNewId());
+    nameTitleBuilder
+            .setTitle(prefixBuilder.mrs())
+            .setFirstName("Emma")
+            .setLastName("Watson-Dillon");
 
-    Employee_v_1_Mapper mapper;
-    mapper.insert(emp);
+    qDebug() << nameTitleBuilder.build()->asString();
 
-    auto _newName = nameBuilder.setLastName("Dillon").setFirstName("Greg").build();
-    qDebug() << _newName->asString();
+    auto _newName = nameBuilder
+            .setLastName("Dillon")
+            .setFirstName("Greg")
+            .build();
 
-    auto _ne = nameTitleBuilder.setTitle(prefixBuilder.dr()).FullName_ConcreteBuilder::from(_newName).build();
+    auto _ne = nameTitleBuilder
+            .from(_newName)
+            .setTitle(prefixBuilder.mr())
+            .build();
+
     qDebug() << _ne->asString();
-
 }
 
 QTEST_MAIN(NewTest)
