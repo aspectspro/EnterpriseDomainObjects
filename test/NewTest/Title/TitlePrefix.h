@@ -51,6 +51,11 @@ public:
         return *this;
     }
 
+    TitlePrefix_ConcreteBuilder &from(QString titleString){
+        _cast()->setTitle(titleString);
+        return *this;
+    }
+
     TitlePrefix_ConcreteBuilder& mr(){
         _cast()->setTitle("Mr");
         return *this;

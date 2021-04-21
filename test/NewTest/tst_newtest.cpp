@@ -88,6 +88,11 @@ void NewTest::tst_abstractParty()
     qDebug() << withoutTitle2->asString();
 
     qDebug() << _me->asString();
+
+    withoutTitle.setPrefix(prefixBuilder.from("Dr"));
+
+    qDebug() << withoutTitle.asString();
+
 }
 
 QTEST_MAIN(NewTest)
