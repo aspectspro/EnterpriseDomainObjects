@@ -69,6 +69,14 @@ void NewTest::tst_abstractParty()
     qDebug() << emp.getTitle()->asString();
     qDebug() << emp.getName()->asString();
 
+    emp.setName(nameBuilder.from(emp.getName()).setFirstName("Emma").setMiddleName());
+
+    qDebug() << emp.getName()->asString();
+
+    auto _newId = uuidBuilder.from(emp.getIdentifier()).build();
+
+    QVERIFY(_newId->asString() == emp.getIdentifier()->asString());
+
 }
 
 QTEST_MAIN(NewTest)

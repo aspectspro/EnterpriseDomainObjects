@@ -44,11 +44,20 @@ public:
     FullName_ConcreteBuilder();
     FullName_ConcreteBuilder(QString firstName, QString lastName, QString middleName = "");
 
-    FullName_ConcreteBuilder& setFirstName(QString firstName);
+    FullName_ConcreteBuilder& from(Name &name){
+        auto _temp = dynamic_cast<FullName_Concrete*>(name.get());
+        setFirstName(_temp->getFirstName());
+        setLastName(_temp->getLastName());
+        setMiddleName(_temp->getMiddleName());
 
-    FullName_ConcreteBuilder& setMiddleName(QString middleName);
+        return *this;
+    }
 
-    FullName_ConcreteBuilder& setLastName(QString lastName);
+    FullName_ConcreteBuilder& setFirstName(QString firstName = "");
+
+    FullName_ConcreteBuilder& setMiddleName(QString middleName = "");
+
+    FullName_ConcreteBuilder& setLastName(QString lastName = "");
 
     // NameBuilder_Interface interface
 public:

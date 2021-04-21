@@ -3,8 +3,6 @@
 
 #include "../src/EnterpriseDomainObjects.h"
 
-
-
 /**
  * @brief The Name_Interface struct
  */
@@ -35,26 +33,6 @@ public:
 };
 
 typedef std::unique_ptr<Name_FactoryInterface> NameFactory;
-
-///**
-// * @brief The NameBuilder struct
-// */
-//struct NameBuilder_Interface{
-
-//public:
-//    /**
-//     * @brief reset - Resets builder product.
-//     * @return
-//     */
-//    virtual NameBuilder_Interface& reset() = 0;
-
-//    /**
-//     * @brief build - Builds product as unique_ptr, remember to call std::move(unique_ptr);
-//     * @return
-//     */
-//    virtual Name build() = 0;
-
-//};
 
 struct NameBuilder_Interface{
 
@@ -89,7 +67,5 @@ protected:
     NameFactory _nameFactory;
 
 };
-
-
 
 #endif // NAMEINTERFACE_H

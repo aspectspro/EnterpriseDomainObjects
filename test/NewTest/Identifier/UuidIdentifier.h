@@ -48,6 +48,16 @@ public:
     }
 
     /**
+     * @brief from
+     * @param identifier
+     * @return
+     */
+    UuidIdentifier_ConcreteBuilder& from(Identifier &identifier){
+        setId(identifier->asString());
+        return *this;
+    }
+
+    /**
      * @brief generateNewId - Call this method to generate new Uuid.
      * @return
      */
