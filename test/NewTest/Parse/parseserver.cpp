@@ -29,3 +29,13 @@ void ParseCreateObjectResponse::setError(const QString &value)
 {
     error = value;
 }
+
+QString ParseCreateObjectResponse::getUpdatedAt() const
+{
+    return updatedAt;
+}
+
+void ParseCreateObjectResponse::setUpdatedAt(const QString &value)
+{
+    updatedAt = value;
+}

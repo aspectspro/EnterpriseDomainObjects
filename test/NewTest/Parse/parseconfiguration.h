@@ -14,8 +14,14 @@ class ParseConfiguration : public AbstractDomainObject
     Q_PROPERTY(QString restApiKey READ getRestApiKey WRITE setRestApiKey)
     Q_PROPERTY(int port READ getPort WRITE setPort)
 
+
+    static std::unique_ptr<ParseConfiguration> _instance;
+
 public:
     ParseConfiguration();
+
+    static ParseConfiguration& getInstance();
+
     virtual const QMetaObject &metaObject() const override;
 
     QString getServerDomain() const;

@@ -1,8 +1,16 @@
 #include "parseconfiguration.h"
 
+std::unique_ptr<ParseConfiguration> ParseConfiguration::_instance = 0;
+
 ParseConfiguration::ParseConfiguration()
 {
 
+}
+
+ParseConfiguration &ParseConfiguration::getInstance(){
+    if(_instance.get() == nullptr)
+        _instance = std::make_unique<ParseConfiguration>();
+    return *_instance.get();
 }
 
 const QMetaObject &ParseConfiguration::metaObject() const

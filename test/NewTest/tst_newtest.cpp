@@ -56,11 +56,23 @@ void NewTest::tst_partyModule()
 
 }
 
+struct ParsePersonMapper : public ParseMapper{
+
+    // ParseMapper interface
+public:
+    virtual QString className() override;
+};
+
+QString ParsePersonMapper::className()
+{
+    return "People";
+}
+
 
 
 void NewTest::tst_abstractParty()
 {
-    ParseConfiguration configuration;
+    auto configuration = ParseConfiguration::getInstance();
 
     configuration.setServerDomain("localhost")
             .setPort(1337)
@@ -75,20 +87,20 @@ void NewTest::tst_abstractParty()
     person.setLastName("Dillon");
     person.setMiddleName("DR");
 
-    QString className = "People";
-    ParsePostObject postObject(configuration);
-
     try {
-        auto reply = postObject.createObject(className,person);
+
+        ParsePersonMapper mapper;
+        mapper.postObject(person);
+
+        qDebug() << person.getObjectId();
+
+//        auto loaded = mapper.getObject<ParsePerson>(person.getObjectId());
+
+//        if(*loaded.get() == person){
+
+//        }
 
 
-        ParseDeleteObject deleteResource(configuration);
-        deleteResource.deleteByObjectId(className,person.getObjectId());
-
-        ParseGetObject getObject(configuration);
-
-        auto _person = getObject.getObject<ParsePerson>(className,person.getObjectId());
-        QVERIFY(person == *_person.get());
 
     } catch (std::exception &e) {
         qInfo() << e.what();
