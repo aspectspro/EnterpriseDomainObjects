@@ -1,75 +1,8 @@
 #ifndef PARSESERVER_H
 #define PARSESERVER_H
 #include "parseconfiguration.h"
+#include "pathbuilderinterface.h"
 #include <QtNetwork>
-
-struct PathBuilder{
-public:
-    virtual PathBuilder& reset() = 0;
-    virtual QString build() = 0;
-    virtual PathBuilder& append(QString path) = 0;
-    virtual QString separator() = 0;
-
-protected:
-    QString pathToReturn;
-    QString resetTo;
-};
-
-struct UrlPathBuilder : public PathBuilder{
-
-    // PathBuilder interface
-public:
-
-    UrlPathBuilder(QString resetTo = ""){
-        this->resetTo = resetTo;
-
-        reset();
-    }
-
-    virtual PathBuilder &reset() override
-    {
-        pathToReturn = resetTo;
-        return *this;
-    }
-
-    virtual QString build() override
-    {
-        auto _return = pathToReturn;
-
-        if(_return.length() != 0){
-
-            if(_return.at(0) != separator())
-                _return = _return.prepend(separator());
-
-            if(_return.at(_return.length() - 1) != separator())
-                _return = _return.append(separator());
-
-        }
-
-        reset();
-        return _return;
-    }
-
-    virtual PathBuilder &append(QString path) override
-    {
-        if(path.length() == 0)
-            return *this;
-
-        if(pathToReturn.length() == 0)
-            pathToReturn = pathToReturn.append(separator());
-        else if(pathToReturn.at(pathToReturn.length() - 1) != separator())
-            pathToReturn = pathToReturn.append(separator());
-
-        pathToReturn = pathToReturn.append(path);
-        return *this;
-    }
-
-protected:
-    virtual QString separator() override
-    {
-        return QString("/");
-    }
-};
 
 struct ParseRequestsApi{
 
@@ -97,7 +30,7 @@ public:
     };
 
 protected:
-    std::unique_ptr<PathBuilder> paths;
+    std::unique_ptr<PathBuilderInterface> paths;
     const ParseConfiguration &configuration;
     QNetworkAccessManager network;
 
@@ -111,6 +44,36 @@ public:
     }
 };
 
+struct ParseCreateObjectResponse : public AbstractDomainObject{
+
+    Q_GADGET
+    Q_PROPERTY(QString objectId READ getObjectId WRITE setObjectId)
+    Q_PROPERTY(QString createdAt READ getCreatedAt WRITE setCreatedAt)
+    Q_PROPERTY(QString error READ getError WRITE setError)
+
+    // AbstractDomainObject interface
+public:
+    virtual const QMetaObject &metaObject() const override
+    {
+        return this->staticMetaObject;
+    }
+
+    QString getObjectId() const;
+    void setObjectId(const QString &value);
+
+    QString getCreatedAt() const;
+    void setCreatedAt(const QString &value);
+
+    QString getError() const;
+    void setError(const QString &value);
+
+private:
+    QString objectId, createdAt, error;
+};
+
+Q_DECLARE_METATYPE(ParseCreateObjectResponse)
+
+
 struct ParseCreateObject : public ParseObjectsApi{
 
 public:
@@ -118,7 +81,7 @@ public:
 
     }
 
-    QJsonObject createObject(QString className, AbstractDomainObject& domainObject){
+    QJsonObject createObject(QString className, ParseBaseObject& domainObject){
         paths->append(className);
 
         QJsonDocument doc;
@@ -136,6 +99,16 @@ public:
         });
         loop.exec();
 
+        ParseCreateObjectResponse responseObject;
+        responseObject.fromJson(response);
+
+        if(responseObject.getError().length() > 0)
+            throw std::exception(responseObject.getError().toUtf8());
+
+        domainObject.setObjectId(responseObject.getObjectId());
+        domainObject.setCreatedAt(responseObject.getCreatedAt());
+        domainObject.setUpdatedAt(responseObject.getCreatedAt());
+
         return response;
     }
 
@@ -146,39 +119,44 @@ struct ParseGetObject : public ParseObjectsApi{
 public:
     ParseGetObject(const ParseConfiguration &configuration) : ParseObjectsApi(configuration){}
 
-    QNetworkReply* getObject(QString className, QString objectId){
+    template<typename T>
+    std::unique_ptr<T> getObject(QString className, QString objectId){
+
+        if(objectId.length() == 0)
+            throw std::exception("Empty objectId");
+
         paths->append(className).append(objectId);
+
+        QJsonDocument doc;
         auto request = getRequest();
         auto reply = network.get(request);
 
-        return reply;
+        QEventLoop loop;
+        QJsonObject response;
+
+        QObject::connect(reply,&QNetworkReply::finished,[&response,&loop,&reply](){
+            auto json = QJsonDocument::fromJson(reply->readAll());
+            response = json.object();
+            loop.quit();
+        });
+        loop.exec();
+
+        ParseCreateObjectResponse res;
+        res.fromJson(response);
+        if(res.getError().length() > 0)
+            throw std::exception(res.getError().toUtf8());
+
+        auto _type = std::make_unique<T>();
+        auto _cast = dynamic_cast<ParseBaseObject*>(_type.get());
+
+        if(_cast != nullptr)
+            _cast->fromJson(response);
+
+        return std::move(_type);
     }
 
 };
 
-struct ParseCreateResponse : public AbstractDomainObject{
 
-    Q_GADGET
-    Q_PROPERTY(QString objectId READ getObjectId WRITE setObjectId)
-    Q_PROPERTY(QString createdAt READ getCreatedAt WRITE setCreatedAt)
-
-    // AbstractDomainObject interface
-public:
-    virtual const QMetaObject &metaObject() const override
-    {
-        return this->staticMetaObject;
-    }
-
-    QString getObjectId() const;
-    void setObjectId(const QString &value);
-
-    QString getCreatedAt() const;
-    void setCreatedAt(const QString &value);
-
-private:
-    QString objectId, createdAt;
-};
-
-Q_DECLARE_METATYPE(ParseCreateResponse)
 
 #endif // PARSESERVER_H

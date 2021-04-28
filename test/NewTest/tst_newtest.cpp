@@ -40,10 +40,10 @@ NewTest::~NewTest()
 
 void NewTest::initTestCase()
 {
-    DatabaseSingleton::getInstance()->initializeDatabase();
+//    DatabaseSingleton::getInstance()->initializeDatabase();
 
-    Core core;
-    core.initializeCoreTables();
+//    Core core;
+//    core.initializeCoreTables();
 }
 
 void NewTest::cleanupTestCase()
@@ -70,51 +70,24 @@ void NewTest::tst_abstractParty()
             .setRestApiKey("rest");
 
 
-    Person p;
-    p.setFirst_name("Greg");
-    p.setLast_name("Dillon");
+    ParsePerson person;
+    person.setFirstName("Greg");
+    person.setLastName("Dillon");
+    person.setMiddleName("DR");
 
-    QString className = "Todo";
+    QString className = "People";
     ParseCreateObject createApi(configuration);
-    auto reply = createApi.createObject(className,p);
 
-    for(int i = 0; i < 1000; i++){
-        p.setFirst_name(p.getFirst_name().append(i));
-        qDebug() << createApi.createObject(className,p);
+    try {
+        auto reply = createApi.createObject(className,person);
+
+        ParseGetObject fetch(configuration);
+        auto _person = fetch.getObject<ParsePerson>(className,person.getObjectId());
+        QVERIFY(person == *_person.get());
+
+    } catch (std::exception &e) {
+        qInfo() << e.what();
     }
-
-
-
-//    QSignalSpy spy(reply, &QNetworkReply::finished);
-
-//    QString obj;
-
-//    connect(reply,&QNetworkReply::finished,[&obj,reply](){
-
-//        auto doc = QJsonDocument::fromJson(reply->readAll());
-//        ParseCreateResponse created;
-//        created.fromJson(doc.object());
-
-//        obj = created.getObjectId();
-
-//        qDebug() << created.toJsonObject();
-//    });
-
-//    spy.wait();
-
-
-//    ParseGetObject get(configuration);
-
-//    auto getReply = get.getObject(className,obj);
-
-//    QSignalSpy spy2(getReply,&QNetworkReply::finished);
-
-//    connect(getReply,&QNetworkReply::finished,[getReply](){
-
-//        qDebug() << getReply->readAll();
-//    });
-
-//    spy2.wait();
 
 }
 

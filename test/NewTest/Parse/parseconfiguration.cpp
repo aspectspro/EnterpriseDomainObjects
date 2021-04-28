@@ -87,3 +87,74 @@ ParseConfiguration &ParseConfiguration::setMountPath(const QString &value)
     mountPath = value;
     return *this;
 }
+
+QJsonValue ParseBaseObject::getCreatedAt() const
+{
+    return createdAt;
+}
+
+void ParseBaseObject::setCreatedAt(const QJsonValue &value)
+{
+    createdAt = value;
+}
+
+QJsonValue ParseBaseObject::getUpdatedAt() const
+{
+    return updatedAt;
+}
+
+void ParseBaseObject::setUpdatedAt(const QJsonValue &value)
+{
+    updatedAt = value;
+}
+
+const QMetaObject &ParseBaseObject::metaObject() const
+{
+    return this->staticMetaObject;
+}
+
+QString ParseBaseObject::getObjectId() const
+{
+    return objectId;
+}
+
+void ParseBaseObject::setObjectId(const QString &value)
+{
+    objectId = value;
+}
+
+QString ParsePerson::getFirstName() const
+{
+    return firstName;
+}
+
+void ParsePerson::setFirstName(const QString &value)
+{
+    firstName = value;
+}
+
+QString ParsePerson::getMiddleName() const
+{
+    return middleName;
+}
+
+void ParsePerson::setMiddleName(const QString &value)
+{
+    middleName = value;
+}
+
+QString ParsePerson::getLastName() const
+{
+    return lastName;
+}
+
+void ParsePerson::setLastName(const QString &value)
+{
+    lastName = value;
+}
+
+
+const QMetaObject &ParsePerson::metaObject() const
+{
+    return this->staticMetaObject;
+}

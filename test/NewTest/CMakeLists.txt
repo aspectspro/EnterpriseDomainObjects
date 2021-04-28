@@ -58,6 +58,8 @@ if(EXISTS ${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
         Parse/parseconfiguration.cpp
         Parse/ParseServer.h
         Parse/ParseServer.cpp
+        Parse/PathBuilderInterface.h
+        Parse/PathBuilderInterface.cpp
         )
     add_test(NAME ${PROJECT_NAME} COMMAND ${PROJECT_NAME})
 

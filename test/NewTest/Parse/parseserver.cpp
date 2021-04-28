@@ -1,21 +1,31 @@
 #include "parseserver.h"
 
-QString ParseCreateResponse::getObjectId() const
+QString ParseCreateObjectResponse::getObjectId() const
 {
     return objectId;
 }
 
-void ParseCreateResponse::setObjectId(const QString &value)
+void ParseCreateObjectResponse::setObjectId(const QString &value)
 {
     objectId = value;
 }
 
-QString ParseCreateResponse::getCreatedAt() const
+QString ParseCreateObjectResponse::getCreatedAt() const
 {
     return createdAt;
 }
 
-void ParseCreateResponse::setCreatedAt(const QString &value)
+void ParseCreateObjectResponse::setCreatedAt(const QString &value)
 {
     createdAt = value;
+}
+
+QString ParseCreateObjectResponse::getError() const
+{
+    return error;
+}
+
+void ParseCreateObjectResponse::setError(const QString &value)
+{
+    error = value;
 }
