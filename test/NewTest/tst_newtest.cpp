@@ -2,6 +2,10 @@
 #include <QCoreApplication>
 #include "../src/EnterpriseDomainObjects.h"
 #include "employee_v_1.h"
+#include "Parse/Parse.h"
+#include <QtNetwork>
+#include <QtWebSockets/QWebSocket>
+#include <QThread>
 
 // add necessary includes here
 
@@ -18,8 +22,9 @@ private slots:
     void cleanupTestCase();    
     void tst_partyModule();
     void tst_abstractParty();
-    void tst_titleSuffix();
-    void tst_titlePrefix();
+
+private:
+    std::unique_ptr<SetupModule> module = std::unique_ptr<SetupModule>(new PartyModule());
 
 };
 
@@ -48,42 +53,66 @@ void NewTest::cleanupTestCase()
 
 void NewTest::tst_partyModule()
 {
-    auto module = std::unique_ptr<SetupModule>(new PartyModule());
-    module->install();
+
 }
+
+
 
 void NewTest::tst_abstractParty()
 {
-    FullName_ConcreteBuilder fullNameBuilder;
-    UuidIdentifier_ConcreteBuilder uuidBuilder;
+    ParseConfiguration configuration;
 
-    TitlePrefix_ConcreteBuilder prefixBuilder;
-    FullNameTitle_ConcreteBuilder fullNameTitleBuilder;
+    configuration.setServerDomain("localhost")
+            .setPort(1337)
+            .setMountPath("/parse")
+            .setApplicationId("myAppId")
+            .setClientKey("customer")
+            .setRestApiKey("rest");
 
-    fullNameTitleBuilder
-            .setPrefix(prefixBuilder.mrs())
-            .setFirstName("Emma")
-            .setLastName("Watson-Dillon");
 
-    QVERIFY(fullNameTitleBuilder.build()->asString() == "Mrs Emma Watson-Dillon");
+    ParseCreateObject createApi(configuration);
+
+    Person p;
+    p.setFirst_name("Greg");
+    p.setLast_name("Dillon");
+
+    QString className = "Todo";
+
+//    auto reply = createApi.createObject(className,p);
+
+//    QSignalSpy spy(reply, &QNetworkReply::finished);
+
+    QString obj;
+
+//    connect(reply,&QNetworkReply::finished,[&obj,reply](){
+
+//        auto doc = QJsonDocument::fromJson(reply->readAll());
+//        ParseCreateResponse created;
+//        created.fromJson(doc.object());
+
+//        obj = created.getObjectId();
+
+//        qDebug() << created.toJsonObject();
+//    });
+
+//    spy.wait();
+
+
+    ParseGetObject get(configuration);
+
+    auto getReply = get.getObject(className,obj);
+
+    QSignalSpy spy2(getReply,&QNetworkReply::finished);
+
+    connect(getReply,&QNetworkReply::finished,[getReply](){
+
+        qDebug() << getReply->readAll();
+    });
+
+    spy2.wait();
 
 }
 
-void NewTest::tst_titleSuffix()
-{
-    TitleSuffix_ConcreteBuilder suffix;
-    QVERIFY(suffix.jr().build()->asString() == "Jr");
-    QVERIFY(suffix.sr().build()->asString() == "Sr");
-}
-
-void NewTest::tst_titlePrefix()
-{
-    TitlePrefix_ConcreteBuilder prefix;
-    QVERIFY(prefix.dr().build()->asString() == "Dr");
-    QVERIFY(prefix.mr().build()->asString() == "Mr");
-    QVERIFY(prefix.ms().build()->asString() == "Ms");
-    QVERIFY(prefix.mrs().build()->asString() == "Mrs");
-}
 
 QTEST_MAIN(NewTest)
 

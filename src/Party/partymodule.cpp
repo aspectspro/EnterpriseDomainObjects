@@ -144,6 +144,16 @@ SetupModule &PartyModule::installSchema()
     employmentTypeTable.appendTableColumn({"name",TableColumn::TypeString,true});
     insertTable(employmentTypeTable);
 
+    auto fullNameTite = initializeModuleTable("fullname_title");
+    fullNameTite.appendTableColumn({"id",TableColumn::TypeString,true})
+            .appendTableColumn({"firstName",TableColumn::TypeString})
+            .appendTableColumn({"lastName",TableColumn::TypeString})
+            .appendTableColumn({"middleName",TableColumn::TypeString})
+            .appendTableColumn({"prefix",TableColumn::TypeString})
+            .appendTableColumn({"suffix",TableColumn::TypeString});
+
+    insertTable(fullNameTite);
+
 
     return *this;
 }

@@ -1,42 +1,5 @@
 #include "fullname.h"
 
-QString FullName_Concrete::asString()
-{
-    auto _fullName = QString("%1%2%3")
-            .arg(getFirstName().append(" "))
-            .arg(getMiddleName().isEmpty() ? "" : getMiddleName().append(" "))
-            .arg(getLastName());
-
-    return _fullName;
-}
-
-FullName_Concrete &FullName_Concrete::setFirstName(QString firstName){
-    _data.insert("firstName",firstName);
-    return *this;
-}
-
-FullName_Concrete &FullName_Concrete::setLastName(QString lastName){
-    _data.insert("lastName",lastName);
-    return *this;
-}
-
-FullName_Concrete &FullName_Concrete::setMiddleName(QString middleName){
-    _data.insert("middleName",middleName);
-    return *this;
-}
-
-QString FullName_Concrete::getFirstName() const {
-    return _data.value("firstName");
-}
-
-QString FullName_Concrete::getLastName() const {
-    return _data.value("lastName");
-}
-
-QString FullName_Concrete::getMiddleName() const {
-    return _data.value("middleName");
-}
-
 Name FullName_ConcreteFactory::create()
 {
     return std::make_unique<FullName_Concrete>();
@@ -45,10 +8,6 @@ Name FullName_ConcreteFactory::create()
 FullName_ConcreteBuilder::FullName_ConcreteBuilder(){
     initializeFactory();
     reset();
-}
-
-FullName_ConcreteBuilder::FullName_ConcreteBuilder(QString firstName, QString lastName, QString middleName) : FullName_ConcreteBuilder(){
-    setFirstName(firstName).setLastName(lastName).setMiddleName(middleName);
 }
 
 FullName_ConcreteBuilder &FullName_ConcreteBuilder::setFirstName(QString firstName){
@@ -74,3 +33,5 @@ NameBuilder_Interface &FullName_ConcreteBuilder::initializeFactory()
     this->_nameFactory = std::make_unique<FullName_ConcreteFactory>();
     return *this;
 }
+
+

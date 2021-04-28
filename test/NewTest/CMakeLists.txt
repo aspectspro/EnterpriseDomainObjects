@@ -10,10 +10,11 @@ include_directories("../../src")
 set(Qt5_DIR "C:\\Felgo\\5.13.2\\msvc2017_64\\lib\\cmake\\Qt5")
 set(Qt5Test_DIR "C:\\Felgo\\5.13.2\\msvc2017_64\\lib\\cmake\\Qt5Test")
 set(Qt5Gui_DIR "C:\\Felgo\\5.13.2\\msvc2017_64\\lib\\cmake\\Qt5Gui")
+set(Qt5WebSocket_DIR "C:\\Felgo\\5.13.2\\msvc2017_64\\lib\\cmake\\Qt5WebSocket")
 
 find_package(Qt5Test REQUIRED)
 find_package(Qt5Gui REQUIRED)
-find_package(Qt5 COMPONENTS Core REQUIRED Sql Concurrent PrintSupport)
+find_package(Qt5 COMPONENTS Core REQUIRED Sql Concurrent PrintSupport Network WebSockets)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -52,10 +53,15 @@ if(EXISTS ${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
         Identifier/IdentifierInterface.h
         Identifier/UuidIdentifier.h
         Title/TitleSuffix.h
+        Parse/parse.h
+        Parse/parseconfiguration.h
+        Parse/parseconfiguration.cpp
+        Parse/ParseServer.h
+        Parse/ParseServer.cpp
         )
     add_test(NAME ${PROJECT_NAME} COMMAND ${PROJECT_NAME})
 
-    target_link_libraries(${PROJECT_NAME} PUBLIC ${LIBRARY_NAME_TEST} PRIVATE Qt5::Gui Qt5::Test Qt5::Core Qt5::Sql Qt5::Concurrent Qt5::PrintSupport)
+    target_link_libraries(${PROJECT_NAME} PUBLIC ${LIBRARY_NAME_TEST} PRIVATE Qt5::Gui Qt5::Test Qt5::Core Qt5::Sql Qt5::Concurrent Qt5::PrintSupport Qt5::Network Qt5::WebSockets)
 
 else()
     message(WARNING "The file conanbuildinfo.cmake doesn't exist, you have to run conan install first")

@@ -8,21 +8,52 @@
  */
 struct FullName_Concrete : public Name_Interface{
 
+    Q_GADGET
+    Q_PROPERTY(QString id READ getId WRITE setId)
+    Q_PROPERTY(QString firstName READ getFirstName WRITE setFirstName)
+    Q_PROPERTY(QString lastName READ getLastName WRITE setLastName)
+    Q_PROPERTY(QString middleName READ getMiddleName WRITE setMiddleName)
+
+private:
+    QString firstName, lastName, middleName;
+
+    // AbstractDomainObject interface
+public:
+    virtual const QMetaObject &metaObject() const override
+    {
+        return this->staticMetaObject;
+    }
+
     // Name_Interface interface
 public:
-    virtual QString asString() override;
+    virtual QString getFirstName() override
+    {
+        return this->firstName;
+    }
+    virtual QString getLastName() override
+    {
+        return this->lastName;
+    }
+    virtual QString getMiddleName() override
+    {
+        return this->middleName;
+    }
 
-    FullName_Concrete &setFirstName(QString firstName);
-
-    FullName_Concrete &setLastName(QString lastName);
-
-    FullName_Concrete &setMiddleName(QString middleName);
-
-    QString getFirstName() const;
-
-    QString getLastName() const;
-
-    QString getMiddleName() const;
+    virtual Name_Interface &setFirstName(QString firstName) override
+    {
+        this->firstName = firstName;
+        return *this;
+    }
+    virtual Name_Interface &setLastName(QString lastName) override
+    {
+        this->lastName = lastName;
+        return *this;
+    }
+    virtual Name_Interface &setMiddleName(QString middleName) override
+    {
+        this->middleName = middleName;
+        return *this;
+    }
 };
 
 /**
@@ -42,15 +73,10 @@ struct FullName_ConcreteBuilder : public NameBuilder_Interface{
 
     // NameBuilder interface
 public:
-    FullName_ConcreteBuilder();
-    FullName_ConcreteBuilder(QString firstName, QString lastName, QString middleName = "");
+    FullName_ConcreteBuilder();    
 
-    virtual FullName_ConcreteBuilder& from(Name &name){
-        auto _temp = dynamic_cast<FullName_Concrete*>(name.get());
-        setFirstName(_temp->getFirstName());
-        setLastName(_temp->getLastName());
-        setMiddleName(_temp->getMiddleName());
-
+    virtual FullName_ConcreteBuilder& from(Name &name){        
+        this->_name->fromJson(name->toJsonObject());
         return *this;
     }
 
@@ -70,32 +96,42 @@ public:
  */
 struct FullNameTitle_Concrete : public FullName_Concrete{
 
+    Q_GADGET
+    Q_PROPERTY(QString prefix READ getPrefix WRITE setPrefix)
+    Q_PROPERTY(QString suffix READ getSuffix WRITE setSuffix)
+
 
     // Name_Interface interface
 public:
-    virtual QString asString() override
-    {
-        auto _name = this->FullName_Concrete::asString();
-
-        //Checking if _prefix is initialized, prevents nullptr error.
-        if(_prefix.get() == nullptr)
-            return _name;
-
-        return _name.prepend(getPrefix()->asString().isEmpty() ? "" : getPrefix()->asString().append(" "));
-    }
-
-    FullNameTitle_Concrete& setPrefix(TitleBuilder_Interface& prefix){
-        this->_prefix = prefix.build();
+    FullNameTitle_Concrete& setPrefix(QString prefix){
+        this->prefix = prefix;
         return *this;
     }
 
-    Title& getPrefix(){
-        return _prefix;
+    QString getPrefix(){
+        return prefix;
+    }
+
+    QString getSuffix() const{
+        return suffix;
+    }
+
+    FullNameTitle_Concrete& setSuffix(const QString &value){
+        suffix = value;
+        return *this;
     }
 
 private:
-    Title _prefix;
+    QString prefix;
+    QString suffix;
 
+
+    // AbstractDomainObject interface
+public:
+    virtual const QMetaObject &metaObject() const override
+    {
+        return this->staticMetaObject;
+    }
 };
 
 /**
@@ -132,18 +168,17 @@ public:
         this->FullName_ConcreteBuilder::from(name);
 
         auto _temp = dynamic_cast<FullNameTitle_Concrete*>(name.get());
-        TitlePrefix_ConcreteBuilder builder;
 
         //Checks if Name is initialized, prevents nullptr error.
         if(_temp != nullptr)
-            setPrefix(builder.from(_temp->getPrefix()));
+            this->_name->fromJson(_temp->toJsonObject());
 
         return *this;
     }
 
     FullNameTitle_ConcreteBuilder& setPrefix(TitleBuilder_Interface &title){
         auto _temp = dynamic_cast<FullNameTitle_Concrete*>(_name.get());
-        _temp->setPrefix(title);
+        _temp->setPrefix(title.build()->asString());
         return *this;
     }
 };

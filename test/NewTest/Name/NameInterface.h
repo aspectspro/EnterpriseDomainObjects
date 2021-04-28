@@ -6,17 +6,29 @@
 /**
  * @brief The Name_Interface struct
  */
-struct Name_Interface{
+struct Name_Interface : public AbstractDomainObject{
+
 
 public:
-    /**
-     * @brief printName - Prints name to string.
-     * @return
-     */
-    virtual QString asString() = 0;
+    virtual QString getFirstName() = 0;
+    virtual QString getLastName() = 0;
+    virtual QString getMiddleName() = 0;
 
-protected:
-    QHash<QString, QString> _data;
+    virtual Name_Interface &setFirstName(QString firstName) = 0;
+    virtual Name_Interface &setLastName(QString lastName) = 0;
+    virtual Name_Interface &setMiddleName(QString middleName) = 0;
+
+    QString getId(){
+        return id;
+    }
+
+    Name_Interface& setId(QString id){
+        this->id = id;
+        return *this;
+    }
+
+private:
+    QString id;
 
 };
 
@@ -69,3 +81,4 @@ protected:
 };
 
 #endif // NAMEINTERFACE_H
+

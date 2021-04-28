@@ -29,8 +29,7 @@ public:
     }
 
     QString printName(){
-        auto _pr = QString("%1").arg(_name->asString());
-        return _pr;
+        return "_pr";
     }
 
     Employee_v_1 &setIdentifier(IdentifierBuilder_Interface &identifierBuilder){
@@ -52,13 +51,6 @@ class Employee_v_1_Mapper{
 public:
     virtual void insert(Employee_v_1 &employee){
 
-        auto _name = employee.getName()->asString();
-        auto _id = employee.getIdentifier()->asString();
-
-        qDebug() << "Inserting Employee";
-
-        qDebug() << _id;
-        qDebug() << _name;
     };
 
     virtual void remove(Employee_v_1 &employee){
