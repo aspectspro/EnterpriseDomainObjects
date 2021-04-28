@@ -70,19 +70,24 @@ void NewTest::tst_abstractParty()
             .setRestApiKey("rest");
 
 
-    ParseCreateObject createApi(configuration);
-
     Person p;
     p.setFirst_name("Greg");
     p.setLast_name("Dillon");
 
     QString className = "Todo";
+    ParseCreateObject createApi(configuration);
+    auto reply = createApi.createObject(className,p);
 
-//    auto reply = createApi.createObject(className,p);
+    for(int i = 0; i < 1000; i++){
+        p.setFirst_name(p.getFirst_name().append(i));
+        qDebug() << createApi.createObject(className,p);
+    }
+
+
 
 //    QSignalSpy spy(reply, &QNetworkReply::finished);
 
-    QString obj;
+//    QString obj;
 
 //    connect(reply,&QNetworkReply::finished,[&obj,reply](){
 
@@ -98,18 +103,18 @@ void NewTest::tst_abstractParty()
 //    spy.wait();
 
 
-    ParseGetObject get(configuration);
+//    ParseGetObject get(configuration);
 
-    auto getReply = get.getObject(className,obj);
+//    auto getReply = get.getObject(className,obj);
 
-    QSignalSpy spy2(getReply,&QNetworkReply::finished);
+//    QSignalSpy spy2(getReply,&QNetworkReply::finished);
 
-    connect(getReply,&QNetworkReply::finished,[getReply](){
+//    connect(getReply,&QNetworkReply::finished,[getReply](){
 
-        qDebug() << getReply->readAll();
-    });
+//        qDebug() << getReply->readAll();
+//    });
 
-    spy2.wait();
+//    spy2.wait();
 
 }
 

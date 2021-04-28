@@ -118,7 +118,7 @@ public:
 
     }
 
-    QNetworkReply* createObject(QString className, AbstractDomainObject& domainObject){
+    QJsonObject createObject(QString className, AbstractDomainObject& domainObject){
         paths->append(className);
 
         QJsonDocument doc;
@@ -126,7 +126,17 @@ public:
         auto request = getRequest();
         auto reply = network.post(request,doc.toJson());
 
-        return reply;
+        QEventLoop loop;
+        QJsonObject response;
+
+        QObject::connect(reply,&QNetworkReply::finished,[&response,&loop,&reply](){
+            auto json = QJsonDocument::fromJson(reply->readAll());
+            response = json.object();
+            loop.quit();
+        });
+        loop.exec();
+
+        return response;
     }
 
 };
