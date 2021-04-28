@@ -74,10 +74,10 @@ private:
 Q_DECLARE_METATYPE(ParseCreateObjectResponse)
 
 
-struct ParseCreateObject : public ParseObjectsApi{
+struct ParsePostObject : public ParseObjectsApi{
 
 public:
-    ParseCreateObject(const ParseConfiguration &configuration) : ParseObjectsApi(configuration){
+    ParsePostObject(const ParseConfiguration &configuration) : ParseObjectsApi(configuration){
 
     }
 
@@ -153,6 +153,42 @@ public:
             _cast->fromJson(response);
 
         return std::move(_type);
+    }
+};
+
+struct ParseDeleteObject : public ParseObjectsApi{
+
+public:
+    ParseDeleteObject(const ParseConfiguration &configuration) : ParseObjectsApi(configuration){}
+
+    QJsonObject deleteByObjectId(QString className, QString objectId){
+
+        if(objectId.length() == 0)
+            throw std::exception("Empty objectId");
+
+        paths->append(className).append(objectId);
+
+        QJsonDocument doc;
+        auto request = getRequest();
+        auto reply = network.deleteResource(request);
+
+        QEventLoop loop;
+        QJsonObject response;
+
+        QObject::connect(reply,&QNetworkReply::finished,[&response,&loop,&reply](){
+            auto json = QJsonDocument::fromJson(reply->readAll());
+            response = json.object();
+            loop.quit();
+        });
+        loop.exec();
+
+        ParseCreateObjectResponse res;
+        res.fromJson(response);
+        if(res.getError().length() > 0)
+            throw std::exception(res.getError().toUtf8());
+
+        return response;
+
     }
 
 };

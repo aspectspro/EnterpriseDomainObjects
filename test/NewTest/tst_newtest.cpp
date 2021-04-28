@@ -76,17 +76,24 @@ void NewTest::tst_abstractParty()
     person.setMiddleName("DR");
 
     QString className = "People";
-    ParseCreateObject createApi(configuration);
+    ParsePostObject postObject(configuration);
 
     try {
-        auto reply = createApi.createObject(className,person);
+        auto reply = postObject.createObject(className,person);
 
-        ParseGetObject fetch(configuration);
-        auto _person = fetch.getObject<ParsePerson>(className,person.getObjectId());
+
+        ParseDeleteObject deleteResource(configuration);
+        deleteResource.deleteByObjectId(className,person.getObjectId());
+
+        ParseGetObject getObject(configuration);
+
+        auto _person = getObject.getObject<ParsePerson>(className,person.getObjectId());
         QVERIFY(person == *_person.get());
 
     } catch (std::exception &e) {
         qInfo() << e.what();
+
+
     }
 
 }
