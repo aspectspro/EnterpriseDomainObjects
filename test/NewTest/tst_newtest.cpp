@@ -74,7 +74,7 @@ void NewTest::tst_abstractParty()
 {
     auto configuration = ParseConfiguration::getInstance();
 
-    configuration.setServerDomain("localhost")
+    configuration->setServerDomain("localhost")
             .setPort(1337)
             .setMountPath("/parse")
             .setApplicationId("myAppId")
@@ -92,14 +92,9 @@ void NewTest::tst_abstractParty()
         ParsePersonMapper mapper;
         mapper.postObject(person);
 
-        qDebug() << person.getObjectId();
+        auto pers = mapper.getObject<ParsePerson>(person.getObjectId());
 
-//        auto loaded = mapper.getObject<ParsePerson>(person.getObjectId());
-
-//        if(*loaded.get() == person){
-
-//        }
-
+        QVERIFY(*pers == person);
 
 
     } catch (std::exception &e) {

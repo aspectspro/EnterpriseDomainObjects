@@ -20,7 +20,7 @@ class ParseConfiguration : public AbstractDomainObject
 public:
     ParseConfiguration();
 
-    static ParseConfiguration& getInstance();
+    static ParseConfiguration* getInstance();
 
     virtual const QMetaObject &metaObject() const override;
 

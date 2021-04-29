@@ -7,10 +7,10 @@ ParseConfiguration::ParseConfiguration()
 
 }
 
-ParseConfiguration &ParseConfiguration::getInstance(){
+ParseConfiguration *ParseConfiguration::getInstance(){
     if(_instance.get() == nullptr)
         _instance = std::make_unique<ParseConfiguration>();
-    return *_instance.get();
+    return _instance.get();
 }
 
 const QMetaObject &ParseConfiguration::metaObject() const

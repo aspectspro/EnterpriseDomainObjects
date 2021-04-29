@@ -7,7 +7,7 @@
 struct ParseRequestsApi{
 
 public:
-    ParseRequestsApi(const ParseConfiguration &configuration) : configuration(configuration){
+    ParseRequestsApi(ParseConfiguration configuration) : configuration(configuration){
         paths = std::make_unique<UrlPathBuilder>();
     }
 
@@ -31,14 +31,15 @@ public:
 
 protected:
     std::unique_ptr<PathBuilderInterface> paths;
-    const ParseConfiguration &configuration;
+    ParseConfiguration configuration;
     QNetworkAccessManager network;
 
 };
 
 struct ParseObjectsApi : public ParseRequestsApi{
+
 public:
-    ParseObjectsApi(const ParseConfiguration& configuration) : ParseRequestsApi(configuration){
+    ParseObjectsApi(ParseConfiguration configuration) : ParseRequestsApi(configuration){
         paths = std::make_unique<UrlPathBuilder>(
                     configuration.getMountPath().append(paths->separator()).append("classes"));
     }
@@ -81,7 +82,7 @@ Q_DECLARE_METATYPE(ParseCreateObjectResponse)
 struct ParsePostObject : public ParseObjectsApi{
 
 public:
-    ParsePostObject(const ParseConfiguration &configuration) : ParseObjectsApi(configuration){
+    ParsePostObject(ParseConfiguration configuration) : ParseObjectsApi(configuration){
 
     }
 
@@ -124,7 +125,7 @@ public:
 struct ParseGetObject : public ParseObjectsApi{
 
 public:
-    ParseGetObject(const ParseConfiguration &configuration) : ParseObjectsApi(configuration){}
+    ParseGetObject(ParseConfiguration configuration) : ParseObjectsApi(configuration){}
 
     template<typename T>
     std::unique_ptr<T> getObject(QString className, QString objectId){
@@ -166,7 +167,7 @@ public:
 struct ParseDeleteObject : public ParseObjectsApi{
 
 public:
-    ParseDeleteObject(const ParseConfiguration &configuration) : ParseObjectsApi(configuration){}
+    ParseDeleteObject(ParseConfiguration configuration) : ParseObjectsApi(configuration){}
 
     QJsonObject deleteByObjectId(QString className, QString objectId){
 
@@ -202,7 +203,7 @@ public:
 struct ParsePutObject : public ParseObjectsApi{
 
 public:
-    ParsePutObject(const ParseConfiguration &configuration) : ParseObjectsApi(configuration){}
+    ParsePutObject(ParseConfiguration configuration) : ParseObjectsApi(configuration){}
 
     QJsonObject updateObject(QString className, ParseBaseObject& domainObject){
         paths->append(className).append(domainObject.getObjectId());
@@ -262,10 +263,10 @@ struct ParseMapper{
 public:
     virtual QString className() = 0;
 
-    ParseMapper() :_post(ParseConfiguration::getInstance())
-      ,_get(ParseConfiguration::getInstance())
-      ,_delete(ParseConfiguration::getInstance())
-      ,_put(ParseConfiguration::getInstance()){
+    ParseMapper() :_post(*ParseConfiguration::getInstance())
+      ,_get(*ParseConfiguration::getInstance())
+      ,_delete(*ParseConfiguration::getInstance())
+      ,_put(*ParseConfiguration::getInstance()){
 
     }
 
@@ -288,6 +289,12 @@ public:
         _put.updateObject(className(),parseObject);
         return *this;
     }
+
+//    template<typename T>
+//    QList<std::unique_ptr<T>> getAll(){
+//        _get.getObject<T>(className(),"");
+
+//    }
 
 protected:
     ParsePostObject _post;
