@@ -96,6 +96,15 @@ void NewTest::tst_abstractParty()
 
         QVERIFY(*pers == person);
 
+        QThread::sleep(5);
+
+        pers->setFirstName("Emma");
+        pers->setLastName("Watson-Dillon");
+
+        mapper.putObject(*pers);
+
+        mapper.deleteObject(pers->getObjectId());
+
 
     } catch (std::exception &e) {
         qInfo() << e.what();

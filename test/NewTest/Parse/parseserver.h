@@ -86,12 +86,13 @@ public:
 
     }
 
-    QJsonObject createObject(QString className, ParseBaseObject& domainObject){
+    QJsonObject createObject(QString className, ParseBaseClass& domainObject){
         paths->append(className);
 
         QJsonDocument doc;
-        doc.setObject(domainObject.toJsonObject());
+        doc.setObject(domainObject.stripParseObject());
         auto request = getRequest();
+
         auto reply = network.post(request,doc.toJson());
 
         QEventLoop loop;
@@ -100,8 +101,6 @@ public:
         QObject::connect(reply,&QNetworkReply::finished,[&response,&loop,&reply](){
             auto json = QJsonDocument::fromJson(reply->readAll());
             response = json.object();
-
-            qDebug() << response;
 
             loop.quit();
         });
@@ -113,9 +112,12 @@ public:
         if(responseObject.getError().length() > 0)
             throw std::exception(responseObject.getError().toUtf8());
 
+        ParseDate createdAt;
+        createdAt.setIso(responseObject.getCreatedAt());
+
         domainObject.setObjectId(responseObject.getObjectId());
-        domainObject.setCreatedAt(responseObject.getCreatedAt());
-        domainObject.setUpdatedAt(responseObject.getCreatedAt());
+        domainObject.setCreatedAt(createdAt);
+        domainObject.setUpdatedAt(createdAt);
 
         return response;
     }
@@ -155,7 +157,7 @@ public:
             throw std::exception(res.getError().toUtf8());
 
         auto _type = std::make_unique<T>();
-        auto _cast = dynamic_cast<ParseBaseObject*>(_type.get());
+        auto _cast = dynamic_cast<ParseBaseClass*>(_type.get());
 
         if(_cast != nullptr)
             _cast->fromJson(response);
@@ -205,11 +207,11 @@ struct ParsePutObject : public ParseObjectsApi{
 public:
     ParsePutObject(ParseConfiguration configuration) : ParseObjectsApi(configuration){}
 
-    QJsonObject updateObject(QString className, ParseBaseObject& domainObject){
+    QJsonObject updateObject(QString className, ParseBaseClass& domainObject){
         paths->append(className).append(domainObject.getObjectId());
 
         QJsonDocument doc;
-        doc.setObject(stripParseObject(domainObject));
+        doc.setObject(domainObject.stripParseObject());
 
         auto request = getRequest();
         auto reply = network.put(request,doc.toJson());
@@ -230,30 +232,12 @@ public:
         if(responseObject.getError().length() > 0)
             throw std::exception(responseObject.getError().toUtf8());
 
-        domainObject.setUpdatedAt(responseObject.getUpdatedAt());
+        ParseDate updatedAt;
+        updatedAt.setIso(responseObject.getUpdatedAt());
+
+        domainObject.setUpdatedAt(updatedAt);
 
         return response;
-    }
-
-private:
-
-    /**
-     * @brief stripParseObject - Removes objectId, createdAt, updateAt from Json
-     * @param baseObject
-     * @return
-     */
-
-    QJsonObject stripParseObject(ParseBaseObject &baseObject){
-        auto base = baseObject.toJsonObject();
-        ParseBaseObject _toRemove;
-
-        auto keys = _toRemove.toJsonObject().keys();
-
-        foreach (auto key, keys) {
-            base.remove(key);
-        }
-
-        return base;
     }
 
 };
@@ -270,7 +254,7 @@ public:
 
     }
 
-    ParseMapper& postObject(ParseBaseObject& parseObject){
+    ParseMapper& postObject(ParseBaseClass& parseObject){
         _post.createObject(className(),parseObject);
         return *this;
     }
@@ -285,7 +269,7 @@ public:
         return *this;
     }
 
-    ParseMapper& putObject(ParseBaseObject& parseObject){
+    ParseMapper& putObject(ParseBaseClass& parseObject){
         _put.updateObject(className(),parseObject);
         return *this;
     }

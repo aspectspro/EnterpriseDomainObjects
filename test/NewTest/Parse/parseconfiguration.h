@@ -52,19 +52,46 @@ private:
 
 Q_DECLARE_METATYPE(ParseConfiguration)
 
-struct ParseBaseObject : public AbstractDomainObject{
+struct ParseDate : public AbstractDomainObject{
+
+    Q_GADGET
+    Q_PROPERTY(QString __type READ getType WRITE setType)
+    Q_PROPERTY(QString iso READ getIso WRITE setIso)
+
+
+public:
+    ParseDate(){
+        registerConverter();
+    }
+
+    QString getIso() const;
+    void setIso(const QString &value);
+
+    QString getType() const;
+    void setType(const QString &value);
+
+private:
+    QString type = "Date";
+    QString iso;
+
+    // AbstractDomainObject interface
+public:
+    virtual const QMetaObject &metaObject() const override;
+    virtual void registerConverter() override;
+};
+
+Q_DECLARE_METATYPE(ParseDate)
+
+/**
+ * @brief The ParseBaseObject struct - This is the data interface for ParseClass
+ */
+struct ParseBaseClass : public AbstractDomainObject{
 
     Q_GADGET
 
     Q_PROPERTY(QString objectId READ getObjectId WRITE setObjectId)
-    Q_PROPERTY(QJsonValue createdAt READ getCreatedAt WRITE setCreatedAt)
-    Q_PROPERTY(QJsonValue updatedAt READ getUpdatedAt WRITE setUpdatedAt)
-
-private:
-    using AbstractDomainObject::generateId;
-    QString objectId;
-    QJsonValue createdAt, updatedAt;
-
+    Q_PROPERTY(ParseDate createdAt READ getCreatedAt WRITE setCreatedAt)
+    Q_PROPERTY(ParseDate updatedAt READ getUpdatedAt WRITE setUpdatedAt)
 
     // AbstractDomainObject interface
 public:
@@ -73,17 +100,58 @@ public:
     QString getObjectId() const;
     void setObjectId(const QString &value);
 
-    QJsonValue getCreatedAt() const;
-    void setCreatedAt(const QJsonValue &value);
+    ParseDate getCreatedAt() const;
+    void setCreatedAt(const ParseDate &value);
 
-    QJsonValue getUpdatedAt() const;
-    void setUpdatedAt(const QJsonValue &value);
+    ParseDate getUpdatedAt() const;
+    void setUpdatedAt(const ParseDate &value);
+
+    /**
+     * @brief stripParseObject - Strips Parse object from generated Fields
+     * @return
+     */
+    QJsonObject stripParseObject(){
+        auto base = this->toJsonObject();
+
+        ParseBaseClass _toRemove;
+
+        auto keys = _toRemove.toJsonObject().keys();
+
+        foreach (auto key, keys) {
+            base.remove(key);
+        }
+
+        injectStrip(base);
+
+        return base;
+    }
+
+protected:
+    /**
+     * @brief injectStrip - Use this to remove other keys
+     * @example
+     *
+     * json.remove("KeyName");
+     *
+     * @param json
+     * @return
+     */
+    virtual ParseBaseClass& injectStrip(QJsonObject &json){
+        Q_UNUSED(json)
+        return *this;
+    }
+
+private:
+    using AbstractDomainObject::generateId;
+    QString objectId;
+    ParseDate createdAt, updatedAt;
+
 };
 
-Q_DECLARE_METATYPE(ParseBaseObject)
+Q_DECLARE_METATYPE(ParseBaseClass)
 
 
-struct ParsePerson : public ParseBaseObject{
+struct ParsePerson : public ParseBaseClass{
 
     Q_GADGET
 

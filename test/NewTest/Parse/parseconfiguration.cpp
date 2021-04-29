@@ -96,39 +96,39 @@ ParseConfiguration &ParseConfiguration::setMountPath(const QString &value)
     return *this;
 }
 
-QJsonValue ParseBaseObject::getCreatedAt() const
-{
-    return createdAt;
-}
-
-void ParseBaseObject::setCreatedAt(const QJsonValue &value)
-{
-    createdAt = value;
-}
-
-QJsonValue ParseBaseObject::getUpdatedAt() const
-{
-    return updatedAt;
-}
-
-void ParseBaseObject::setUpdatedAt(const QJsonValue &value)
-{
-    updatedAt = value;
-}
-
-const QMetaObject &ParseBaseObject::metaObject() const
+const QMetaObject &ParseBaseClass::metaObject() const
 {
     return this->staticMetaObject;
 }
 
-QString ParseBaseObject::getObjectId() const
+QString ParseBaseClass::getObjectId() const
 {
     return objectId;
 }
 
-void ParseBaseObject::setObjectId(const QString &value)
+void ParseBaseClass::setObjectId(const QString &value)
 {
     objectId = value;
+}
+
+ParseDate ParseBaseClass::getCreatedAt() const
+{
+    return createdAt;
+}
+
+void ParseBaseClass::setCreatedAt(const ParseDate &value)
+{
+    createdAt = value;
+}
+
+ParseDate ParseBaseClass::getUpdatedAt() const
+{
+    return updatedAt;
+}
+
+void ParseBaseClass::setUpdatedAt(const ParseDate &value)
+{
+    updatedAt = value;
 }
 
 QString ParsePerson::getFirstName() const
@@ -166,3 +166,55 @@ const QMetaObject &ParsePerson::metaObject() const
 {
     return this->staticMetaObject;
 }
+
+QString ParseDate::getIso() const
+{
+    return iso;
+}
+
+void ParseDate::setIso(const QString &value)
+{
+    iso = value;
+}
+
+QString ParseDate::getType() const
+{
+    return type;
+}
+
+void ParseDate::setType(const QString &value)
+{
+    type = value;
+}
+
+const QMetaObject &ParseDate::metaObject() const
+{
+    return this->staticMetaObject;
+}
+
+void ParseDate::registerConverter()
+{
+    if(QMetaType::hasRegisteredConverterFunction<ParseDate,QJsonValue>())
+        return;
+
+    qRegisterMetaType<ParseDate>();
+
+    QMetaType::registerConverter<ParseDate,QJsonValue>([=](ParseDate dateTime) -> QJsonValue{
+        return dateTime.toJsonObject();
+
+    });
+
+
+    QMetaType::registerConverter<QJsonValue,ParseDate>([=](QJsonValue dateTime) -> ParseDate{
+        ParseDate _date;
+        _date.fromJson(dateTime.toObject());
+        return _date;
+    });
+
+    QMetaType::registerConverter<QString,ParseDate>([=](QString dateTime) -> ParseDate{
+        ParseDate _date;
+        _date.setIso(dateTime);
+        return _date;
+    });
+}
+
