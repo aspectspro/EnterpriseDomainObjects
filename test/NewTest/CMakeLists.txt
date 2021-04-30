@@ -35,6 +35,9 @@ if(EXISTS ${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 
     link_directories(${CMAKE_BINARY_DIR}/src/lib)
 
+    file(GLOB parse parse/**.cpp parse/**.h)
+    SET(parse ${parse})
+
     add_executable(
         ${PROJECT_NAME}
         tst_newtest.cpp
@@ -53,13 +56,17 @@ if(EXISTS ${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
         Identifier/IdentifierInterface.h
         Identifier/UuidIdentifier.h
         Title/TitleSuffix.h
-        Parse/parse.h
-        Parse/parseconfiguration.h
-        Parse/parseconfiguration.cpp
-        Parse/ParseServer.h
-        Parse/ParseServer.cpp
-        Parse/PathBuilderInterface.h
-        Parse/PathBuilderInterface.cpp
+        ${parse}
+#        Parse/parse.h
+#        Parse/parseconfiguration.h
+#        Parse/parseconfiguration.cpp
+#        Parse/ParseServer.h
+#        Parse/ParseServer.cpp
+#        Parse/PathBuilderInterface.h
+#        Parse/PathBuilderInterface.cpp
+#        Parse/ParseRestApi.h
+#        Parse/ParseRestApi.cpp
+#        Parse/ParseHttpRequest.h
         )
     add_test(NAME ${PROJECT_NAME} COMMAND ${PROJECT_NAME})
 
