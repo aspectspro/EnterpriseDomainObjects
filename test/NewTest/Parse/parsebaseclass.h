@@ -12,7 +12,7 @@ struct ParseBaseClass : public AbstractDomainObject{
     Q_PROPERTY(QString objectId READ getObjectId WRITE setObjectId)
     Q_PROPERTY(ParseDate createdAt READ getCreatedAt WRITE setCreatedAt)
     Q_PROPERTY(ParseDate updatedAt READ getUpdatedAt WRITE setUpdatedAt)
-    Q_PROPERTY(QString typeName READ getTypeName)
+//    Q_PROPERTY(QString typeName READ getTypeName)
 
     // AbstractDomainObject interface
 public:
@@ -33,9 +33,9 @@ public:
      */
     QJsonObject stripParseObject();
 
-    QString getTypeName(){
-        return metaObject().className();
-    }
+//    QString getTypeName(){
+//        return metaObject().className();
+//    }
 
 protected:
     /**
