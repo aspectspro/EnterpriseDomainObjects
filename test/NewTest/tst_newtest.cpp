@@ -104,6 +104,8 @@ void NewTest::tst_abstractParty()
 //        }
 
 
+
+
     } catch (std::exception &e) {
         qInfo() << e.what();
 

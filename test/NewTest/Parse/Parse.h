@@ -3,5 +3,6 @@
 
 #include "parseconfiguration.h"
 #include "parseserver.h"
+#include "parseperson.h"
 
 #endif // PARSE_H

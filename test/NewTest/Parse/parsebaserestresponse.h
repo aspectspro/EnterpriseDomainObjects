@@ -2,6 +2,7 @@
 #define PARSEBASEHTTPRESPONSE_H
 #include "parserestrequest.h"
 
+
 struct ParseBaseRestResponse : public AbstractDomainObject{
 
     Q_GADGET
