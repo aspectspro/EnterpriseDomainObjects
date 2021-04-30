@@ -5,14 +5,14 @@
 struct ParseQueryResponse : public ParseBaseRestResponse{
 
     Q_GADGET
-    Q_PROPERTY(QJsonArray results READ getResults WRITE setResults)
+    Q_PROPERTY(QJsonValue results READ getResults WRITE setResults)
 public:
-    QJsonArray getResults() const;
-    void setResults(const QJsonArray &value);
+    QJsonValue getResults() const;
+    void setResults(const QJsonValue &value);
 
 
 private:
-    QJsonArray results;
+    QJsonValue results;
 
 
     // AbstractDomainObject interface

@@ -4,7 +4,7 @@
 #include "parserestgetobject.h"
 #include "parserestputobject.h"
 #include "parserestpostobject.h"
-#include "parsequery.h"
+#include "parsequeryresponse.h"
 
 struct ParseRestQueryObject : public ParseRestObjectsApi{
 
@@ -12,7 +12,27 @@ public:
     ParseRestQueryObject(ParseConfiguration configuration) : ParseRestObjectsApi(configuration){}
 
     template<typename T>
-    QList<T> query(ParseQuery &query){
+    QList<std::shared_ptr<T>> query(ParseQuery query){
+
+        auto results = internalQuery(query);
+
+        QList<std::shared_ptr<T>> list;
+
+        foreach (auto value, results) {
+            auto _type = std::make_shared<T>();
+            auto _cast = dynamic_cast<ParseBaseClass*>(_type.get());
+
+            if(_cast != nullptr)
+                _cast->fromJson(value.toObject());
+            list.append(_type);
+        }
+
+        return list;
+    }
+
+
+private:
+    QJsonArray internalQuery(ParseQuery &query){
 
         if(query.getClassName().isNull())
             throw std::exception("Empty class name");
@@ -33,10 +53,12 @@ public:
         });
         loop.exec();
 
-        ParseBaseRestResponse res;
+        ParseQueryResponse res;
         res.fromJson(response);
         if(res.getError().length() > 0)
             throw std::exception(res.getError().toUtf8());
+
+        return res.getResults().toArray();
 
 //        auto _type = std::make_unique<T>();
 //        auto _cast = dynamic_cast<ParseBaseClass*>(_type.get());

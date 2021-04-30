@@ -1,11 +1,11 @@
 #include "parsequeryresponse.h"
 
-QJsonArray ParseQueryResponse::getResults() const
+QJsonValue ParseQueryResponse::getResults() const
 {
     return results;
 }
 
-void ParseQueryResponse::setResults(const QJsonArray &value)
+void ParseQueryResponse::setResults(const QJsonValue &value)
 {
     results = value;
 }

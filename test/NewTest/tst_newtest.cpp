@@ -92,18 +92,16 @@ void NewTest::tst_abstractParty()
         ParsePersonMapper mapper;
         mapper.postObject(person);
 
-        auto pers = mapper.getObject<ParsePerson>(person.getObjectId());
+        ParseRestQueryObject query(*configuration);
 
-        QVERIFY(*pers == person);
+        ParseQuery _query;
+        _query.setClassName(mapper.className());
 
-        QThread::sleep(5);
+        auto data = query.query<ParsePerson>(_query);
 
-        pers->setFirstName("Emma");
-        pers->setLastName("Watson-Dillon");
-
-        mapper.putObject(*pers);
-
-        mapper.deleteObject(pers->getObjectId());
+//        foreach (auto value, data) {
+//            mapper.deleteObject(value->getObjectId());
+//        }
 
 
     } catch (std::exception &e) {
