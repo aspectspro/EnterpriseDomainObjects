@@ -97,7 +97,9 @@ void NewTest::tst_abstractParty()
         ParseQuery _query;
         _query.setClassName(mapper.className());
 
-        auto data = query.query<ParsePerson>(_query);
+//        auto data = query.query<ParsePerson>(_query);
+
+        qDebug() << person.toJsonObject();
 
 //        foreach (auto value, data) {
 //            mapper.deleteObject(value->getObjectId());
